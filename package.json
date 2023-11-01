@@ -1,5 +1,5 @@
 {
-  "name": "next-compose-middleware",
+  "name": "next-compose-middlewares",
   "private": true,
   "scripts": {
     "lint": "pnpm run -r lint",

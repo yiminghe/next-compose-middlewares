@@ -1,2 +1,2 @@
-# next-compose-middleware
-using koa style middleware inside nextjs
+# next-compose-middlewares
+using koa style middlewares inside nextjs

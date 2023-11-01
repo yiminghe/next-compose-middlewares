@@ -87,7 +87,7 @@ export interface NextContext {
 }
 
 // @public (undocumented)
-export type NextFunction = () => (Promise<any> | void);
+export type NextFunction = () => Promise<any> | void;
 
 // @public (undocumented)
 export interface PageRequest {
