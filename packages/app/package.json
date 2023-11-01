@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@types/node": "18.x",
-    "next-compose-middleware": "workspace:*",
+    "next-compose-middlewares": "workspace:*",
     "next": "14.x",
     "react": "18.x",
     "@types/react": "18.x",

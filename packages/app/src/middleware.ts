@@ -1,2 +1,2 @@
 // @ts-ignore
-export { middleware } from 'next-compose-middleware/middleware';
+export { middleware } from 'next-compose-middlewares/middleware';

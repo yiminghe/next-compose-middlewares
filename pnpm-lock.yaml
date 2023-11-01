@@ -19,9 +19,9 @@ importers:
       next:
         specifier: 14.x
         version: 14.0.1(react-dom@18.2.0)(react@18.2.0)
-      next-compose-middleware:
+      next-compose-middlewares:
         specifier: workspace:*
-        version: link:../next-compose-middleware
+        version: link:../next-compose-middlewares
       react:
         specifier: 18.x
         version: 18.2.0
@@ -33,7 +33,7 @@ importers:
         specifier: 5.x
         version: 5.2.2
 
-  packages/next-compose-middleware:
+  packages/next-compose-middlewares:
     devDependencies:
       '@microsoft/api-extractor':
         specifier: 7.x

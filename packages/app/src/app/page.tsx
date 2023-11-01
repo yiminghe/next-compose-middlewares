@@ -1,5 +1,5 @@
 import React from 'react';
-import { createPage } from 'next-compose-middleware';
+import { createPage } from 'next-compose-middlewares';
 import { user, finishMiddleware } from '../middlewares';
 import Link from 'next/link';
 

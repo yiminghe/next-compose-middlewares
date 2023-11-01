@@ -1,4 +1,4 @@
-import { createRoute } from 'next-compose-middleware';
+import { createRoute } from 'next-compose-middlewares';
 import { user, finishMiddleware } from '../../middlewares';
 
 export const GET = createRoute([

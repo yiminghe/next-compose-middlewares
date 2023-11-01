@@ -1,6 +1,6 @@
-import { NextContext, NextFunction } from 'next-compose-middleware';
+import { NextContext, NextFunction } from 'next-compose-middlewares';
 
-export { finishMiddleware } from 'next-compose-middleware';
+export { finishMiddleware } from 'next-compose-middlewares';
 
 export async function user(context: NextContext, next?: NextFunction) {
   context.user = 'test';
