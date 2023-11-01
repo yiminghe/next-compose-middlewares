@@ -37,7 +37,7 @@ import { createPage, finishMiddleware } from 'next-compose-middlewares';
 
 export default createPage([
   finishMiddleware,
-  (context, next) => {
+  async (context, next) => {
     context.user = 'test';
     await next();
   },
@@ -60,7 +60,7 @@ import { createRoute, finishMiddleware } from 'next-compose-middlewares';
 
 export const GET = createRoute([
   finishMiddleware,
-  (context, next) => {
+  async (context, next) => {
     context.user = 'test';
     await next();
   },
