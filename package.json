@@ -1,0 +1,13 @@
+{
+  "name": "next-compose-middleware",
+  "private": true,
+  "scripts": {
+    "lint": "pnpm run -r lint",
+    "postinstall": "cp scripts/git-hooks/pre-commit .git/hooks/pre-commit",
+    "format": "cd scripts && npm run format",
+    "format:staged": "cd scripts && npm run format:staged",
+    "reinstall": "rm -rf node_modules pnpm-lock.yaml && pnpm"
+  },
+  "devDependencies": {},
+  "packageManager": "pnpm@8.7.0"
+}

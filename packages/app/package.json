@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "tsc --noEmit",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@types/node": "18.x",
+    "next-compose-middleware": "workspace:*",
+    "next": "14.x",
+    "react": "18.x",
+    "@types/react": "18.x",
+    "react-dom": "18.x"
+  },
+  "devDependencies": {
+    "typescript": "5.x"
+  }
+}

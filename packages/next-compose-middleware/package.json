@@ -1,0 +1,43 @@
+{
+  "name": "next-compose-middleware",
+  "version": "0.0.1",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/mjs/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/mjs/index.d.ts",
+        "default": "./dist/mjs/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./middleware": {
+      "import": {
+        "types": "./dist/mjs/middleware.d.ts",
+        "default": "./dist/mjs/middleware.js"
+      },
+      "require": {
+        "types": "./dist/cjs/middleware.d.ts",
+        "default": "./dist/cjs/middleware.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "doc": "api-extractor run --local --diagnostics",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig-esm.json && pnpm doc && cp etc/next-compose-middleware.api.md README.md"
+  },
+  "devDependencies": {
+    "@microsoft/api-extractor": "7.x",
+    "@types/react": "18.x",
+    "next": "14.x",
+    "typescript": "5.x",
+    "@types/node": "18.x"
+  }
+}
