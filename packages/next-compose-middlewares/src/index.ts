@@ -50,7 +50,7 @@ export function createPage(
   fns: MiddlewareFunction[],
   props: createPageProps = {},
 ) {
-  const handle = compose(fns);
+  const handle = compose([finishMiddleware, ...fns]);
   const Page = () => {
     return handle(getNextContextFromPage(props.request?.()));
   };
@@ -66,7 +66,7 @@ export function createRoute(
   fns: MiddlewareFunction[],
   props: createRouteProps = {},
 ) {
-  const handle = compose(fns);
+  const handle = compose([finishMiddleware, ...fns]);
   const Route = (r: NextRequest) => {
     return handle(getNextContextFromRoute(r, props.request?.(r)));
   };

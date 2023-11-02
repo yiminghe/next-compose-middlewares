@@ -33,10 +33,9 @@ declare module 'next-compose-middlewares' {
 
 ```js
 import React from 'react';
-import { createPage, finishMiddleware } from 'next-compose-middlewares';
+import { createPage } from 'next-compose-middlewares';
 
 export default createPage([
-  finishMiddleware,
   async (context, next) => {
     context.user = 'test';
     await next();
@@ -55,11 +54,9 @@ export default createPage([
 `src/app/get/route.ts`
 
 ```js
-import React from 'react';
-import { createRoute, finishMiddleware } from 'next-compose-middlewares';
+import { createRoute } from 'next-compose-middlewares';
 
 export const GET = createRoute([
-  finishMiddleware,
   async (context, next) => {
     context.user = 'test';
     await next();
