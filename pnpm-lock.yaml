@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  packages/app:
+  packages/demo:
     dependencies:
       '@types/node':
         specifier: 18.x
@@ -16,6 +16,12 @@ importers:
       '@types/react':
         specifier: 18.x
         version: 18.2.33
+      mobx:
+        specifier: 6.x
+        version: 6.12.3
+      mobx-react-lite:
+        specifier: 4.x
+        version: 4.0.7(mobx@6.12.3)(react-dom@18.2.0)(react@18.2.0)
       next:
         specifier: 14.x
         version: 14.0.1(react-dom@18.2.0)(react@18.2.0)
@@ -528,6 +534,29 @@ packages:
       brace-expansion: 1.1.11
     dev: false
 
+  /mobx-react-lite@4.0.7(mobx@6.12.3)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-RjwdseshK9Mg8On5tyJZHtGD+J78ZnCnRaxeQDSiciKVQDUbfZcXhmld0VMxAwvcTnPEHZySGGewm467Fcpreg==}
+    peerDependencies:
+      mobx: ^6.9.0
+      react: ^16.8.0 || ^17 || ^18
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      mobx: 6.12.3
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /mobx@6.12.3:
+    resolution: {integrity: sha512-c8NKkO4R2lShkSXZ2Ongj1ycjugjzFFo/UswHBnS62y07DMcTc9Rvo03/3nRyszIvwPNljlkd4S828zIBv/piw==}
+    dev: false
+
   /mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -885,6 +914,14 @@ packages:
     dependencies:
       punycode: 2.3.1
     dev: true
+
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /validator@13.11.0:
     resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}

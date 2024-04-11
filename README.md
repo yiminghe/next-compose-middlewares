@@ -7,6 +7,8 @@ using koa style middlewares inside nextjs
 ```
 npm install next-compose-middlewares
 ```
+## demo
+[packages/demo](./packages/demo/)
 
 ## Usage
 
