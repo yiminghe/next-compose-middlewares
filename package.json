@@ -9,5 +9,5 @@
     "reinstall": "rm -rf node_modules pnpm-lock.yaml && pnpm"
   },
   "devDependencies": {},
-  "packageManager": "pnpm@8.15.6"
+  "packageManager": "pnpm@9.1.4"
 }

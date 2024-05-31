@@ -9,16 +9,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "typescript": "5.x",
+    "@next/bundle-analyzer": "^14.2.3",
+    "@types/node": "18.x",
+    "@types/react": "18.x",
     "mobx": "6.x",
     "mobx-react-lite": "4.x",
-    "@types/node": "18.x",
-    "next-compose-middlewares": "workspace:*",
     "next": "14.x",
+    "next-compose-middlewares": "workspace:*",
     "react": "18.x",
-    "@types/react": "18.x",
     "react-dom": "18.x"
-  },
-  "devDependencies": {
-    "typescript": "5.x"
   }
 }
