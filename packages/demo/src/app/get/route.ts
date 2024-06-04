@@ -3,7 +3,8 @@ import { user } from '../../middlewares';
 
 export const GET = createRoute([
   user,
-  ({ user, response }) => {
-    response.json = { user };
+  ({ user, res }) => {
+    res.set('x-from', 'next-compose');
+    res.json({ user });
   },
 ]);

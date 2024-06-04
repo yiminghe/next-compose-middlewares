@@ -4,11 +4,12 @@ import { user } from '@/middlewares';
 import { GlobalProvider } from '@/app/GlobalContext';
 import components from '@/components';
 
+let count = 0;
 export default createPage([
   user,
-  ({ user, response }) => {
-    const cs = Math.random() > 0.5 ? ['c1'] : ['c2'];
-    response.jsx = (
+  ({ user, res }) => {
+    const cs = ++count % 2 ? ['c1'] : ['c2'];
+    res.render(
       <GlobalProvider name={user}>
         <div>
           {cs.map((id) => {
@@ -16,7 +17,7 @@ export default createPage([
             return <C key={id} />;
           })}
         </div>
-      </GlobalProvider>
+      </GlobalProvider>,
     );
   },
 ]);

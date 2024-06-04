@@ -8,13 +8,13 @@ import { UserName } from './UserName';
 
 export default createPage([
   user,
-  ({ user, response }) => {
-    response.jsx = (
+  ({ user, res }) => {
+    res.render(
       <GlobalProvider name={user}>
         <UserInput />
         <UserName />
         <Link href="/get">get</Link>
-      </GlobalProvider>
+      </GlobalProvider>,
     );
   },
 ]);

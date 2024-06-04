@@ -33,14 +33,14 @@ export interface RouteRequest {
  *@public
  */
 export interface createPageProps {
-  request?: () => PageRequest;
+  req?: () => PageRequest;
   name?: string;
 }
 /**
  *@public
  */
 export interface createRouteProps {
-  request?: (r: NextRequest) => RouteRequest;
+  req?: (r: NextRequest) => RouteRequest;
   name?: string;
 }
 /**
@@ -52,7 +52,7 @@ export function createPage(
 ) {
   const handle = compose([finishMiddleware, ...fns]);
   const Page = () => {
-    return handle(getNextContextFromPage(props.request?.()));
+    return handle(getNextContextFromPage(props.req?.()));
   };
   if (props.name) {
     Page.name = props.name;
@@ -68,12 +68,115 @@ export function createRoute(
 ) {
   const handle = compose([finishMiddleware, ...fns]);
   const Route = (r: NextRequest) => {
-    return handle(getNextContextFromRoute(r, props.request?.(r)));
+    return handle(getNextContextFromRoute(r, props.req?.(r)));
   };
   if (props.name) {
     Route.name = props.name;
   }
   return Route;
+}
+
+function transformCookiesToObject(): any {
+  const cookies = getCookies();
+  return new Proxy(
+    {},
+    {
+      get: function (target, prop: string, receiver) {
+        return cookies.get(prop)?.value;
+      },
+      has(target, key: string) {
+        return cookies.has(key);
+      },
+      getOwnPropertyDescriptor(target, key: string) {
+        if (cookies.has(key)) {
+          return {
+            configurable: true,
+            enumerable: true,
+            value: cookies.get(key)!.value,
+          };
+        }
+      },
+      ownKeys(target) {
+        return cookies.getAll().map((c) => c.name);
+      },
+    },
+  );
+}
+
+function transformHeadersToObject(): any {
+  const headers = getHeaders();
+  return new Proxy(
+    {},
+    {
+      get: function (target, prop: string, receiver) {
+        return headers.get(prop);
+      },
+      has(target, key: string) {
+        return headers.has(key);
+      },
+      getOwnPropertyDescriptor(target, key: string) {
+        if (headers.has(key)) {
+          return {
+            configurable: true,
+            enumerable: true,
+            value: headers.get(key),
+          };
+        }
+      },
+      ownKeys(target) {
+        return Array.from(headers.keys());
+      },
+    },
+  );
+}
+
+function buildResponse(): NextContext['res'] {
+  const p: NextContext['res']['_private'] = {
+    status: 200,
+    headers: {},
+  };
+  return {
+    _private: p,
+    append(k: string, v: any) {
+      p.headers[k] = p.headers[k] ?? '';
+      p.headers[k] += v;
+    },
+    set(...args: any) {
+      const [k, v] = args;
+      if (typeof k === 'string') {
+        p.headers[k] = v;
+        return;
+      }
+      Object.assign(p.headers, k);
+    },
+    get(k: string) {
+      return p.headers[k];
+    },
+    status(s: number) {
+      p.status = s;
+    },
+    render(n: React.ReactNode) {
+      p.render = n;
+    },
+    json(j: any) {
+      p.json = j;
+    },
+    redirect(r: string) {
+      p.redirect = r;
+    },
+  };
+}
+
+function buildHeaderApi() {
+  const headers = transformHeadersToObject();
+  function get(k: string) {
+    return headers[k];
+  }
+  return {
+    headers,
+    get,
+    header: get,
+  };
 }
 
 /**
@@ -91,10 +194,12 @@ export function getNextContextFromPage(props: PageRequest = {}) {
   for (const [k, v] of Array.from(nextUrl.searchParams.entries())) {
     searchParams[k] = v;
   }
+
   const context: NextContext = {
     type: 'page',
     cookies,
-    request: {
+    headers,
+    req: {
       url,
       text: () =>
         new Promise((r) => {
@@ -104,15 +209,14 @@ export function getNextContextFromPage(props: PageRequest = {}) {
         new Promise((r) => {
           r({});
         }),
-      headers,
-      pathname: new URL(url).pathname,
+      cookies: transformCookiesToObject(),
+      ...buildHeaderApi(),
+      path: new URL(url).pathname,
       method: 'GET',
-      searchParams,
+      query: searchParams,
       ...props,
     },
-    response: {
-      status: 200,
-    },
+    res: buildResponse(),
   };
   return context;
 }
@@ -120,29 +224,30 @@ export function getNextContextFromPage(props: PageRequest = {}) {
  *@public
  */
 export function getNextContextFromRoute(
-  request: NextRequest,
+  req: NextRequest,
   props: RouteRequest = {},
 ) {
   const searchParams: Record<string, any> = {};
-  for (const [k, v] of Array.from(request.nextUrl.searchParams.entries())) {
+  for (const [k, v] of Array.from(req.nextUrl.searchParams.entries())) {
     searchParams[k] = v;
   }
   const cookies = getCookies();
+
   const headers = getHeaders();
   const context: NextContext = {
     type: 'route',
     cookies,
-    response: {
-      status: 200,
-    },
-    request: {
-      url: request.url,
-      text: () => request.text(),
-      json: () => request.json(),
-      method: request.method,
-      pathname: request.nextUrl.pathname,
-      searchParams,
-      headers,
+    headers,
+    res: buildResponse(),
+    req: {
+      url: req.url,
+      text: () => req.text(),
+      json: () => req.json(),
+      method: req.method,
+      path: req.nextUrl.pathname,
+      query: searchParams,
+      cookies: transformCookiesToObject(),
+      ...buildHeaderApi(),
       ...props,
     },
   };

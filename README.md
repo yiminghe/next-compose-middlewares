@@ -7,6 +7,8 @@ using koa style middlewares inside nextjs
 ```
 npm install next-compose-middlewares
 ```
+
+
 ## demo
 [packages/demo](./packages/demo/)
 
@@ -42,8 +44,8 @@ export default createPage([
     context.user = 'test';
     await next();
   },
-  ({ user, response }) => {
-    response.jsx = (
+  ({ user, res }) => {
+    res.jsx = (
       <>
         <p>{user}</p>
       </>
@@ -63,8 +65,8 @@ export const GET = createRoute([
     context.user = 'test';
     await next();
   },
-  ({ user, response }) => {
-    response.json = { user };
+  ({ user, res }) => {
+    res.json = { user };
   },
 ]);
 ```
@@ -97,7 +99,7 @@ export interface createPageProps {
     // (undocumented)
     name?: string;
     // (undocumented)
-    request?: () => PageRequest;
+    req?: () => PageRequest;
 }
 
 // @public (undocumented)
@@ -111,7 +113,7 @@ export interface createRouteProps {
     // (undocumented)
     name?: string;
     // (undocumented)
-    request?: (r: NextRequest) => RouteRequest;
+    req?: (r: NextRequest) => RouteRequest;
 }
 
 // @public (undocumented)
@@ -121,10 +123,10 @@ export const finishMiddleware: MiddlewareFunction;
 export function getNextContextFromPage(props?: PageRequest): NextContext;
 
 // @public (undocumented)
-export function getNextContextFromRoute(request: NextRequest, props?: RouteRequest): NextContext;
+export function getNextContextFromRoute(req: NextRequest, props?: RouteRequest): NextContext;
 
 // @public (undocumented)
-export function middleware(request: NextRequest): Promise<NextResponse<unknown>>;
+export function middleware(req: NextRequest): Promise<NextResponse<unknown>>;
 
 // @public (undocumented)
 export type MiddlewareFunction = (context: NextContext, next?: NextFunction) => Promise<any> | void;
@@ -134,24 +136,35 @@ export interface NextContext {
     // (undocumented)
     cookies: ResponseCookies;
     // (undocumented)
-    request: {
+    headers: NextRequest['headers'];
+    // (undocumented)
+    req: {
         url: string;
+        get: (k: string) => any;
         text: () => Promise<string>;
         json: () => Promise<any>;
         method: string;
-        pathname: string;
-        searchParams: any;
-        headers: NextRequest['headers'];
+        path: string;
+        query: any;
+        cookies: any;
+        headers: any;
     };
     // (undocumented)
-    response: {
-        redirect?: string;
-        text?: () => string;
-        jsx?: React_2.ReactNode;
-        json?: any;
-        status: number;
-        message?: string;
-        headers?: any;
+    res: {
+        _private: {
+            headers: any;
+            redirect?: string;
+            render?: React_2.ReactNode;
+            json?: any;
+            status?: number;
+        };
+        append: (k: string, v: any) => void;
+        set: (...args: [key: string, v: any] | [o: any]) => void;
+        get: (key: string) => any;
+        redirect: (r: string) => void;
+        render: (r: React_2.ReactNode) => void;
+        json: (j: any) => void;
+        status: (s: number) => void;
     };
     // (undocumented)
     type: 'page' | 'route';

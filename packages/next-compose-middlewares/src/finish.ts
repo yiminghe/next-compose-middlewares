@@ -5,21 +5,18 @@ import { redirect } from 'next/navigation';
  *@public
  */
 export function createFinishMiddleware(): MiddlewareFunction {
-  return async (
-    { response }: NextContext,
-    next?: NextFunction,
-  ): Promise<any> => {
+  return async ({ res }: NextContext, next?: NextFunction): Promise<any> => {
     await next?.();
-    if (response.redirect) {
-      return redirect(response.redirect);
+    if (res._private.redirect) {
+      return redirect(res._private.redirect);
     }
-    if (response.jsx !== undefined) {
-      return response.jsx as any;
+    if (res._private.render !== undefined) {
+      return res._private.render as any;
     }
-    if (response.json) {
-      return NextResponse.json(response.json, {
-        status: response.status,
-        headers: response.headers,
+    if (res._private.json) {
+      return NextResponse.json(res._private.json, {
+        status: res._private.status,
+        headers: res._private.headers,
       });
     }
   };
