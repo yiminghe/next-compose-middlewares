@@ -8,6 +8,7 @@ let count = 0;
 export default createPage([
   user,
   ({ user, res }) => {
+    res.cookie('x-user2', 'yiminghe2', { path: '/' });
     const cs = ++count % 2 ? ['c1'] : ['c2'];
     res.render(
       <GlobalProvider name={user}>

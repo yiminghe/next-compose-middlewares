@@ -8,9 +8,10 @@ import { UserName } from './UserName';
 
 export default createPage([
   user,
-  ({ user, res }) => {
+  ({ user, req, res }) => {
     res.render(
       <GlobalProvider name={user}>
+        <div>cookies: {JSON.stringify(req.cookies)}</div>
         <UserInput />
         <UserName />
         <Link href="/get">get</Link>

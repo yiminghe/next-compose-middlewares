@@ -1,8 +1,15 @@
-import { NextContext, MiddlewareFunction, NextFunction } from './types';
-import { NextRequest } from 'next/server';
+import type {
+  NextContext,
+  MiddlewareFunction,
+  NextFunction,
+  CookieOptions,
+} from './types';
+import type { NextRequest } from 'next/server';
 import { cookies as getCookies, headers as getHeaders } from 'next/headers';
 import { compose } from './compose';
 import { createFinishMiddleware } from './finish';
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
 
 export { middleware } from './middleware';
 export { createFinishMiddleware } from './finish';
@@ -77,60 +84,76 @@ export function createRoute(
 }
 
 function transformCookiesToObject(): any {
-  const cookies = getCookies();
+  let cookies: ReadonlyRequestCookies;
+  function getCookie() {
+    if (cookies) {
+      return cookies;
+    }
+    cookies = getCookies();
+    return cookies;
+  }
   return new Proxy(
     {},
     {
       get: function (target, prop: string, receiver) {
-        return cookies.get(prop)?.value;
+        return getCookie().get(prop)?.value;
       },
       has(target, key: string) {
-        return cookies.has(key);
+        return getCookie().has(key);
       },
       getOwnPropertyDescriptor(target, key: string) {
-        if (cookies.has(key)) {
+        if (getCookie().has(key)) {
           return {
             configurable: true,
             enumerable: true,
-            value: cookies.get(key)!.value,
+            value: getCookie().get(key)!.value,
           };
         }
       },
       ownKeys(target) {
-        return cookies.getAll().map((c) => c.name);
+        return getCookie()
+          .getAll()
+          .map((c) => c.name);
       },
     },
   );
 }
 
 function transformHeadersToObject(): any {
-  const headers = getHeaders();
+  let headers: ReadonlyHeaders;
+  function getHeader() {
+    if (headers) {
+      return headers;
+    }
+    headers = getHeaders();
+    return headers;
+  }
   return new Proxy(
     {},
     {
       get: function (target, prop: string, receiver) {
-        return headers.get(prop);
+        return getHeader().get(prop);
       },
       has(target, key: string) {
-        return headers.has(key);
+        return getHeader().has(key);
       },
       getOwnPropertyDescriptor(target, key: string) {
-        if (headers.has(key)) {
+        if (getHeader().has(key)) {
           return {
             configurable: true,
             enumerable: true,
-            value: headers.get(key),
+            value: getHeader().get(key),
           };
         }
       },
       ownKeys(target) {
-        return Array.from(headers.keys());
+        return Array.from(getHeader().keys());
       },
     },
   );
 }
 
-function buildResponse(): NextContext['res'] {
+function buildResponse(): Omit<NextContext['res'], 'cookie'> {
   const p: NextContext['res']['_private'] = {
     status: 200,
     headers: {},
@@ -183,7 +206,6 @@ function buildHeaderApi() {
  *@public
  */
 export function getNextContextFromPage(props: PageRequest = {}) {
-  const cookies = getCookies();
   const headers = getHeaders();
   const url = headers.get('x-url');
   if (!url) {
@@ -195,10 +217,19 @@ export function getNextContextFromPage(props: PageRequest = {}) {
     searchParams[k] = v;
   }
 
+  const res = buildResponse();
+  function cookie(name: string, value: any, options?: CookieOptions) {
+    res._private.cookies = res._private.cookies || {};
+    res._private.cookies[name] = { ...options, value } as any;
+    if (options?.expires) {
+      res._private.cookies[name].expires = +options.expires;
+    }
+  }
+
   const context: NextContext = {
     type: 'page',
-    cookies,
-    headers,
+    cookies: () => getCookies(),
+    headers: () => getHeaders(),
     req: {
       url,
       text: () =>
@@ -216,7 +247,10 @@ export function getNextContextFromPage(props: PageRequest = {}) {
       query: searchParams,
       ...props,
     },
-    res: buildResponse(),
+    res: {
+      ...res,
+      cookie,
+    },
   };
   return context;
 }
@@ -231,14 +265,17 @@ export function getNextContextFromRoute(
   for (const [k, v] of Array.from(req.nextUrl.searchParams.entries())) {
     searchParams[k] = v;
   }
-  const cookies = getCookies();
 
-  const headers = getHeaders();
   const context: NextContext = {
     type: 'route',
-    cookies,
-    headers,
-    res: buildResponse(),
+    cookies: () => getCookies(),
+    headers: () => getHeaders(),
+    res: {
+      ...buildResponse(),
+      cookie(name: string, value: any, options?: CookieOptions) {
+        getCookies().set(name, value, options);
+      },
+    },
     req: {
       url: req.url,
       text: () => req.text(),

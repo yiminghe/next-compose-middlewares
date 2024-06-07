@@ -1,6 +1,6 @@
 {
   "name": "next-compose-middlewares",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "./dist/cjs/index.js",
   "module": "./dist/mjs/index.js",
   "types": "./dist/cjs/index.d.ts",
@@ -40,8 +40,13 @@
   "devDependencies": {
     "@microsoft/api-extractor": "7.x",
     "@types/react": "18.x",
-    "next": "14.x",
+    "next": "rc",
+    "react": "rc",
     "typescript": "5.x",
     "@types/node": "18.x"
+  },
+  "dependencies": {
+    "@types/js-cookie": "3.x",
+    "js-cookie": "3.x"
   }
 }

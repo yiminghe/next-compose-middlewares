@@ -10,14 +10,14 @@
   },
   "dependencies": {
     "typescript": "5.x",
-    "@next/bundle-analyzer": "^14.2.3",
+    "@next/bundle-analyzer": "rc",
     "@types/node": "18.x",
     "@types/react": "18.x",
     "mobx": "6.x",
     "mobx-react-lite": "4.x",
-    "next": "14.x",
+    "next": "rc",
     "next-compose-middlewares": "workspace:*",
-    "react": "18.x",
-    "react-dom": "18.x"
+    "react": "rc",
+    "react-dom": "rc"
   }
 }

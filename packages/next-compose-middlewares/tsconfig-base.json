@@ -2,7 +2,7 @@
   "exclude": ["./test", "./tap-snapshots"],
   "include": ["src/**/*.ts"],
   "compilerOptions": {
-    "jsx": "preserve",
+    "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "declarationMap": true,

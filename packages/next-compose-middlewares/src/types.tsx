@@ -1,6 +1,9 @@
 import { NextRequest } from 'next/server';
 import type React from 'react';
-import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies';
+import {
+  ResponseCookie,
+  ResponseCookies,
+} from 'next/dist/compiled/@edge-runtime/cookies';
 /**
  *@public
  */
@@ -9,11 +12,23 @@ export type NextFunction = () => Promise<any> | void;
 /**
  *@public
  */
+export type CookieOptions = Omit<
+  ResponseCookie,
+  'expires' | 'name' | 'value'
+> & { expires?: Date };
+
+export type ClientCookies = {
+  [key: string]: Omit<ResponseCookie, 'expires'> & { expires?: number };
+};
+
+/**
+ *@public
+ */
 export interface NextContext {
   type: 'page' | 'route';
 
-  cookies: ResponseCookies;
-  headers: NextRequest['headers'];
+  cookies: () => ResponseCookies;
+  headers: () => NextRequest['headers'];
   req: {
     url: string;
     get: (k: string) => any;
@@ -27,12 +42,14 @@ export interface NextContext {
   };
   res: {
     _private: {
+      cookies?: ClientCookies;
       headers: any;
       redirect?: string;
       render?: React.ReactNode;
       json?: any;
       status?: number;
     };
+    cookie: (name: string, value: any, options?: CookieOptions) => void;
     append: (k: string, v: any) => void;
     set: (...args: [key: string, v: any] | [o: any]) => void;
     get: (key: string) => any;

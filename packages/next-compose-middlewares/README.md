@@ -45,7 +45,7 @@ export default createPage([
     await next();
   },
   ({ user, res }) => {
-    res.jsx = (
+    res.render(
       <>
         <p>{user}</p>
       </>
@@ -66,7 +66,7 @@ export const GET = createRoute([
     await next();
   },
   ({ user, res }) => {
-    res.json = { user };
+    res.json({ user });
   },
 ]);
 ```
@@ -80,6 +80,7 @@ export const GET = createRoute([
 import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import type { default as React_2 } from 'react';
+import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 
 // @public (undocumented)
@@ -134,9 +135,9 @@ export type MiddlewareFunction = (context: NextContext, next?: NextFunction) => 
 // @public (undocumented)
 export interface NextContext {
     // (undocumented)
-    cookies: ResponseCookies;
+    cookies: () => ResponseCookies;
     // (undocumented)
-    headers: NextRequest['headers'];
+    headers: () => NextRequest['headers'];
     // (undocumented)
     req: {
         url: string;
@@ -152,12 +153,14 @@ export interface NextContext {
     // (undocumented)
     res: {
         _private: {
+            cookies?: ClientCookies;
             headers: any;
             redirect?: string;
             render?: React_2.ReactNode;
             json?: any;
             status?: number;
         };
+        cookie: (name: string, value: any, options?: CookieOptions) => void;
         append: (k: string, v: any) => void;
         set: (...args: [key: string, v: any] | [o: any]) => void;
         get: (key: string) => any;
@@ -190,6 +193,11 @@ export interface RouteRequest {
     // (undocumented)
     params?: any;
 }
+
+// Warnings were encountered during analysis:
+//
+// src/types.tsx:38:7 - (ae-forgotten-export) The symbol "ClientCookies" needs to be exported by the entry point index.d.ts
+// src/types.tsx:45:5 - (ae-forgotten-export) The symbol "CookieOptions" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
