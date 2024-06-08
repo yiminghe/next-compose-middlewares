@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { MiddlewareFunction, NextContext, NextFunction } from './types';
 import { redirect } from 'next/navigation';
 import ClientCookies from './ClientCookies';
-import React from 'react';
+import React, { Fragment } from 'react';
 /**
  *@public
  */
@@ -17,15 +17,14 @@ export function createFinishMiddleware(): MiddlewareFunction {
       return redirect(private_.redirect);
     }
     if (type === 'page' && private_.render !== undefined) {
-      if (private_.cookies) {
-        return (
-          <ClientCookies cookies={private_.cookies}>
-            {private_.render}
-          </ClientCookies>
-        );
-      } else {
-        return private_.render;
-      }
+      return (
+        <>
+          {private_.cookies && (
+            <ClientCookies key="cookies" cookies={private_.cookies} />
+          )}
+          <Fragment key="main">{private_.render}</Fragment>
+        </>
+      );
     }
     if (type === 'route' && private_.json) {
       return NextResponse.json(private_.json, {

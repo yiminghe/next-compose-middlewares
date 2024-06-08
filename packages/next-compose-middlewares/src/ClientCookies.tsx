@@ -1,17 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import type { ClientCookies } from './types';
 import Cookies from 'js-cookie';
 
 export default function ClientCookies({
   cookies,
-  children,
 }: {
-  children: any;
   cookies?: ClientCookies;
 }) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (cookies) {
       for (const key of Object.keys(cookies)) {
         const value = cookies[key]!;
@@ -26,5 +24,5 @@ export default function ClientCookies({
       }
     }
   }, [cookies]);
-  return children;
+  return null;
 }

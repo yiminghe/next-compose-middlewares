@@ -14,6 +14,7 @@ import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapte
 export { middleware } from './middleware';
 export { createFinishMiddleware } from './finish';
 export { compose } from './compose';
+export type { ClientCookies, CookieOptions } from './types';
 export type { NextContext, MiddlewareFunction, NextFunction };
 /**
  *@public

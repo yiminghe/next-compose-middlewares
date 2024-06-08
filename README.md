@@ -84,7 +84,19 @@ import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 
 // @public (undocumented)
+export type ClientCookies = {
+    [key: string]: Omit<ResponseCookie, 'expires'> & {
+        expires?: number;
+    };
+};
+
+// @public (undocumented)
 export function compose(middleware: Function[]): (context: any, next?: Function) => Promise<any>;
+
+// @public (undocumented)
+export type CookieOptions = Omit<ResponseCookie, 'expires' | 'name' | 'value'> & {
+    expires?: Date;
+};
 
 // @public (undocumented)
 export function createFinishMiddleware(): MiddlewareFunction;
@@ -193,11 +205,6 @@ export interface RouteRequest {
     // (undocumented)
     params?: any;
 }
-
-// Warnings were encountered during analysis:
-//
-// src/types.tsx:38:7 - (ae-forgotten-export) The symbol "ClientCookies" needs to be exported by the entry point index.d.ts
-// src/types.tsx:45:5 - (ae-forgotten-export) The symbol "CookieOptions" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
