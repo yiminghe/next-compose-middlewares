@@ -2,15 +2,18 @@
 
 import { observer } from 'mobx-react-lite';
 import { useCallback, useContext } from 'react';
-import { GlobalContext } from './GlobalContext';
+import { ClientContext } from '../client-context/ClientContext';
 
 export const UserInput = observer(() => {
-  const user = useContext(GlobalContext);
-  const onChange = useCallback((e: any) => {
-    user.name = e.target.value;
-    // same as
-    // user.setUser(e.target.value);
-  }, []);
+  const user = useContext(ClientContext);
+  const onChange = useCallback(
+    (e: any) => {
+      user.name = e.target.value;
+      // same as
+      // user.setUser(e.target.value);
+    },
+    [user],
+  );
   return (
     <div>
       <input value={user.name} onChange={onChange} />

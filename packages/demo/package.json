@@ -3,13 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "lint": "tsc --noEmit",
+    "lint": "tsc --noEmit && next lint",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
-    "typescript": "5.x",
     "@next/bundle-analyzer": "rc",
     "@types/node": "18.x",
     "@types/react": "18.x",
@@ -18,6 +17,11 @@
     "next": "rc",
     "next-compose-middlewares": "workspace:*",
     "react": "rc",
-    "react-dom": "rc"
+    "react-dom": "rc",
+    "typescript": "5.x"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3"
   }
 }

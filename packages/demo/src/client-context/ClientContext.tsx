@@ -30,9 +30,9 @@ export class User {
   }
 }
 
-export const GlobalContext = createContext<User>(null as any);
+export const ClientContext = createContext<User>(null as any);
 
-export function GlobalProvider({
+export function ClientProvider({
   children,
   name,
 }: {
@@ -40,8 +40,8 @@ export function GlobalProvider({
   name: string;
 }) {
   return (
-    <GlobalContext.Provider value={new User(name)}>
+    <ClientContext.Provider value={new User(name)}>
       {children}
-    </GlobalContext.Provider>
+    </ClientContext.Provider>
   );
 }

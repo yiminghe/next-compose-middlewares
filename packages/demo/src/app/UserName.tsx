@@ -2,9 +2,9 @@
 
 import { observer } from 'mobx-react-lite';
 import { useCallback, useContext } from 'react';
-import { GlobalContext } from './GlobalContext';
+import { ClientContext } from '../client-context/ClientContext';
 
 export const UserName = observer(() => {
-  const user = useContext(GlobalContext);
+  const user = useContext(ClientContext);
   return <div>{user.name}</div>;
 });
