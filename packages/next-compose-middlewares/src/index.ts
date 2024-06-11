@@ -13,6 +13,7 @@ import {
   getNextContextFromRoute,
 } from './next-context';
 import { setServerContext } from './server-context';
+import { AsyncLocalStorage } from 'async_hooks';
 
 export { middleware } from './middleware';
 export { createFinishMiddleware } from './finish';
@@ -60,13 +61,18 @@ export function createPage(
 /**
  *@public
  */
+export const asyncLocalStorage = new AsyncLocalStorage<NextContext>();
+/**
+ *@public
+ */
 export function createRoute(
   fns: MiddlewareFunction[],
   props: createRouteProps = {},
 ) {
   const handle = compose([finishMiddleware, ...fns]);
   const Route = (r: NextRequest) => {
-    return handle(getNextContextFromRoute(r, props.req?.(r)));
+    const context = getNextContextFromRoute(r, props.req?.(r));
+    return asyncLocalStorage.run(context, () => handle(context));
   };
   if (props.name) {
     Route.name = props.name;

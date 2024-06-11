@@ -4,11 +4,17 @@
 
 ```ts
 
+/// <reference types="node" />
+
+import { AsyncLocalStorage as AsyncLocalStorage_2 } from 'async_hooks';
 import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import type { default as React_2 } from 'react';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies';
+
+// @public (undocumented)
+export const asyncLocalStorage: AsyncLocalStorage_2<NextContext>;
 
 // @public (undocumented)
 export type ClientCookies = {
