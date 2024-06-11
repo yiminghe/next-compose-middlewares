@@ -52,18 +52,24 @@ export function createRoute(fns: MiddlewareFunction[], props?: createRouteProps)
 export interface createRouteProps {
     // (undocumented)
     name?: string;
+    // Warning: (ae-forgotten-export) The symbol "RouteRequest" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
     req?: (r: NextRequest) => RouteRequest;
 }
 
 // @public (undocumented)
+export function createServerContext<T>(defaultValue: T): [() => T, (v: T) => void];
+
+// @public (undocumented)
 export const finishMiddleware: MiddlewareFunction;
 
 // @public (undocumented)
-export function getNextContextFromPage(props?: PageRequest): NextContext;
-
-// @public (undocumented)
-export function getNextContextFromRoute(req: NextRequest, props?: RouteRequest): NextContext;
+export const
+/**
+*@public
+*/
+getServerContext: () => NextContext;
 
 // @public (undocumented)
 export function middleware(req: NextRequest): Promise<NextResponse<unknown>>;
@@ -125,12 +131,6 @@ export interface PageRequest {
     params?: any;
     // (undocumented)
     text?: () => Promise<string>;
-}
-
-// @public (undocumented)
-export interface RouteRequest {
-    // (undocumented)
-    params?: any;
 }
 
 // (No @packageDocumentation comment for this package)

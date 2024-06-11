@@ -17,6 +17,9 @@ export type CookieOptions = Omit<
   'expires' | 'name' | 'value'
 > & { expires?: Date };
 
+/**
+ *@public
+ */
 export type ClientCookies = {
   [key: string]: Omit<ResponseCookie, 'expires'> & { expires?: number };
 };
@@ -67,3 +70,20 @@ export type MiddlewareFunction = (
   context: NextContext,
   next?: NextFunction,
 ) => Promise<any> | void;
+
+/**
+ *@public
+ */
+export interface PageRequest {
+  params?: any;
+  method?: string;
+  text?: () => Promise<string>;
+  json?: () => Promise<any>;
+}
+
+/**
+ *@public
+ */
+export interface RouteRequest {
+  params?: any;
+}

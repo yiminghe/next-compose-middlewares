@@ -1,6 +1,6 @@
 {
   "name": "next-compose-middlewares",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "main": "./dist/cjs/index.js",
   "module": "./dist/mjs/index.js",
   "types": "./dist/cjs/index.d.ts",
@@ -34,6 +34,7 @@
     "dist"
   ],
   "scripts": {
+    "lint": "tsc --noEmit",
     "doc": "api-extractor run --local --diagnostics",
     "build": "tsc -p tsconfig.json && tsc -p tsconfig-esm.json && pnpm doc && node scripts/build"
   },

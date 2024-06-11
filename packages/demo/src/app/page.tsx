@@ -3,17 +3,16 @@ import { createPage } from 'next-compose-middlewares';
 import { user } from '../middlewares';
 import Link from 'next/link';
 import { ClientProvider } from '../client-context/ClientContext';
-import { UserInput } from './UserInput';
-import { UserName } from './UserName';
-import { setServerUser } from '@/server-context/serverContext';
+import { UserInput } from './components/UserInput';
+import { UserName } from './components/UserName';
+import ServerInfo from './components/ServerInfo';
 
 export default createPage([
   user,
-  ({ user, req, res }) => {
-    setServerUser(user);
+  ({ user, res }) => {
     res.render(
       <ClientProvider name={user}>
-        <div>cookies: {JSON.stringify(req.cookies)}</div>
+        <ServerInfo />
         <UserInput />
         <UserName />
         <Link href="/get">get</Link>
