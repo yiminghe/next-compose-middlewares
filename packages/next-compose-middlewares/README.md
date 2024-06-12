@@ -161,6 +161,8 @@ export interface NextContext {
     headers: () => NextRequest['headers'];
     // (undocumented)
     req: {
+        protocol: string;
+        secure: boolean;
         url: string;
         get: (k: string) => any;
         text: () => Promise<string>;
@@ -181,6 +183,7 @@ export interface NextContext {
             json?: any;
             status?: number;
         };
+        clearCookie: (name: string, options?: Omit<CookieOptions, 'expires' | 'maxAge'>) => void;
         cookie: (name: string, value: any, options?: CookieOptions) => void;
         append: (k: string, v: any) => void;
         set: (...args: [key: string, v: any] | [o: any]) => void;
