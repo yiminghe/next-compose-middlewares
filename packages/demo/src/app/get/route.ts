@@ -1,4 +1,4 @@
-import { asyncLocalStorage, createRoute } from 'next-compose-middlewares';
+import { createRoute, getRouteContext } from 'next-compose-middlewares';
 import { user } from '../../middlewares';
 
 function sleep(ms: number) {
@@ -11,6 +11,6 @@ export const GET = createRoute([
     await sleep(1000);
     res.cookie('x-user', 'yiminghe', { path: '/' });
     res.set('x-from', 'next-compose');
-    res.json({ user, user2: asyncLocalStorage.getStore()?.user });
+    res.json({ user, user2: getRouteContext().user });
   },
 ]);

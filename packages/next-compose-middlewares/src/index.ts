@@ -12,7 +12,7 @@ import {
   getNextContextFromPage,
   getNextContextFromRoute,
 } from './next-context';
-import { setServerContext } from './server-context';
+import { setPageContext } from './page-context';
 import { AsyncLocalStorage } from 'async_hooks';
 
 export { middleware } from './middleware';
@@ -20,7 +20,7 @@ export { createFinishMiddleware } from './finish';
 export { compose } from './compose';
 export type { ClientCookies, CookieOptions, PageRequest } from './types';
 export type { NextContext, MiddlewareFunction, NextFunction };
-export { getServerContext, createServerContext } from './server-context';
+export { getPageContext, createPageContext } from './page-context';
 /**
  *@public
  */
@@ -50,7 +50,7 @@ export function createPage(
   const handle = compose([finishMiddleware, ...fns]);
   const Page = () => {
     const context = getNextContextFromPage(props.req?.());
-    setServerContext(context);
+    setPageContext(context);
     return handle(context);
   };
   if (props.name) {
@@ -61,7 +61,11 @@ export function createPage(
 /**
  *@public
  */
-export const asyncLocalStorage = new AsyncLocalStorage<NextContext>();
+export function getRouteContext():NextContext {
+  return asyncLocalStorage.getStore()!;
+}
+
+const asyncLocalStorage = new AsyncLocalStorage<NextContext>();
 /**
  *@public
  */

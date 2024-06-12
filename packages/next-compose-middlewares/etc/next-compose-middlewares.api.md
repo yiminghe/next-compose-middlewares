@@ -4,17 +4,11 @@
 
 ```ts
 
-/// <reference types="node" />
-
-import { AsyncLocalStorage as AsyncLocalStorage_2 } from 'async_hooks';
 import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import type { default as React_2 } from 'react';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies';
-
-// @public (undocumented)
-export const asyncLocalStorage: AsyncLocalStorage_2<NextContext>;
 
 // @public (undocumented)
 export type ClientCookies = {
@@ -41,6 +35,9 @@ export function createPage(fns: MiddlewareFunction[], props?: createPageProps): 
 };
 
 // @public (undocumented)
+export function createPageContext<T>(defaultValue: T): [() => T, (v: T) => void];
+
+// @public (undocumented)
 export interface createPageProps {
     // (undocumented)
     name?: string;
@@ -65,9 +62,6 @@ export interface createRouteProps {
 }
 
 // @public (undocumented)
-export function createServerContext<T>(defaultValue: T): [() => T, (v: T) => void];
-
-// @public (undocumented)
 export const finishMiddleware: MiddlewareFunction;
 
 // @public (undocumented)
@@ -75,7 +69,10 @@ export const
 /**
 *@public
 */
-getServerContext: () => NextContext;
+getPageContext: () => NextContext;
+
+// @public (undocumented)
+export function getRouteContext(): NextContext;
 
 // @public (undocumented)
 export function middleware(req: NextRequest): Promise<NextResponse<unknown>>;

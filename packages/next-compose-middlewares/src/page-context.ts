@@ -5,7 +5,7 @@ import type { NextContext } from './types';
 /**
  *@public
  */
-export function createServerContext<T>(
+export function createPageContext<T>(
   defaultValue: T,
 ): [() => T, (v: T) => void] {
   const getRef = cache(() => ({ current: defaultValue }));
@@ -26,9 +26,9 @@ export const [
   /**
    *@public
    */
-  getServerContext,
+  getPageContext,
   /**
    *@public
    */
-  setServerContext,
-] = createServerContext({} as NextContext);
+  setPageContext,
+] = createPageContext({} as NextContext);
