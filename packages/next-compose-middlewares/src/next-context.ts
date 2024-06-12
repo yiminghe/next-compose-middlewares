@@ -160,6 +160,7 @@ export function getNextContextFromPage(props: PageRequest = {}) {
     cookies: () => getCookies(),
     headers: () => getHeaders(),
     req: {
+      ip: headers.get('x-ip') || undefined,
       protocol,
       secure: protocol === 'https',
       url,
@@ -217,6 +218,7 @@ export function getNextContextFromRoute(
       },
     },
     req: {
+      ip: req.ip,
       protocol,
       secure: protocol === 'https',
       url: req.url,

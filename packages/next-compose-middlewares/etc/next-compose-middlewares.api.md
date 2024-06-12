@@ -91,7 +91,9 @@ export interface NextContext {
         protocol: string;
         secure: boolean;
         url: string;
+        ip: string | undefined;
         get: (k: string) => any;
+        header: (k: string) => any;
         text: () => Promise<string>;
         json: () => Promise<any>;
         method: string;
