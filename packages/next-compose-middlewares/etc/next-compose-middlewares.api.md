@@ -75,7 +75,7 @@ getPageContext: () => NextContext;
 export function getRouteContext(): NextContext;
 
 // @public (undocumented)
-export function middleware(req: NextRequest): Promise<NextResponse<unknown>>;
+export function middleware(req: NextRequest): Promise<NextResponse<unknown> | undefined>;
 
 // @public (undocumented)
 export type MiddlewareFunction = (context: NextContext, next?: NextFunction) => Promise<any> | void;
@@ -88,6 +88,7 @@ export interface NextContext {
     headers: () => NextRequest['headers'];
     // (undocumented)
     req: {
+        host: string;
         protocol: string;
         secure: boolean;
         url: string;

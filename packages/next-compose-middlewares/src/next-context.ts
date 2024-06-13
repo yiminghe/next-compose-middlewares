@@ -7,7 +7,6 @@ import type {
 import type { NextRequest } from 'next/server';
 import { cookies as getCookies, headers as getHeaders } from 'next/headers';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
 
 function transformCookiesToObject(): any {
   let cookies: ReadonlyRequestCookies;
@@ -46,37 +45,30 @@ function transformCookiesToObject(): any {
 }
 
 function transformHeadersToObject(): any {
-  let headers: ReadonlyHeaders;
-  function getHeader() {
-    if (headers) {
-      return headers;
-    }
-    headers = getHeaders();
-    return headers;
-  }
+  let headers = getHeaders();
   return new Proxy(
     {},
     {
       get: function (target, prop: string, receiver) {
-        return getHeader().get(prop);
+        return headers.get(prop);
       },
       has(target, key: string) {
-        return getHeader().has(key);
+        return headers.has(key);
       },
       set() {
         throw new Error('Next cannot set headers');
       },
       getOwnPropertyDescriptor(target, key: string) {
-        if (getHeader().has(key)) {
+        if (headers.has(key)) {
           return {
             configurable: true,
             enumerable: true,
-            value: getHeader().get(key),
+            value: headers.get(key),
           };
         }
       },
       ownKeys(target) {
-        return Array.from(getHeader().keys());
+        return Array.from(headers.keys());
       },
     },
   );
@@ -124,7 +116,24 @@ function buildHeaderApi() {
   function get(k: string) {
     return headers[k];
   }
+  if (!headers['x-forwarded-uri']) {
+    throw new Error('must setup middleware!');
+  }
+  const stringUrl = `${headers['x-forwarded-proto']}://${headers['x-forwarded-host']}${headers['x-forwarded-uri']}`;
+  const url = new URL(stringUrl);
+  const searchParams: Record<string, any> = {};
+  for (const [k, v] of Array.from(url.searchParams.entries())) {
+    searchParams[k] = v;
+  }
+  const protocol = url.protocol.slice(0, -1);
   return {
+    host: url.host,
+    secure: protocol === 'https',
+    url: url.toString(),
+    path: url.pathname,
+    query: searchParams,
+    protocol,
+    ip: headers['x-forwarded-for'] || headers['ncm-ip'],
     headers,
     get,
     header: get,
@@ -135,17 +144,6 @@ function buildHeaderApi() {
  *@public
  */
 export function getNextContextFromPage(props: PageRequest = {}) {
-  const headers = getHeaders();
-  const url = headers.get('x-url');
-  if (!url) {
-    throw new Error('must set x-url header from middleware');
-  }
-  const nextUrl = new URL(url);
-  const searchParams: Record<string, any> = {};
-  for (const [k, v] of Array.from(nextUrl.searchParams.entries())) {
-    searchParams[k] = v;
-  }
-
   const res = buildResponse();
   function cookie(name: string, value: any, options?: CookieOptions) {
     res._private.cookies = res._private.cookies || {};
@@ -154,16 +152,11 @@ export function getNextContextFromPage(props: PageRequest = {}) {
       res._private.cookies[name].expires = +options.expires;
     }
   }
-  const protocol = nextUrl.protocol.slice(0, -1);
   const context: NextContext = {
     type: 'page',
     cookies: () => getCookies(),
     headers: () => getHeaders(),
     req: {
-      ip: headers.get('x-ip') || undefined,
-      protocol,
-      secure: protocol === 'https',
-      url,
       text: () =>
         new Promise((r) => {
           r('');
@@ -174,17 +167,18 @@ export function getNextContextFromPage(props: PageRequest = {}) {
         }),
       cookies: transformCookiesToObject(),
       ...buildHeaderApi(),
-      path: new URL(url).pathname,
       method: 'GET',
-      query: searchParams,
       ...props,
     },
     res: {
       ...res,
       cookie,
-      clearCookie(name: string, options?: Omit<CookieOptions, 'expires' | 'maxAge'>) {
+      clearCookie(
+        name: string,
+        options?: Omit<CookieOptions, 'expires' | 'maxAge'>,
+      ) {
         cookie(name, '', { ...options, expires: new Date(0) });
-      }
+      },
     },
   };
   return context;
@@ -196,18 +190,16 @@ export function getNextContextFromRoute(
   req: NextRequest,
   props: RouteRequest = {},
 ) {
-  const searchParams: Record<string, any> = {};
-  for (const [k, v] of Array.from(req.nextUrl.searchParams.entries())) {
-    searchParams[k] = v;
-  }
-  const protocol = req.nextUrl.protocol.slice(0, -1);
   const context: NextContext = {
     type: 'route',
     cookies: () => getCookies(),
     headers: () => getHeaders(),
     res: {
       ...buildResponse(),
-      clearCookie(name: string, options?: Omit<CookieOptions, 'expires' | 'maxAge'>) {
+      clearCookie(
+        name: string,
+        options?: Omit<CookieOptions, 'expires' | 'maxAge'>,
+      ) {
         getCookies().set(name, '', {
           ...options,
           expires: new Date(0),
@@ -218,15 +210,9 @@ export function getNextContextFromRoute(
       },
     },
     req: {
-      ip: req.ip,
-      protocol,
-      secure: protocol === 'https',
-      url: req.url,
       text: () => req.text(),
       json: () => req.json(),
       method: req.method,
-      path: req.nextUrl.pathname,
-      query: searchParams,
       cookies: transformCookiesToObject(),
       ...buildHeaderApi(),
       ...props,
