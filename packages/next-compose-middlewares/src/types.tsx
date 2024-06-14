@@ -1,9 +1,5 @@
-import { NextRequest } from 'next/server';
 import type React from 'react';
-import {
-  ResponseCookie,
-  ResponseCookies,
-} from 'next/dist/compiled/@edge-runtime/cookies';
+import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 /**
  *@public
  */
@@ -30,6 +26,7 @@ export type ClientCookies = {
 export interface NextContext {
   type: 'page' | 'route' | 'action';
   req: {
+    params: any;
     host: string;
     protocol: string;
     secure: boolean;
@@ -74,22 +71,5 @@ export interface NextContext {
  */
 export type MiddlewareFunction = (
   context: NextContext,
-  next?: NextFunction,
+  next: NextFunction,
 ) => Promise<any> | void;
-
-/**
- *@public
- */
-export interface PageRequest {
-  params?: any;
-  method?: string;
-  text?: () => Promise<string>;
-  json?: () => Promise<any>;
-}
-
-/**
- *@public
- */
-export interface RouteRequest {
-  params?: any;
-}

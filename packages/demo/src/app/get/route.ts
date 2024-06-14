@@ -7,12 +7,14 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const GET = createRoute([
-  user,
-  async ({ user, res, type }) => {
-    await runInExtraContext({
-      from: 'route'
-    }, async () => {
+export const GET = createRoute([user], async function Get(...args) {
+  console.log('Get', args);
+  const { user, res, type } = getNextContext();
+  await runInExtraContext(
+    {
+      from: 'route',
+    },
+    async () => {
       await sleep(1000);
       res.cookie('x-user', 'yiminghe', { path: '/' });
       res.set('x-from', 'next-compose');
@@ -22,6 +24,6 @@ export const GET = createRoute([
         type,
         ...getExtraContextInfo(),
       });
-    });
-  },
-]);
+    },
+  );
+});

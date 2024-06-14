@@ -1,10 +1,4 @@
-import type {
-  NextContext,
-  MiddlewareFunction,
-  NextFunction,
-  PageRequest,
-  RouteRequest,
-} from './types';
+import type { NextContext, MiddlewareFunction, NextFunction } from './types';
 import type { NextRequest } from 'next/server';
 import { compose } from './compose';
 import { createFinishMiddleware } from './finish';
@@ -14,8 +8,9 @@ import {
   getNextContextFromRoute,
 } from './next-context';
 import { setPageContext, runInRouteContext } from './set-context';
+import { aborted } from 'util';
 
-export type { ClientCookies, CookieOptions, PageRequest } from './types';
+export type { ClientCookies, CookieOptions } from './types';
 export type { NextContext, MiddlewareFunction, NextFunction };
 export { getNextContext, createNextContext } from './set-context';
 /**
@@ -23,78 +18,97 @@ export { getNextContext, createNextContext } from './set-context';
  */
 const finishMiddleware = createFinishMiddleware();
 
-/**
- *@public
- */
-export interface createPageProps {
-  req?: () => PageRequest;
-  name?: string;
-}
-/**
- *@public
- */
-export interface createRouteProps {
-  req?: (r: NextRequest) => RouteRequest;
-  name?: string;
-}
+function noop() {}
+
+type PK = Record<string, string | string[]>;
+
+type PageRequest = {
+  params: PK;
+  searchParams: PK;
+};
+
+type PageFn = (r: PageRequest) => void;
 
 /**
  *@public
  */
-export interface createActionProps {
-  name?: string;
-}
-
-/**
- *@public
- */
-export function createPage(
-  fns: MiddlewareFunction[],
-  props: createPageProps = {},
-) {
-  const handle = compose([finishMiddleware, ...fns]);
-  const Page = () => {
-    const context = getNextContextFromPage(props.req?.());
-    return setPageContext(context, () => handle(context));
+export function createPage(fns: MiddlewareFunction[], Page: PageFn): PageFn {
+  const handle = compose([
+    finishMiddleware,
+    ...fns,
+    (_: any, _2: any, r: PageRequest) => Page(r),
+  ]);
+  const P = (r: PageRequest) => {
+    const context = getNextContextFromPage();
+    if (r?.params) {
+      context.req.params = r.params;
+    }
+    return setPageContext(context, () => handle(context, noop, r));
   };
-  if (props.name) {
-    Page.name = props.name;
+  if (Page.name) {
+    Object.defineProperty(P, 'name', {
+      writable: true,
+      value: Page.name,
+    });
   }
-  return Page;
+  return P;
 }
+
+type RouteFn = (request: NextRequest, context: { params: PK }) => void;
 
 /**
  *@public
  */
 export function createRoute(
   fns: MiddlewareFunction[],
-  props: createRouteProps = {},
-) {
-  const handle = compose([finishMiddleware, ...fns]);
-  const Route = (r: NextRequest) => {
-    const context = getNextContextFromRoute(r, props.req?.(r));
-    return runInRouteContext(context, () => handle(context));
+  Route: RouteFn,
+): RouteFn {
+  const handle = compose([
+    finishMiddleware,
+    ...fns,
+    (_: any, _2: any, ...args: any) => Route.apply(null, args),
+  ]);
+  const R = (...args: any) => {
+    const r = args[0];
+    const c = args[1];
+    const context = getNextContextFromRoute(r);
+    if (c?.params) {
+      context.req.params = c.params;
+    }
+    return runInRouteContext(context, () => handle(context, noop, ...args));
   };
-  if (props.name) {
-    Route.name = props.name;
+  if (Route.name) {
+    Object.defineProperty(R, 'name', {
+      writable: true,
+      value: Route.name,
+    });
   }
-  return Route;
+  return R;
 }
 
 /**
  *@public
  */
-export function createAction(
+export function createAction<T extends Function>(
   fns: MiddlewareFunction[],
-  props: createActionProps = {},
-) {
-  const handle = compose([finishMiddleware, ...fns]);
-  const Route = () => {
+  action: T,
+): T {
+  //@ts-ignore
+  const handle = compose([
+    finishMiddleware,
+    ...fns,
+    (context: any, next: any, ...args: any) => action(...args),
+  ]);
+  const a = (...args: any) => {
     const context = getNextContextFromAction();
-    return runInRouteContext(context, () => handle(context));
+    //@ts-ignore
+    return runInRouteContext(context, () => handle(context, noop, ...args));
   };
-  if (props.name) {
-    Route.name = props.name;
+  if (action.name) {
+    Object.defineProperty(a, 'name', {
+      writable: true,
+      value: action.name,
+    });
   }
-  return Route;
+  return a as any;
 }

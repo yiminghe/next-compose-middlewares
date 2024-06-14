@@ -1,5 +1,5 @@
 import React from 'react';
-import { createPage } from 'next-compose-middlewares';
+import { createPage, getNextContext } from 'next-compose-middlewares';
 import { user } from '@/middlewares';
 import { ClientProvider } from '@/client-context/ClientContext';
 import components from '@/components';
@@ -8,14 +8,16 @@ import { runInExtraContext } from '../utils/extra-context';
 import ExtraContextInfo from '../components/ExtraContextInfo';
 
 let count = 0;
-export default createPage([
-  user,
-  ({ user, req, res }) => {
-    res.cookie('x-user2', 'yiminghe2', { path: '/' });
-    const cs = ++count % 2 ? ['c1'] : ['c2'];
-    runInExtraContext({
-      from: 'dynamic'
-    }, () => {
+export default createPage([user], function (...args) {
+  console.log('dynamic', args);
+  const { user, req, res } = getNextContext();
+  res.cookie('x-user2', 'yiminghe2', { path: '/' });
+  const cs = ++count % 2 ? ['c1'] : ['c2'];
+  runInExtraContext(
+    {
+      from: 'dynamic',
+    },
+    () => {
       res.render(
         <ClientProvider name={user}>
           <ExtraContextInfo />
@@ -33,7 +35,6 @@ export default createPage([
           </div>
         </ClientProvider>,
       );
-    })
-
-  },
-]);
+    },
+  );
+});

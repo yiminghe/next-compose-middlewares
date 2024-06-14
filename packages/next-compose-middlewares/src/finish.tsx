@@ -9,9 +9,9 @@ import React, { Fragment } from 'react';
 export function createFinishMiddleware(): MiddlewareFunction {
   return async (
     { res, type }: NextContext,
-    next?: NextFunction,
+    next: NextFunction,
   ): Promise<any> => {
-    const ret = await next?.();
+    const ret = await next();
     const private_ = res._private;
     if (private_.redirect) {
       return redirect(private_.redirect);

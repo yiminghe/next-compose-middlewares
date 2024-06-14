@@ -21,62 +21,34 @@ export type CookieOptions = Omit<ResponseCookie, 'expires' | 'name' | 'value'> &
 };
 
 // @public (undocumented)
-export function createAction(fns: MiddlewareFunction[], props?: createActionProps): {
-    (): unknown;
-    name: string;
-};
-
-// @public (undocumented)
-export interface createActionProps {
-    // (undocumented)
-    name?: string;
-}
+export function createAction<T extends Function>(fns: MiddlewareFunction[], action: T): T;
 
 // Warning: (ae-forgotten-export) The symbol "GetSetNextContext" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
 export function createNextContext<T>(c: T): GetSetNextContext<T>;
 
+// Warning: (ae-forgotten-export) The symbol "PageFn" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export function createPage(fns: MiddlewareFunction[], props?: createPageProps): {
-    (): unknown;
-    name: string;
-};
+export function createPage(fns: MiddlewareFunction[], Page: PageFn): PageFn;
 
+// Warning: (ae-forgotten-export) The symbol "RouteFn" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export interface createPageProps {
-    // (undocumented)
-    name?: string;
-    // (undocumented)
-    req?: () => PageRequest;
-}
-
-// @public (undocumented)
-export function createRoute(fns: MiddlewareFunction[], props?: createRouteProps): {
-    (r: NextRequest): unknown;
-    name: string;
-};
-
-// @public (undocumented)
-export interface createRouteProps {
-    // (undocumented)
-    name?: string;
-    // Warning: (ae-forgotten-export) The symbol "RouteRequest" needs to be exported by the entry point index.d.ts
-    //
-    // (undocumented)
-    req?: (r: NextRequest) => RouteRequest;
-}
+export function createRoute(fns: MiddlewareFunction[], Route: RouteFn): RouteFn;
 
 // @public (undocumented)
 export function getNextContext(): NextContext;
 
 // @public (undocumented)
-export type MiddlewareFunction = (context: NextContext, next?: NextFunction) => Promise<any> | void;
+export type MiddlewareFunction = (context: NextContext, next: NextFunction) => Promise<any> | void;
 
 // @public (undocumented)
 export interface NextContext {
     // (undocumented)
     req: {
+        params: any;
         host: string;
         protocol: string;
         secure: boolean;
@@ -118,18 +90,6 @@ export interface NextContext {
 
 // @public (undocumented)
 export type NextFunction = () => Promise<any> | void;
-
-// @public (undocumented)
-export interface PageRequest {
-    // (undocumented)
-    json?: () => Promise<any>;
-    // (undocumented)
-    method?: string;
-    // (undocumented)
-    params?: any;
-    // (undocumented)
-    text?: () => Promise<string>;
-}
 
 // (No @packageDocumentation comment for this package)
 

@@ -1,9 +1,4 @@
-import type {
-  NextContext,
-  CookieOptions,
-  PageRequest,
-  RouteRequest,
-} from './types';
+import type { NextContext, CookieOptions } from './types';
 import type { NextRequest } from 'next/server';
 import { cookies as getCookies, headers as getHeaders } from 'next/headers';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
@@ -139,6 +134,7 @@ function buildRequest() {
   }
   const protocol = url.protocol.slice(0, -1);
   return {
+    params: {},
     method: 'GET',
     cookies: transformCookiesToObject(),
     text: () =>
@@ -165,7 +161,7 @@ function buildRequest() {
 /**
  *@public
  */
-export function getNextContextFromPage(props: PageRequest = {}) {
+export function getNextContextFromPage() {
   const res = buildResponse();
   function cookie(name: string, value: any, options?: CookieOptions) {
     res._private.cookies = res._private.cookies || {};
@@ -176,10 +172,7 @@ export function getNextContextFromPage(props: PageRequest = {}) {
   }
   const context: NextContext = {
     type: 'page',
-    req: {
-      ...buildRequest(),
-      ...props,
-    },
+    req: buildRequest(),
     res: {
       ...res,
       cookie,
@@ -212,10 +205,7 @@ export function getNextContextFromAction() {
 /**
  *@public
  */
-export function getNextContextFromRoute(
-  req: NextRequest,
-  props: RouteRequest = {},
-) {
+export function getNextContextFromRoute(req: NextRequest) {
   const context: NextContext = {
     type: 'route',
     res: buildResponse(),
@@ -224,7 +214,6 @@ export function getNextContextFromRoute(
       text: () => req.text(),
       json: () => req.json(),
       method: req.method,
-      ...props,
     },
   };
   return context;

@@ -14,7 +14,7 @@ export const UserName = observer(() => {
         href="#"
         onClick={async (e) => {
           e.preventDefault();
-          console.log(await getUser());
+          console.log(await getUser(Date.now()));
         }}>
         get user by action
       </a>
