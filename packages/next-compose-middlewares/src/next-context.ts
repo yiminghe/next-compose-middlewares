@@ -74,13 +74,25 @@ function transformHeadersToObject(): any {
   );
 }
 
-function buildResponse(): Omit<NextContext['res'], 'cookie' | 'clearCookie'> {
+function buildResponse(): NextContext['res'] {
   const p: NextContext['res']['_private'] = {
     status: 200,
     headers: {},
   };
   return {
     _private: p,
+    clearCookie(
+      name: string,
+      options?: Omit<CookieOptions, 'expires' | 'maxAge'>,
+    ) {
+      getCookies().set(name, '', {
+        ...options,
+        expires: new Date(0),
+      });
+    },
+    cookie(name: string, value: any, options?: CookieOptions) {
+      getCookies().set(name, value, options);
+    },
     append(k: string, v: any) {
       p.headers[k] = p.headers[k] ?? '';
       p.headers[k] += v;
@@ -111,7 +123,7 @@ function buildResponse(): Omit<NextContext['res'], 'cookie' | 'clearCookie'> {
   };
 }
 
-function buildHeaderApi() {
+function buildRequest() {
   const headers = transformHeadersToObject();
   function get(k: string) {
     return headers[k];
@@ -127,6 +139,16 @@ function buildHeaderApi() {
   }
   const protocol = url.protocol.slice(0, -1);
   return {
+    method: 'GET',
+    cookies: transformCookiesToObject(),
+    text: () =>
+      new Promise<string>((r) => {
+        r('');
+      }),
+    json: () =>
+      new Promise<any>((r) => {
+        r({});
+      }),
     host: url.host,
     secure: protocol === 'https',
     url: url.toString(),
@@ -154,20 +176,8 @@ export function getNextContextFromPage(props: PageRequest = {}) {
   }
   const context: NextContext = {
     type: 'page',
-    cookies: () => getCookies(),
-    headers: () => getHeaders(),
     req: {
-      text: () =>
-        new Promise((r) => {
-          r('');
-        }),
-      json: () =>
-        new Promise((r) => {
-          r({});
-        }),
-      cookies: transformCookiesToObject(),
-      ...buildHeaderApi(),
-      method: 'GET',
+      ...buildRequest(),
       ...props,
     },
     res: {
@@ -186,35 +196,34 @@ export function getNextContextFromPage(props: PageRequest = {}) {
 /**
  *@public
  */
+export function getNextContextFromAction() {
+  const res = buildResponse();
+  const context: NextContext = {
+    type: 'action',
+    req: {
+      ...buildRequest(),
+      method: 'POST',
+    },
+    res,
+  };
+  return context;
+}
+
+/**
+ *@public
+ */
 export function getNextContextFromRoute(
   req: NextRequest,
   props: RouteRequest = {},
 ) {
   const context: NextContext = {
     type: 'route',
-    cookies: () => getCookies(),
-    headers: () => getHeaders(),
-    res: {
-      ...buildResponse(),
-      clearCookie(
-        name: string,
-        options?: Omit<CookieOptions, 'expires' | 'maxAge'>,
-      ) {
-        getCookies().set(name, '', {
-          ...options,
-          expires: new Date(0),
-        });
-      },
-      cookie(name: string, value: any, options?: CookieOptions) {
-        getCookies().set(name, value, options);
-      },
-    },
+    res: buildResponse(),
     req: {
+      ...buildRequest(),
       text: () => req.text(),
       json: () => req.json(),
       method: req.method,
-      cookies: transformCookiesToObject(),
-      ...buildHeaderApi(),
       ...props,
     },
   };

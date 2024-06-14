@@ -6,12 +6,14 @@ import { ClientProvider } from '../client-context/ClientContext';
 import { UserInput } from './components/UserInput';
 import { UserName } from './components/UserName';
 import ServerInfo from './components/ServerInfo';
+import ExtraContextInfo from './components/ExtraContextInfo';
 
 export default createPage([
   user,
   ({ user, res }) => {
     res.render(
       <ClientProvider name={user}>
+        <ExtraContextInfo />
         <ServerInfo />
         <UserInput />
         <UserName />

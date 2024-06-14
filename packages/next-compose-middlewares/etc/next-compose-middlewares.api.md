@@ -4,10 +4,9 @@
 
 ```ts
 
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import type { default as React_2 } from 'react';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 
 // @public (undocumented)
 export type ClientCookies = {
@@ -76,10 +75,6 @@ export type MiddlewareFunction = (context: NextContext, next?: NextFunction) => 
 
 // @public (undocumented)
 export interface NextContext {
-    // (undocumented)
-    cookies: () => ResponseCookies;
-    // (undocumented)
-    headers: () => NextRequest['headers'];
     // (undocumented)
     req: {
         host: string;

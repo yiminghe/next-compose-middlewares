@@ -9,6 +9,7 @@ import type { NextRequest } from 'next/server';
 import { compose } from './compose';
 import { createFinishMiddleware } from './finish';
 import {
+  getNextContextFromAction,
   getNextContextFromPage,
   getNextContextFromRoute,
 } from './next-context';
@@ -89,8 +90,7 @@ export function createAction(
 ) {
   const handle = compose([finishMiddleware, ...fns]);
   const Route = () => {
-    const context = getNextContextFromPage();
-    context.type = 'action';
+    const context = getNextContextFromAction();
     return runInRouteContext(context, () => handle(context));
   };
   if (props.name) {

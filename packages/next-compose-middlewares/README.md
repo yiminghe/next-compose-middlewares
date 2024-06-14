@@ -1,8 +1,8 @@
 # next-compose-middlewares
 - Using koa style middlewares inside nextjs
-- Unified request/response context(express api) across Page and Route
-- SetCookie/clearCookie both inside Page and Route
-- Easily access request/response context between components inside Page and functions inside Route 
+- Unified request/response context(express api) across Page and Route/Action
+- SetCookie/clearCookie both inside Page and Route/Action
+- Easily access request/response context between components inside Page and functions inside Route/Action 
 
 
 [![NPM version](https://badge.fury.io/js/next-compose-middlewares.png)](http://badge.fury.io/js/next-compose-middlewares)
@@ -93,10 +93,9 @@ location /rewrite {
 
 ```ts
 
-import { NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import type { default as React_2 } from 'react';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies';
 
 // @public (undocumented)
 export type ClientCookies = {
@@ -165,10 +164,6 @@ export type MiddlewareFunction = (context: NextContext, next?: NextFunction) => 
 
 // @public (undocumented)
 export interface NextContext {
-    // (undocumented)
-    cookies: () => ResponseCookies;
-    // (undocumented)
-    headers: () => NextRequest['headers'];
     // (undocumented)
     req: {
         host: string;
