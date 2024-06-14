@@ -12,21 +12,18 @@ import {
   getNextContextFromPage,
   getNextContextFromRoute,
 } from './next-context';
-import { setPageContext, asyncLocalStorage } from './set-context';
+import { setPageContext, runInRouteContext } from './set-context';
 
-export { middleware } from './middleware';
-export { createFinishMiddleware } from './finish';
-export { compose } from './compose';
 export type { ClientCookies, CookieOptions, PageRequest } from './types';
 export type { NextContext, MiddlewareFunction, NextFunction };
 export {
   getNextContext,
-  createPageContext,
+  createNextContext,
 } from './set-context';
 /**
  *@public
  */
-export const finishMiddleware = createFinishMiddleware();
+const finishMiddleware = createFinishMiddleware();
 
 /**
  *@public
@@ -52,8 +49,7 @@ export function createPage(
   const handle = compose([finishMiddleware, ...fns]);
   const Page = () => {
     const context = getNextContextFromPage(props.req?.());
-    setPageContext(context);
-    return handle(context);
+    return setPageContext(context, () => handle(context));
   };
   if (props.name) {
     Page.name = props.name;
@@ -71,7 +67,7 @@ export function createRoute(
   const handle = compose([finishMiddleware, ...fns]);
   const Route = (r: NextRequest) => {
     const context = getNextContextFromRoute(r, props.req?.(r));
-    return asyncLocalStorage.run(context, () => handle(context));
+    return runInRouteContext(context, () => handle(context));
   };
   if (props.name) {
     Route.name = props.name;

@@ -89,10 +89,7 @@ location /rewrite {
 
 ```ts
 
-/// <reference types="node" />
-
 import { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
 import type { default as React_2 } from 'react';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { ResponseCookies } from 'next/dist/compiled/@edge-runtime/cookies';
@@ -105,24 +102,20 @@ export type ClientCookies = {
 };
 
 // @public (undocumented)
-export function compose(middleware: Function[]): (context: any, next?: Function) => Promise<any>;
-
-// @public (undocumented)
 export type CookieOptions = Omit<ResponseCookie, 'expires' | 'name' | 'value'> & {
     expires?: Date;
 };
 
+// Warning: (ae-forgotten-export) The symbol "GetSetNextContext" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export function createFinishMiddleware(): MiddlewareFunction;
+export function createNextContext<T>(c: T): GetSetNextContext<T>;
 
 // @public (undocumented)
 export function createPage(fns: MiddlewareFunction[], props?: createPageProps): {
-    (): Promise<any>;
+    (): unknown;
     name: string;
 };
-
-// @public (undocumented)
-export function createPageContext<T>(defaultValue: T): [() => T, (v: T) => void];
 
 // @public (undocumented)
 export interface createPageProps {
@@ -134,7 +127,7 @@ export interface createPageProps {
 
 // @public (undocumented)
 export function createRoute(fns: MiddlewareFunction[], props?: createRouteProps): {
-    (r: NextRequest): Promise<any>;
+    (r: NextRequest): unknown;
     name: string;
 };
 
@@ -149,13 +142,7 @@ export interface createRouteProps {
 }
 
 // @public (undocumented)
-export const finishMiddleware: MiddlewareFunction;
-
-// @public (undocumented)
 export function getNextContext(): NextContext;
-
-// @public (undocumented)
-export function middleware(req: NextRequest): Promise<NextResponse<unknown> | undefined>;
 
 // @public (undocumented)
 export type MiddlewareFunction = (context: NextContext, next?: NextFunction) => Promise<any> | void;
