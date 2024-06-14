@@ -11,7 +11,7 @@ export function createFinishMiddleware(): MiddlewareFunction {
     { res, type }: NextContext,
     next?: NextFunction,
   ): Promise<any> => {
-    await next?.();
+    const ret = await next?.();
     const private_ = res._private;
     if (private_.redirect) {
       return redirect(private_.redirect);
@@ -32,5 +32,6 @@ export function createFinishMiddleware(): MiddlewareFunction {
         headers: private_.headers,
       });
     }
+    return ret;
   };
 }

@@ -21,6 +21,18 @@ export type CookieOptions = Omit<ResponseCookie, 'expires' | 'name' | 'value'> &
     expires?: Date;
 };
 
+// @public (undocumented)
+export function createAction(fns: MiddlewareFunction[], props?: createActionProps): {
+    (): unknown;
+    name: string;
+};
+
+// @public (undocumented)
+export interface createActionProps {
+    // (undocumented)
+    name?: string;
+}
+
 // Warning: (ae-forgotten-export) The symbol "GetSetNextContext" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
@@ -106,7 +118,7 @@ export interface NextContext {
         status: (s: number) => void;
     };
     // (undocumented)
-    type: 'page' | 'route';
+    type: 'page' | 'route' | 'action';
 }
 
 // @public (undocumented)

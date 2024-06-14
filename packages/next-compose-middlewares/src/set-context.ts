@@ -5,9 +5,7 @@ import type { NextContext } from './types';
 /**
  *@public
  */
-export function createPageContext<T>(
-  defaultValue: T,
-): GetSetNextContext<T> {
+export function createPageContext<T>(defaultValue: T): GetSetNextContext<T> {
   const getRef = cache(() => ({ current: defaultValue }));
 
   const getValue = (): T => getRef().current;
@@ -39,17 +37,16 @@ export const [
 /**
  *@public
  */
-export function createRouteContext<T>(defaultValue: T):
-  GetSetNextContext<T> {
+export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
   const s = new AsyncLocalStorage<T>();
   let value = defaultValue;
   const getRouteContext = (): T => s.getStore() || value;
 
-  const runInRouteContext = (v: T, callback: () => unknown) => s.run(v, callback);
+  const runInRouteContext = (v: T, callback: () => unknown) =>
+    s.run(v, callback);
 
   return [getRouteContext, runInRouteContext];
 }
-
 
 /**
  *@public
@@ -76,7 +73,10 @@ export function getNextContext() {
 /**
  *@public
  */
-export type GetSetNextContext<T> = [() => T, (v: T, callback: () => unknown) => unknown];
+export type GetSetNextContext<T> = [
+  () => T,
+  (v: T, callback: () => unknown) => unknown,
+];
 
 /**
  *@public
@@ -85,15 +85,14 @@ export function createNextContext<T>(c: T): GetSetNextContext<T> {
   let getSetPage: GetSetNextContext<T> = [] as any;
   let getSetRoute: GetSetNextContext<T> = [] as any;
   function init() {
-
     const context = getNextContext() || {};
     if (context.type === 'page') {
       if (getSetPage.length) {
         return getSetPage;
       }
       getSetPage = createPageContext(c);
-      return getSetPage
-    } else if (context.type === 'route') {
+      return getSetPage;
+    } else if (context.type === 'route' || context.type === 'action') {
       if (getSetRoute.length) {
         return getSetRoute;
       }

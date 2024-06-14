@@ -28,7 +28,7 @@ export type ClientCookies = {
  *@public
  */
 export interface NextContext {
-  type: 'page' | 'route';
+  type: 'page' | 'route' | 'action';
 
   cookies: () => ResponseCookies;
   headers: () => NextRequest['headers'];
