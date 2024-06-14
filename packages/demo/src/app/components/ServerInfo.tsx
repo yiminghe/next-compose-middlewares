@@ -1,7 +1,7 @@
-import { getPageContext } from 'next-compose-middlewares';
+import { getNextContext } from 'next-compose-middlewares';
 
 export default function ServerInfo() {
-  const { req, user } = getPageContext();
+  const { req, user } = getNextContext();
   return (
     <>
       <div>server user: {user}</div>

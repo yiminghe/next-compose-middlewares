@@ -12,15 +12,17 @@ import {
   getNextContextFromPage,
   getNextContextFromRoute,
 } from './next-context';
-import { setPageContext } from './page-context';
-import { AsyncLocalStorage } from 'async_hooks';
+import { setPageContext, asyncLocalStorage } from './set-context';
 
 export { middleware } from './middleware';
 export { createFinishMiddleware } from './finish';
 export { compose } from './compose';
 export type { ClientCookies, CookieOptions, PageRequest } from './types';
 export type { NextContext, MiddlewareFunction, NextFunction };
-export { getPageContext, createPageContext } from './page-context';
+export {
+  getNextContext,
+  createPageContext,
+} from './set-context';
 /**
  *@public
  */
@@ -58,14 +60,7 @@ export function createPage(
   }
   return Page;
 }
-/**
- *@public
- */
-export function getRouteContext():NextContext {
-  return asyncLocalStorage.getStore()!;
-}
 
-const asyncLocalStorage = new AsyncLocalStorage<NextContext>();
 /**
  *@public
  */

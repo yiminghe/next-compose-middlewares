@@ -1,4 +1,4 @@
-import { createRoute, getRouteContext } from 'next-compose-middlewares';
+import { createRoute, getNextContext } from 'next-compose-middlewares';
 import { user } from '../../middlewares';
 
 function sleep(ms: number) {
@@ -7,10 +7,10 @@ function sleep(ms: number) {
 
 export const GET = createRoute([
   user,
-  async ({ user, res }) => {
+  async ({ user, res,type }) => {
     await sleep(1000);
     res.cookie('x-user', 'yiminghe', { path: '/' });
     res.set('x-from', 'next-compose');
-    res.json({ user, user2: getRouteContext().user });
+    res.json({ user, user2: getNextContext().user,type });
   },
 ]);

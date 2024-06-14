@@ -19,6 +19,8 @@ export function createPageContext<T>(
   return [getValue, setValue];
 }
 
+const defaultValue = {} as NextContext;
+
 /**
  *@public
  */
@@ -31,4 +33,22 @@ export const [
    *@public
    */
   setPageContext,
-] = createPageContext({} as NextContext);
+] = createPageContext(defaultValue);
+
+
+/**
+ *@public
+ */
+export function getRouteContext(): NextContext {
+  return asyncLocalStorage.getStore()!;
+}
+
+export const asyncLocalStorage = new AsyncLocalStorage<NextContext>();
+
+/**
+ *@public
+ */
+export function getNextContext() {
+  const context = getPageContext();
+  return context == defaultValue ? getRouteContext() : context;
+}

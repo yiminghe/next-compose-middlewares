@@ -89,6 +89,8 @@ location /rewrite {
 
 ```ts
 
+/// <reference types="node" />
+
 import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import type { default as React_2 } from 'react';
@@ -150,14 +152,7 @@ export interface createRouteProps {
 export const finishMiddleware: MiddlewareFunction;
 
 // @public (undocumented)
-export const
-/**
-*@public
-*/
-getPageContext: () => NextContext;
-
-// @public (undocumented)
-export function getRouteContext(): NextContext;
+export function getNextContext(): NextContext;
 
 // @public (undocumented)
 export function middleware(req: NextRequest): Promise<NextResponse<unknown> | undefined>;
