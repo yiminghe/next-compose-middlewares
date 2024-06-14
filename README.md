@@ -1,5 +1,9 @@
 # next-compose-middlewares
-using koa style middlewares inside nextjs
+- Using koa style middlewares inside nextjs
+- Unified request/response context(express api) across Page and Route
+- SetCookie/clearCookie both inside Page and Route
+- Easily access request/response context between components inside Page and functions inside Route 
+
 
 [![NPM version](https://badge.fury.io/js/next-compose-middlewares.png)](http://badge.fury.io/js/next-compose-middlewares)
 [![NPM downloads](http://img.shields.io/npm/dm/next-compose-middlewares.svg)](https://npmjs.org/package/next-compose-middlewares)
