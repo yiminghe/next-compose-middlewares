@@ -24,7 +24,7 @@ export type ClientCookies = {
  *@public
  */
 export interface NextContext {
-  type: 'page' | 'route' | 'action';
+  type: 'page' | 'route' | 'action' | 'layout';
   req: {
     params: any;
     host: string;

@@ -4,6 +4,8 @@
 
 ```ts
 
+/// <reference types="react" />
+
 import type { NextRequest } from 'next/server';
 import type { default as React_2 } from 'react';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
@@ -23,23 +25,31 @@ export type CookieOptions = Omit<ResponseCookie, 'expires' | 'name' | 'value'> &
 // @public (undocumented)
 export function createAction<T extends Function>(fns: MiddlewareFunction[], action: T): T;
 
+// @public (undocumented)
+export function createLayout(fns: MiddlewareFunction[], Layout: LayoutFunction): LayoutFunction;
+
 // Warning: (ae-forgotten-export) The symbol "GetSetNextContext" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
 export function createNextContext<T>(c: T): GetSetNextContext<T>;
 
-// Warning: (ae-forgotten-export) The symbol "PageFn" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
-export function createPage(fns: MiddlewareFunction[], Page: PageFn): PageFn;
+export function createPage(fns: MiddlewareFunction[], Page: PageFunction): PageFunction;
 
-// Warning: (ae-forgotten-export) The symbol "RouteFn" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
-export function createRoute(fns: MiddlewareFunction[], Route: RouteFn): RouteFn;
+export function createRoute(fns: MiddlewareFunction[], Route: RouteFunction): RouteFunction;
 
 // @public (undocumented)
 export function getNextContext(): NextContext;
+
+// @public (undocumented)
+export type LayoutFunction = (r: LayoutRequest) => ReturnedRender | Promise<ReturnedRender>;
+
+// @public (undocumented)
+export type LayoutRequest = {
+    params: Params;
+    children: React.ReactNode;
+};
 
 // @public (undocumented)
 export type MiddlewareFunction = (context: NextContext, next: NextFunction) => Promise<any> | void;
@@ -85,11 +95,31 @@ export interface NextContext {
         status: (s: number) => void;
     };
     // (undocumented)
-    type: 'page' | 'route' | 'action';
+    type: 'page' | 'route' | 'action' | 'layout';
 }
 
 // @public (undocumented)
 export type NextFunction = () => Promise<any> | void;
+
+// @public (undocumented)
+export type PageFunction = (r: PageRequest) => ReturnedRender | Promise<ReturnedRender>;
+
+// @public (undocumented)
+export type PageRequest = {
+    params: Params;
+    searchParams: Params;
+};
+
+// @public (undocumented)
+export type Params = Record<string, string | string[]>;
+
+// @public (undocumented)
+export type ReturnedRender = void | React.ReactNode;
+
+// @public (undocumented)
+export type RouteFunction = (request: NextRequest, context: {
+    params: Params;
+}) => any;
 
 // (No @packageDocumentation comment for this package)
 

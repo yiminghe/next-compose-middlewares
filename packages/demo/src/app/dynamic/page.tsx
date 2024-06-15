@@ -8,17 +8,16 @@ import { runInExtraContext } from '../utils/extra-context';
 import ExtraContextInfo from '../components/ExtraContextInfo';
 
 let count = 0;
-export default createPage([user], function (...args) {
-  console.log('dynamic', args);
+export default createPage([user], function Dynamic() {
   const { user, req, res } = getNextContext();
   res.cookie('x-user2', 'yiminghe2', { path: '/' });
   const cs = ++count % 2 ? ['c1'] : ['c2'];
-  runInExtraContext(
+  return runInExtraContext(
     {
       from: 'dynamic',
     },
     () => {
-      res.render(
+      return (
         <ClientProvider name={user}>
           <ExtraContextInfo />
           <script>{`console.log(${JSON.stringify(req)});`}</script>
@@ -33,7 +32,7 @@ export default createPage([user], function (...args) {
               return <C key={id} />;
             })}
           </div>
-        </ClientProvider>,
+        </ClientProvider>
       );
     },
   );

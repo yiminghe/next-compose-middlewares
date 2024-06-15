@@ -62,6 +62,10 @@ export const [
   runInRouteContext,
 ] = createRouteContext(defaultContext);
 
+export function isPageContextInitialized() {
+  return getPageContext() !== defaultContext;
+}
+
 /**
  *@public
  */
@@ -75,7 +79,7 @@ export function getNextContext() {
  */
 export type GetSetNextContext<T> = [
   () => T,
-  (v: T, callback: () => unknown) => unknown,
+  (v: T, callback: () => unknown) => any,
 ];
 
 /**

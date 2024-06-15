@@ -16,7 +16,7 @@ export const GET = createRoute([user], async function Get(...args) {
     },
     async () => {
       await sleep(1000);
-      res.cookie('x-user', 'yiminghe', { path: '/' });
+      res.cookie('x-user3', 'yiminghe', { path: '/' });
       res.set('x-from', 'next-compose');
       res.json({
         user,

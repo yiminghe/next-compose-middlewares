@@ -3,12 +3,16 @@ import type { NextRequest } from 'next/server';
 import { compose } from './compose';
 import { createFinishMiddleware } from './finish';
 import {
-  getNextContextFromAction,
-  getNextContextFromPage,
-  getNextContextFromRoute,
+  createNextContextFromAction,
+  createNextContextFromPage,
+  createNextContextFromRoute,
 } from './next-context';
-import { setPageContext, runInRouteContext } from './set-context';
-import { aborted } from 'util';
+import {
+  setPageContext,
+  runInRouteContext,
+  isPageContextInitialized,
+  getPageContext,
+} from './set-context';
 
 export type { ClientCookies, CookieOptions } from './types';
 export type { NextContext, MiddlewareFunction, NextFunction };
@@ -20,30 +24,55 @@ const finishMiddleware = createFinishMiddleware();
 
 function noop() {}
 
-type PK = Record<string, string | string[]>;
-
-type PageRequest = {
-  params: PK;
-  searchParams: PK;
-};
-
-type PageFn = (r: PageRequest) => void;
+/**
+ *@public
+ */
+export type Params = Record<string, string | string[]>;
 
 /**
  *@public
  */
-export function createPage(fns: MiddlewareFunction[], Page: PageFn): PageFn {
+export type PageRequest = {
+  params: Params;
+  searchParams: Params;
+};
+/**
+ *@public
+ */
+export type ReturnedRender = void | React.ReactNode;
+/**
+ *@public
+ */
+export type PageFunction = (
+  r: PageRequest,
+) => ReturnedRender | Promise<ReturnedRender>;
+
+/**
+ *@public
+ */
+export function createPage(
+  fns: MiddlewareFunction[],
+  Page: PageFunction,
+): PageFunction {
   const handle = compose([
     finishMiddleware,
     ...fns,
-    (_: any, _2: any, r: PageRequest) => Page(r),
+    (_: any, _2: any, r: any) => Page(r),
   ]);
-  const P = (r: PageRequest) => {
-    const context = getNextContextFromPage();
+  const P = async (r: PageRequest | LayoutRequest) => {
+    const currentType = 'children' in r ? 'layout' : 'page';
+    // if page context is initialized by layout, use it, otherwise create a new one
+    const context = isPageContextInitialized()
+      ? getPageContext()
+      : createNextContextFromPage(currentType);
+    const prevType = context.type;
+    context.type = currentType;
     if (r?.params) {
       context.req.params = r.params;
     }
-    return setPageContext(context, () => handle(context, noop, r));
+    const ret = await setPageContext(context, () => handle(context, noop, r));
+    context.type = prevType;
+    return ret;
   };
   if (Page.name) {
     Object.defineProperty(P, 'name', {
@@ -51,18 +80,47 @@ export function createPage(fns: MiddlewareFunction[], Page: PageFn): PageFn {
       value: Page.name,
     });
   }
-  return P;
+  return P as PageFunction;
+}
+/**
+ *@public
+ */
+export type LayoutRequest = {
+  params: Params;
+  children: React.ReactNode;
+};
+/**
+ *@public
+ */
+export type LayoutFunction = (
+  r: LayoutRequest,
+) => ReturnedRender | Promise<ReturnedRender>;
+
+/**
+ *@public
+ */
+export function createLayout(
+  fns: MiddlewareFunction[],
+  Layout: LayoutFunction,
+): LayoutFunction {
+  return createPage(fns as any, Layout as any) as any;
 }
 
-type RouteFn = (request: NextRequest, context: { params: PK }) => void;
+/**
+ *@public
+ */
+export type RouteFunction = (
+  request: NextRequest,
+  context: { params: Params },
+) => any;
 
 /**
  *@public
  */
 export function createRoute(
   fns: MiddlewareFunction[],
-  Route: RouteFn,
-): RouteFn {
+  Route: RouteFunction,
+): RouteFunction {
   const handle = compose([
     finishMiddleware,
     ...fns,
@@ -71,7 +129,7 @@ export function createRoute(
   const R = (...args: any) => {
     const r = args[0];
     const c = args[1];
-    const context = getNextContextFromRoute(r);
+    const context = createNextContextFromRoute(r);
     if (c?.params) {
       context.req.params = c.params;
     }
@@ -100,7 +158,7 @@ export function createAction<T extends Function>(
     (context: any, next: any, ...args: any) => action(...args),
   ]);
   const a = (...args: any) => {
-    const context = getNextContextFromAction();
+    const context = createNextContextFromAction();
     //@ts-ignore
     return runInRouteContext(context, () => handle(context, noop, ...args));
   };

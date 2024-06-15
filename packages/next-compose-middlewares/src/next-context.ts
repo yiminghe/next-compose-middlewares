@@ -161,7 +161,7 @@ function buildRequest() {
 /**
  *@public
  */
-export function getNextContextFromPage() {
+export function createNextContextFromPage(type: 'page' | 'layout' = 'page') {
   const res = buildResponse();
   function cookie(name: string, value: any, options?: CookieOptions) {
     res._private.cookies = res._private.cookies || {};
@@ -171,7 +171,7 @@ export function getNextContextFromPage() {
     }
   }
   const context: NextContext = {
-    type: 'page',
+    type,
     req: buildRequest(),
     res: {
       ...res,
@@ -189,7 +189,7 @@ export function getNextContextFromPage() {
 /**
  *@public
  */
-export function getNextContextFromAction() {
+export function createNextContextFromAction() {
   const res = buildResponse();
   const context: NextContext = {
     type: 'action',
@@ -205,7 +205,7 @@ export function getNextContextFromAction() {
 /**
  *@public
  */
-export function getNextContextFromRoute(req: NextRequest) {
+export function createNextContextFromRoute(req: NextRequest) {
   const context: NextContext = {
     type: 'route',
     res: buildResponse(),

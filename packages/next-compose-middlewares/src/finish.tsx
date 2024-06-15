@@ -16,13 +16,13 @@ export function createFinishMiddleware(): MiddlewareFunction {
     if (private_.redirect) {
       return redirect(private_.redirect);
     }
-    if (type === 'page' && private_.render !== undefined) {
+    if (type === 'page' || type === 'layout') {
       return (
         <>
           {private_.cookies && (
             <ClientCookies key="cookies" cookies={private_.cookies} />
           )}
-          <Fragment key="main">{private_.render}</Fragment>
+          <Fragment key="main">{private_.render || ret}</Fragment>
         </>
       );
     }

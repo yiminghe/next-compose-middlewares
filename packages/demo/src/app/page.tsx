@@ -8,16 +8,15 @@ import { UserName } from './components/UserName';
 import ServerInfo from './components/ServerInfo';
 import ExtraContextInfo from './components/ExtraContextInfo';
 
-export default createPage([user], function Index(...args) {
-  console.log('Index', args);
-  const { user, res } = getNextContext();
-  res.render(
+export default createPage([user], function Index() {
+  const { user } = getNextContext();
+  return (
     <ClientProvider name={user}>
       <ExtraContextInfo />
       <ServerInfo />
       <UserInput />
       <UserName />
-      <Link href="/get">get</Link>
-    </ClientProvider>,
+      <Link href="/get">get</Link> &nbsp; <Link href="/dynamic">dynamic</Link>
+    </ClientProvider>
   );
 });
