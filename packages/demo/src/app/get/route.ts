@@ -1,5 +1,5 @@
-import { createRoute, getNextContext } from 'next-compose-middlewares';
-import { user } from '../../middlewares';
+import { getNextContext } from 'next-compose-middlewares';
+import { createRoute } from '../../middlewares';
 import getExtraContextInfo from '../utils/getExtraContextInfo';
 import { runInExtraContext } from '../utils/extra-context';
 
@@ -7,7 +7,7 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const GET = createRoute([user], async function Get(...args) {
+export const GET = createRoute(async function Get(...args) {
   console.log('Get', args);
   const { user, res, type } = getNextContext();
   await runInExtraContext(

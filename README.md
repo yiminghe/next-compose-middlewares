@@ -41,13 +41,13 @@ declare module 'next-compose-middlewares' {
 
 ```js
 import React from 'react';
-import { createPage,getNextContext } from 'next-compose-middlewares';
+import { withPageMiddlewares, getNextContext } from 'next-compose-middlewares';
 
-export default createPage([
+export default withPageMiddlewares([
   async (context, next) => {
     context.user = 'test';
     return await next();
-  },],
+  }])(
   () => {
     const { user } = getNextContext();
     return (
@@ -63,13 +63,13 @@ export default createPage([
 `src/app/get/route.ts`
 
 ```js
-import { createRoute,getNextContext } from 'next-compose-middlewares';
+import { withRouteMiddlewares,getNextContext } from 'next-compose-middlewares';
 
-export const GET = createRoute([
+export const GET = withRouteMiddlewares([
   async (context, next) => {
     context.user = 'test';
     return await next();
-  },],
+  }])(
   () => {
     const { user, res } = getNextContext();
     res.json({ user });
@@ -113,22 +113,10 @@ export type CookieOptions = Omit<ResponseCookie, 'expires' | 'name' | 'value'> &
     expires?: Date;
 };
 
-// @public (undocumented)
-export function createAction<T extends Function>(fns: MiddlewareFunction[], action: T): T;
-
-// @public (undocumented)
-export function createLayout(fns: MiddlewareFunction[], Layout: LayoutFunction): LayoutFunction;
-
 // Warning: (ae-forgotten-export) The symbol "GetSetNextContext" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
 export function createNextContext<T>(c: T): GetSetNextContext<T>;
-
-// @public (undocumented)
-export function createPage(fns: MiddlewareFunction[], Page: PageFunction): PageFunction;
-
-// @public (undocumented)
-export function createRoute(fns: MiddlewareFunction[], Route: RouteFunction): RouteFunction;
 
 // @public (undocumented)
 export function getNextContext(): NextContext;
@@ -211,6 +199,18 @@ export type ReturnedRender = void | React.ReactNode;
 export type RouteFunction = (request: NextRequest, context: {
     params: Params;
 }) => any;
+
+// @public (undocumented)
+export function withActionMiddlewares(fns: MiddlewareFunction[]): <T extends Function>(action: T) => T;
+
+// @public (undocumented)
+export const withLayoutMiddlewares: (fns: MiddlewareFunction[]) => (Layout: LayoutFunction) => LayoutFunction;
+
+// @public (undocumented)
+export function withPageMiddlewares(fns: MiddlewareFunction[]): (Page: PageFunction) => PageFunction;
+
+// @public (undocumented)
+export function withRouteMiddlewares(fns: MiddlewareFunction[]): (Route: RouteFunction) => RouteFunction;
 
 // (No @packageDocumentation comment for this package)
 

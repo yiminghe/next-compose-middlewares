@@ -1,6 +1,6 @@
 import React from 'react';
-import { createPage, getNextContext } from 'next-compose-middlewares';
-import { user } from '@/middlewares';
+import { getNextContext } from 'next-compose-middlewares';
+import { createPage } from '@/middlewares';
 import { ClientProvider } from '@/client-context/ClientContext';
 import components from '@/components';
 import Link from 'next/link';
@@ -8,7 +8,7 @@ import { runInExtraContext } from '../utils/extra-context';
 import ExtraContextInfo from '../components/ExtraContextInfo';
 
 let count = 0;
-export default createPage([user], function Dynamic() {
+export default createPage(function Dynamic() {
   const { user, req, res } = getNextContext();
   res.cookie('x-user2', 'yiminghe2', { path: '/' });
   const cs = ++count % 2 ? ['c1'] : ['c2'];
