@@ -45,5 +45,4 @@ cypress/fixtures/users.json
 .next/
 temp
 tsconfig.tsbuildinfo
-coverage
 .nyc_output
