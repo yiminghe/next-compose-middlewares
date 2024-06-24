@@ -1,15 +1,88 @@
 {
   "name": "next-compose-middlewares",
-  "private": true,
+  "version": "0.0.22",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/mjs/index.js",
+  "types": "./dist/cjs/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yiminghe/next-compose-middlewares"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/mjs/index.d.ts",
+        "default": "./dist/mjs/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./middleware": {
+      "import": {
+        "types": "./dist/mjs/middleware.d.ts",
+        "default": "./dist/mjs/middleware.js"
+      },
+      "require": {
+        "types": "./dist/cjs/middleware.d.ts",
+        "default": "./dist/cjs/middleware.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "lint": "pnpm run -r lint",
     "postinstall": "cp scripts/git-hooks/pre-commit .git/hooks/pre-commit",
-    "format": "cd scripts && npm run format",
-    "format:staged": "cd scripts && npm run format:staged",
-    "reinstall": "rm -rf node_modules pnpm-lock.yaml && pnpm"
+    "format": "prettier --config ./prettier.config.js --ignore-path ./.prettierignore ./ --write",
+    "format:staged": "pretty-quick --staged",
+    "test": "rm -rf .nyc_output && cypress run --e2e",
+    "test:ci": "start-test dev http://localhost:3000 ci",
+    "ci": "npm run test -- --record --key $CYPRESS_RECORD_KEY",
+    "lint": "tsc --noEmit && next lint",
+    "dev": "next dev",
+    "doc": "api-extractor run --local --diagnostics",
+    "build": "rm -rf dist && tsc -p tsconfig-cjs.json && tsc -p tsconfig-esm.json && pnpm doc && node scripts/build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@types/js-cookie": "3.x",
+    "js-cookie": "3.x"
   },
   "devDependencies": {
-    "next": "rc"
+    "prettier-plugin-tailwindcss": "0.2.x",
+    "prettier": "2.x",
+    "pretty-quick": "3.x",
+    "@microsoft/api-extractor": "7.x",
+    "@next/bundle-analyzer": "rc",
+    "@types/node": "18.x",
+    "@types/react": "18.x",
+    "mobx": "6.x",
+    "mobx-react-lite": "4.x",
+    "next": "rc",
+    "react": "rc",
+    "react-dom": "rc",
+    "typescript": "5.x",
+    "cypress": "13.x",
+    "start-server-and-test": "2.x",
+    "swc-plugin-coverage-instrument": "0.0.21",
+    "@cypress/code-coverage": "3.x",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3"
   },
-  "packageManager": "pnpm@9.3.0"
+  "nyc": {
+    "excludeAfterRemap": true,
+    "exclude": [
+      "**/node_modules/**/*",
+      "**/.pnpm/**/*",
+      "**/src/**/*",
+      "**/cypress/**/*"
+    ],
+    "reporter": [
+      "text",
+      "lcov"
+    ]
+  },
+  "packageManager": "pnpm@9.4.0"
 }

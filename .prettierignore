@@ -1,7 +1,6 @@
 #-------------------------------------------------------------------------------------------------------------------
 # Keep this section in sync with .gitignore
 #-------------------------------------------------------------------------------------------------------------------
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -46,10 +45,11 @@ cypress/logs
 cypress/fixtures/profile.json
 cypress/fixtures/users.json
 .history
-
+.next/
 temp
 tsconfig.tsbuildinfo
-.next/
+coverage
+.nyc_output
 #-------------------------------------------------------------------------------------------------------------------
 # Prettier-specific overrides
 #-------------------------------------------------------------------------------------------------------------------
