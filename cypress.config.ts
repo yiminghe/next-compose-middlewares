@@ -2,6 +2,13 @@ import { defineConfig } from 'cypress';
 import codeCoverage from '@cypress/code-coverage/task';
 
 export default defineConfig({
+  reporter: 'mochawesome',
+  reporterOptions: {
+    reportDir: 'coverage/test-report',
+    overwrite: false,
+    html: false,
+    json: true,
+  },
   projectId: '5v7p13',
   env: {
     codeCoverage: {
