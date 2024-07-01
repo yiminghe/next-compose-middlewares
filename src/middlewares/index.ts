@@ -9,7 +9,7 @@ import {
 
 async function user(context: NextContext, next: NextFunction) {
   context.user ??= 'test';
-  return await next();
+  await next();
 }
 
 export const createPage = withPageMiddlewares([user]);

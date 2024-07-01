@@ -7,31 +7,37 @@ import React, { Fragment } from 'react';
  *@public
  */
 export function createFinishMiddleware(): MiddlewareFunction {
-  return async (
+  return async function finishMiddleware(
     { res, type }: NextContext,
     next: NextFunction,
-  ): Promise<any> => {
-    const ret = await next();
-    const private_ = res._private;
-    if (private_.redirect) {
-      return redirect(private_.redirect);
+  ): Promise<any> {
+    await next();
+    const {
+      return: returnValue,
+      cookies,
+      render,
+      json,
+      status,
+      headers,
+      redirect: redirectUrl,
+    } = res._private;
+    if (redirectUrl) {
+      return redirect(redirectUrl);
     }
     if (type === 'page' || type === 'layout') {
       return (
         <>
-          {private_.cookies && (
-            <ClientCookies key="cookies" cookies={private_.cookies} />
-          )}
-          <Fragment key="main">{private_.render || ret}</Fragment>
+          {cookies && <ClientCookies key="cookies" cookies={cookies} />}
+          <Fragment key="main">{render || returnValue}</Fragment>
         </>
       );
     }
-    if (type === 'route' && private_.json) {
-      return NextResponse.json(private_.json, {
-        status: private_.status,
-        headers: private_.headers,
+    if (type === 'route' && json) {
+      return NextResponse.json(json, {
+        status,
+        headers,
       });
     }
-    return ret;
+    return returnValue;
   };
 }

@@ -8,10 +8,10 @@ import { UserName } from './components/UserName';
 import ServerInfo from './components/ServerInfo';
 import ExtraContextInfo from './components/ExtraContextInfo';
 
-export default createPage(function Index() {
+export default createPage(async function Index() {
   const { user } = getNextContext();
   return (
-    <ClientProvider name={user}>
+    <ClientProvider name={user!}>
       <ExtraContextInfo />
       <ServerInfo />
       <UserInput />

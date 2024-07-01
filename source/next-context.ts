@@ -74,7 +74,7 @@ function buildResponse(): NextContext['res'] {
     status: 200,
     headers: {},
   };
-  return {
+  const res = {
     _private: p,
     clearCookie(
       name: string,
@@ -106,6 +106,7 @@ function buildResponse(): NextContext['res'] {
     status(s: number) {
       p.status = s;
     },
+    return: (r: any) => (p.return = r),
     render(n: React.ReactNode) {
       p.render = n;
     },
@@ -116,6 +117,7 @@ function buildResponse(): NextContext['res'] {
       p.redirect = r;
     },
   };
+  return res;
 }
 
 function buildRequest() {
@@ -158,10 +160,7 @@ function buildRequest() {
   };
 }
 
-/**
- *@public
- */
-export function createNextContextFromPage(type: 'page' | 'layout' = 'page') {
+export function buildPageResponse() {
   const res = buildResponse();
   function cookie(name: string, value: any, options?: CookieOptions) {
     res._private.cookies = res._private.cookies || {};
@@ -170,19 +169,26 @@ export function createNextContextFromPage(type: 'page' | 'layout' = 'page') {
       res._private.cookies[name].expires = +options.expires;
     }
   }
+  return {
+    ...res,
+    cookie,
+    clearCookie(
+      name: string,
+      options?: Omit<CookieOptions, 'expires' | 'maxAge'>,
+    ) {
+      cookie(name, '', { ...options, expires: new Date(0) });
+    },
+  };
+}
+
+/**
+ *@public
+ */
+export function createNextContextFromPage(type: 'page' | 'layout' = 'page') {
   const context: NextContext = {
     type,
     req: buildRequest(),
-    res: {
-      ...res,
-      cookie,
-      clearCookie(
-        name: string,
-        options?: Omit<CookieOptions, 'expires' | 'maxAge'>,
-      ) {
-        cookie(name, '', { ...options, expires: new Date(0) });
-      },
-    },
+    res: buildPageResponse(),
   };
   return context;
 }

@@ -44,6 +44,7 @@ export interface NextContext {
   };
   res: {
     _private: {
+      return?: any;
       cookies?: ClientCookies;
       headers: any;
       redirect?: string;
@@ -60,6 +61,7 @@ export interface NextContext {
     set: (...args: [key: string, v: any] | [o: any]) => void;
     get: (key: string) => any;
     redirect: (r: string) => void;
+    return: (r: any) => void;
     render: (r: React.ReactNode) => void;
     json: (j: any) => void;
     status: (s: number) => void;

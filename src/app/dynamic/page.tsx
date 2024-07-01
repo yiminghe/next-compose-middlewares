@@ -12,13 +12,13 @@ export default createPage(function Dynamic() {
   const { user, req, res } = getNextContext();
   res.cookie('x-user2', 'yiminghe2', { path: '/' });
   const cs = ++count % 2 ? ['c1'] : ['c2'];
-  return runInExtraContext(
+  runInExtraContext(
     {
       from: 'dynamic',
     },
     () => {
-      return (
-        <ClientProvider name={user}>
+      res.render(
+        <ClientProvider name={user!}>
           <ExtraContextInfo />
           <script>{`console.log(${JSON.stringify(req)});`}</script>
           <div>
@@ -32,7 +32,7 @@ export default createPage(function Dynamic() {
               return <C key={id} />;
             })}
           </div>
-        </ClientProvider>
+        </ClientProvider>,
       );
     },
   );

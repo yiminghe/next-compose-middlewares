@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import { compose } from './compose';
 import { createFinishMiddleware } from './finish';
 import {
+  buildPageResponse,
   createNextContextFromAction,
   createNextContextFromPage,
   createNextContextFromRoute,
@@ -55,14 +56,17 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
     const handle = compose([
       finishMiddleware,
       ...fns,
-      (_: any, _2: any, r: any) => Page(r),
+      ({ res }: NextContext, _2: any, r: any) => res.return(Page(r)),
     ]);
     const P = async (r: PageRequest | LayoutRequest) => {
       const currentType = 'children' in r ? 'layout' : 'page';
-      // if page context is initialized by layout, use it, otherwise create a new one
+      // if page context is initialized by layout,
+      // use it, otherwise create a new one
       const context = isPageContextInitialized()
         ? getPageContext()
         : createNextContextFromPage(currentType);
+      // do not share response
+      context.res = buildPageResponse();
       const prevType = context.type;
       context.type = currentType;
       if (r?.params) {
@@ -118,7 +122,8 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
     const handle = compose([
       finishMiddleware,
       ...fns,
-      (_: any, _2: any, ...args: any) => Route.apply(null, args),
+      ({ res }: NextContext, _2: any, ...args: any) =>
+        res.return(Route.apply(null, args)),
     ]);
     const R = (...args: any) => {
       const r = args[0];
@@ -148,7 +153,8 @@ export function withActionMiddlewares(fns: MiddlewareFunction[]) {
     const handle = compose([
       finishMiddleware,
       ...fns,
-      (context: any, next: any, ...args: any) => action(...args),
+      ({ res }: NextContext, _: any, ...args: any) =>
+        res.return(action(...args)),
     ]);
     const a = (...args: any) => {
       const context = createNextContextFromAction();

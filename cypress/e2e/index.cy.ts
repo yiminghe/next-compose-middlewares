@@ -8,4 +8,10 @@ describe('index spec', () => {
     cy.get('body').contains('server user: test');
     cy.get('body').contains('client user: test');
   });
+
+  it('action passes', () => {
+    cy.visit('/');
+    cy.get('[data-cy="action"]').click();
+    cy.get('body').contains('from action: test');
+  });
 });
