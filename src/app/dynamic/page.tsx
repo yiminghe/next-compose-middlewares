@@ -4,17 +4,17 @@ import { createPage } from '@/middlewares';
 import { ClientProvider } from '@/client-context/ClientContext';
 import components from '@/components';
 import Link from 'next/link';
-import { setExtraContext } from '../utils/extra-context';
 import ExtraContextInfo from '../components/ExtraContextInfo';
 
 let count = 0;
 export default createPage(function Dynamic() {
-  const { user, req, res } = getNextContext();
+  const context = getNextContext();
+  const { user, req, res } = context;
   res.cookie('x-user2', 'yiminghe2', { path: '/' });
   const cs = ++count % 2 ? ['c1'] : ['c2'];
-  setExtraContext({
+  context.extraContent={
     from: 'dynamic',
-  });
+  };
   res.render(
     <ClientProvider name={user!}>
       <ExtraContextInfo />

@@ -1,4 +1,4 @@
-import type { NextContext, CookieOptions } from './types';
+import type { NextContext,CookieAttributes, NextContextResponseInternal } from './types';
 import type { NextRequest } from 'next/server';
 import { cookies as getCookies, headers as getHeaders } from 'next/headers';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
@@ -69,8 +69,8 @@ function transformHeadersToObject(): any {
   );
 }
 
-function buildResponse(): NextContext['res'] {
-  const p: NextContext['res']['_private'] = {
+function buildResponse(): NextContextResponseInternal {
+  const p: NextContextResponseInternal['_private'] = {
     status: 200,
     headers: {},
   };
@@ -78,17 +78,17 @@ function buildResponse(): NextContext['res'] {
     _private: p,
     clearCookie(
       name: string,
-      options?: Omit<CookieOptions, 'expires' | 'maxAge'>,
+      options?: CookieAttributes,
     ) {
       getCookies().set(name, '', {
         ...options,
         expires: new Date(0),
       });
     },
-    cookie(name: string, value: any, options?: CookieOptions) {
+    cookie(name: string, value: string, options?: CookieAttributes) {
       getCookies().set(name, value, options);
     },
-    append(k: string, v: any) {
+    append(k: string, v: string) {
       p.headers[k] = p.headers[k] ?? '';
       p.headers[k] += v;
     },
@@ -162,9 +162,9 @@ function buildRequest() {
 
 export function buildPageResponse() {
   const res = buildResponse();
-  function cookie(name: string, value: any, options?: CookieOptions) {
+  function cookie(name: string, value: string, options?: CookieAttributes) {
     res._private.cookies = res._private.cookies || {};
-    res._private.cookies[name] = { ...options, value } as any;
+    res._private.cookies[name] = { ...options, value };
     if (options?.expires) {
       res._private.cookies[name].expires = +options.expires;
     }
@@ -174,7 +174,7 @@ export function buildPageResponse() {
     cookie,
     clearCookie(
       name: string,
-      options?: Omit<CookieOptions, 'expires' | 'maxAge'>,
+      options?: CookieAttributes,
     ) {
       cookie(name, '', { ...options, expires: new Date(0) });
     },

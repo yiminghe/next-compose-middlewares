@@ -16,9 +16,22 @@ import {
   requestStorage,
 } from './set-context';
 
-export type { ClientCookies, CookieOptions } from './types';
-export type { NextContext, MiddlewareFunction, NextFunction };
-export { getNextContext, createNextContext, type GetSetNextContext } from './set-context';
+export type {
+  NextContextResponse,
+  NextContextRequest,
+  NextContextType,
+  NextContext,
+  MiddlewareFunction,
+  NextFunction,
+  CookieAttributes
+} from './types';
+
+export {
+  getNextContext,
+  // attach data to context directly
+  //  createNextContext, 
+  //  type GetSetNextContext 
+} from './set-context';
 /**
  *@public
  */

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { MiddlewareFunction, NextContext, NextFunction } from './types';
+import type { MiddlewareFunction, NextContext, NextContextResponseInternal, NextFunction } from './types';
 import { redirect } from 'next/navigation';
 import ClientCookies from './ClientCookies';
 import React, { Fragment } from 'react';
@@ -10,7 +10,7 @@ export function createFinishMiddleware(): MiddlewareFunction {
   return async function finishMiddleware(
     { res, type }: NextContext,
     next: NextFunction,
-  ): Promise<any> {
+  ) {
     await next();
     const {
       return: returnValue,
@@ -20,7 +20,7 @@ export function createFinishMiddleware(): MiddlewareFunction {
       status,
       headers,
       redirect: redirectUrl,
-    } = res._private;
+    } = (res as NextContextResponseInternal)._private;
     if (redirectUrl) {
       return redirect(redirectUrl);
     }

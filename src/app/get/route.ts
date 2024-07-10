@@ -1,7 +1,5 @@
 import { getNextContext } from '@/next-compose-middlewares';
 import { createRoute } from '../../middlewares';
-import getExtraContextInfo from '../utils/getExtraContextInfo';
-import { setExtraContext } from '../utils/extra-context';
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -9,10 +7,11 @@ function sleep(ms: number) {
 
 export const GET = createRoute(async function Get(...args) {
   console.log('Get', args);
-  const { user, res, type } = getNextContext();
-  setExtraContext({
+  const context = getNextContext();
+  const { user, res, type } = context;
+  context.extraContent = {
     from: 'route',
-  });
+  };
   await sleep(1000);
   res.cookie('x-user3', 'yiminghe', { path: '/' });
   res.set('x-from', 'next-compose');
@@ -20,6 +19,6 @@ export const GET = createRoute(async function Get(...args) {
     user,
     user2: getNextContext().user,
     type,
-    ...getExtraContextInfo(),
+    ...context.extraContent,
   });
 });

@@ -1,7 +1,7 @@
 // @ts-ignore
 import { cache } from 'react';
 import type { NextContext } from './types';
-
+import type { DeepOmit } from 'deep-utility-types';
 /**
  *@public
  */
@@ -63,7 +63,18 @@ export const [
 export function isPageContextInitialized() {
   return getPageContext() !== defaultContext;
 }
-
+type NestedOmit<
+Schema,
+Path extends string,
+> = Path extends `${infer Head}.${infer Tail}`
+? Head extends keyof Schema
+  ? {
+      [K in keyof Schema]: K extends Head
+        ? NestedOmit<Schema[K], Tail>
+        : Schema[K];
+    }
+  : Schema
+: Omit<Schema, Path>;
 /**
  *@public
  */

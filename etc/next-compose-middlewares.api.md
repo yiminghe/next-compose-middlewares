@@ -5,29 +5,18 @@
 ```ts
 
 import type { NextRequest } from 'next/server';
-import type { default as React_2 } from 'react';
-import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
 // @public (undocumented)
-export type ClientCookies = {
-    [key: string]: Omit<ResponseCookie, 'expires'> & {
-        expires?: number;
-    };
-};
-
-// @public (undocumented)
-export type CookieOptions = Omit<ResponseCookie, 'expires' | 'name' | 'value'> & {
-    expires?: Date;
-};
-
-// @public (undocumented)
-export function createNextContext<T>(c: T): GetSetNextContext<T>;
+export interface CookieAttributes {
+    domain?: string | undefined;
+    expires?: number | Date | undefined;
+    path?: string | undefined;
+    sameSite?: "strict" | "lax" | "none" | undefined;
+    secure?: boolean | undefined;
+}
 
 // @public (undocumented)
 export function getNextContext(): NextContext;
-
-// @public (undocumented)
-export type GetSetNextContext<T> = [() => T, (v: T) => any];
 
 // @public (undocumented)
 export type LayoutFunction = (r: LayoutRequest) => ReturnedRender | Promise<ReturnedRender>;
@@ -44,48 +33,48 @@ export type MiddlewareFunction = (context: NextContext, next: NextFunction) => P
 // @public (undocumented)
 export interface NextContext {
     // (undocumented)
-    req: {
-        params: any;
-        host: string;
-        protocol: string;
-        secure: boolean;
-        url: string;
-        ip: string | undefined;
-        get: (k: string) => any;
-        header: (k: string) => any;
-        text: () => Promise<string>;
-        json: () => Promise<any>;
-        method: string;
-        path: string;
-        query: any;
-        cookies: any;
-        headers: any;
-    };
+    req: NextContextRequest;
     // (undocumented)
-    res: {
-        _private: {
-            return?: any;
-            cookies?: ClientCookies;
-            headers: any;
-            redirect?: string;
-            render?: React_2.ReactNode;
-            json?: any;
-            status?: number;
-        };
-        clearCookie: (name: string, options?: Omit<CookieOptions, 'expires' | 'maxAge'>) => void;
-        cookie: (name: string, value: any, options?: CookieOptions) => void;
-        append: (k: string, v: any) => void;
-        set: (...args: [key: string, v: any] | [o: any]) => void;
-        get: (key: string) => any;
-        redirect: (r: string) => void;
-        return: (r: any) => void;
-        render: (r: React_2.ReactNode) => void;
-        json: (j: any) => void;
-        status: (s: number) => void;
-    };
+    res: NextContextResponse;
     // (undocumented)
-    type: 'page' | 'route' | 'action' | 'layout';
+    type: NextContextType;
 }
+
+// @public (undocumented)
+export type NextContextRequest = {
+    params: any;
+    host: string;
+    protocol: string;
+    secure: boolean;
+    url: string;
+    ip: string | undefined;
+    get: (k: string) => any;
+    header: (k: string) => any;
+    text: () => Promise<string>;
+    json: () => Promise<any>;
+    method: string;
+    path: string;
+    query: any;
+    cookies: any;
+    headers: any;
+};
+
+// @public (undocumented)
+export type NextContextResponse = {
+    clearCookie: (name: string, options?: CookieAttributes) => void;
+    cookie: (name: string, value: string, options?: CookieAttributes) => void;
+    append: (k: string, v: string) => void;
+    set: (...args: [key: string, v: any] | [o: any]) => void;
+    get: (key: string) => any;
+    redirect: (r: string) => void;
+    return: (r: any) => void;
+    render: (r: React.ReactNode) => void;
+    json: (j: any) => void;
+    status: (s: number) => void;
+};
+
+// @public (undocumented)
+export type NextContextType = 'page' | 'route' | 'action' | 'layout';
 
 // @public (undocumented)
 export type NextFunction = () => Promise<any> | void;

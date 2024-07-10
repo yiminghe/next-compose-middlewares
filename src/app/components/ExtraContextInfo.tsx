@@ -1,12 +1,12 @@
 import { getNextContext } from '@/next-compose-middlewares';
-import { getExtraContext } from '../utils/extra-context';
+
 
 export default function ExtraContextInfo() {
-  const extra = getExtraContext();
+  const { type, extraContent } = getNextContext();
   return (
     <>
-      <div>from: {extra.from}</div>
-      <div>type: {getNextContext().type}</div>
+      <div>from: {extraContent?.from || 'from: default extra context'}</div>
+      <div>type: {type}</div>
     </>
   );
 }
