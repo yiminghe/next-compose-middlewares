@@ -6,16 +6,15 @@ import type { NextContext } from './types';
  *@public
  */
 export function createPageContext<T>(defaultValue: T): GetSetNextContext<T> {
-  const getRef = cache(() => ({ current: defaultValue }));
+  const ref = cache(() => ({ current: defaultValue }));
 
-  const getValue = (): T => getRef().current;
+  const get = (): T => ref().current;
 
-  const setValue = (value: T, callback: () => unknown) => {
-    getRef().current = value;
-    return callback();
+  const set = (value: T) => {
+    ref().current = value;
   };
 
-  return [getValue, setValue];
+  return [get, set];
 }
 
 const defaultContext = Object.freeze({}) as NextContext;
@@ -34,18 +33,17 @@ export const [
   setPageContext,
 ] = createPageContext(defaultContext);
 
+export const requestStorage = new AsyncLocalStorage<Map<Function, any>>();
+
 /**
  *@public
  */
 export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
-  const s = new AsyncLocalStorage<T>();
-  let value = defaultValue;
-  const getRouteContext = (): T => s.getStore() || value;
+  const get = (): T => requestStorage.getStore()!.get(get) || defaultValue;
 
-  const runInRouteContext = (v: T, callback: () => unknown) =>
-    s.run(v, callback);
+  const set = (v: T) => requestStorage.getStore()!.set(get, v);
 
-  return [getRouteContext, runInRouteContext];
+  return [get, set];
 }
 
 /**
@@ -59,7 +57,7 @@ export const [
   /**
    *@public
    */
-  runInRouteContext,
+  setRouteContext,
 ] = createRouteContext(defaultContext);
 
 export function isPageContextInitialized() {
@@ -77,10 +75,7 @@ export function getNextContext() {
 /**
  *@public
  */
-export type GetSetNextContext<T> = [
-  () => T,
-  (v: T, callback: () => unknown) => any,
-];
+export type GetSetNextContext<T> = [() => T, (v: T) => any];
 
 /**
  *@public
@@ -108,8 +103,8 @@ export function createNextContext<T>(c: T): GetSetNextContext<T> {
   const get = () => {
     return init()[0]();
   };
-  const run = (v: T, callback: () => unknown) => {
-    return init()[1](v, callback);
+  const set = (v: T) => {
+    return init()[1](v);
   };
-  return [get, run];
+  return [get, set];
 }

@@ -10,9 +10,10 @@ import {
 } from './next-context';
 import {
   setPageContext,
-  runInRouteContext,
+  setRouteContext,
   isPageContextInitialized,
   getPageContext,
+  requestStorage,
 } from './set-context';
 
 export type { ClientCookies, CookieOptions } from './types';
@@ -58,7 +59,7 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
       ...fns,
       ({ res }: NextContext, _2: any, r: any) => res.return(Page(r)),
     ]);
-    const P = async (r: PageRequest | LayoutRequest) => {
+    const P = (r: PageRequest | LayoutRequest) => {
       const currentType = 'children' in r ? 'layout' : 'page';
       // if page context is initialized by layout,
       // use it, otherwise create a new one
@@ -72,7 +73,8 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
       if (r?.params) {
         context.req.params = r.params;
       }
-      const ret = await setPageContext(context, () => handle(context, noop, r));
+      setPageContext(context);
+      const ret = handle(context, noop, r);
       context.type = prevType;
       return ret;
     };
@@ -132,7 +134,10 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
       if (c?.params) {
         context.req.params = c.params;
       }
-      return runInRouteContext(context, () => handle(context, noop, ...args));
+      return requestStorage.run(new Map(), () => {
+        setRouteContext(context);
+        return handle(context, noop, ...args);
+      });
     };
     if (Route.name) {
       Object.defineProperty(R, 'name', {
@@ -149,7 +154,6 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
  */
 export function withActionMiddlewares(fns: MiddlewareFunction[]) {
   return function <T extends Function>(action: T): T {
-    //@ts-ignore
     const handle = compose([
       finishMiddleware,
       ...fns,
@@ -158,8 +162,10 @@ export function withActionMiddlewares(fns: MiddlewareFunction[]) {
     ]);
     const a = (...args: any) => {
       const context = createNextContextFromAction();
-      //@ts-ignore
-      return runInRouteContext(context, () => handle(context, noop, ...args));
+      return requestStorage.run(new Map(), () => {
+        setRouteContext(context);
+        return handle(context, noop, ...args);
+      });
     };
     if (action.name) {
       Object.defineProperty(a, 'name', {

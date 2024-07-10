@@ -4,7 +4,7 @@ export type ExtraContext = {
   from: string;
 };
 
-export const [getExtraContext, runInExtraContext] =
+export const [getExtraContext, setExtraContext] =
   createNextContext<ExtraContext>({
     from: 'default extra context',
   });

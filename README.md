@@ -34,7 +34,6 @@ npm run dev
 `src/middleware.ts`
 
 ```js
-// @ts-ignore
 export { middleware } from 'next-compose-middlewares/middleware';
 ```
 
