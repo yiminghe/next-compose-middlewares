@@ -122,13 +122,14 @@ export type CookieOptions = Omit<ResponseCookie, 'expires' | 'name' | 'value'> &
     expires?: Date;
 };
 
-// Warning: (ae-forgotten-export) The symbol "GetSetNextContext" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export function createNextContext<T>(c: T): GetSetNextContext<T>;
 
 // @public (undocumented)
 export function getNextContext(): NextContext;
+
+// @public (undocumented)
+export type GetSetNextContext<T> = [() => T, (v: T) => any];
 
 // @public (undocumented)
 export type LayoutFunction = (r: LayoutRequest) => ReturnedRender | Promise<ReturnedRender>;

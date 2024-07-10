@@ -18,13 +18,13 @@ import {
 
 export type { ClientCookies, CookieOptions } from './types';
 export type { NextContext, MiddlewareFunction, NextFunction };
-export { getNextContext, createNextContext } from './set-context';
+export { getNextContext, createNextContext, type GetSetNextContext } from './set-context';
 /**
  *@public
  */
 const finishMiddleware = createFinishMiddleware();
 
-function noop() {}
+function noop() { }
 
 /**
  *@public
