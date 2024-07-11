@@ -1,3 +1,4 @@
+/* c8 ignore start */
 /**
  *@public
  */
@@ -36,7 +37,7 @@
     * providing some protection against cross-site request forgery
     * attacks (CSRF)
     */
-   sameSite?: "strict" | "lax" | "none" | undefined;
+   sameSite?: 'strict' | 'lax' | 'none' | undefined;
  }
  
  /**
@@ -69,10 +70,7 @@
   * @public
   */
  export type NextContextResponse = {
-   clearCookie: (
-     name: string,
-     options?: CookieAttributes,
-   ) => void;
+   clearCookie: (name: string, options?: CookieAttributes) => void;
    cookie: (name: string, value: string, options?: CookieAttributes) => void;
    append: (k: string, v: string) => void;
    set: (...args: [key: string, v: any] | [o: any]) => void;
@@ -108,7 +106,6 @@
      json?: any;
      status?: number;
    };
- 
  } & NextContextResponse;
  /**
   * @internal
@@ -124,4 +121,5 @@
    context: NextContext,
    next: NextFunction,
  ) => Promise<any> | void;
+ /* c8 ignore stop */
  

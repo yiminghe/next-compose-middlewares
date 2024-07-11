@@ -46,3 +46,4 @@ cypress/fixtures/users.json
 temp
 tsconfig.tsbuildinfo
 .nyc_output
+.swc/
