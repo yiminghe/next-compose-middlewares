@@ -153,7 +153,7 @@ function buildRequest() {
     path: url.pathname,
     query: searchParams,
     protocol,
-    ip: headers['x-forwarded-for'] || headers['ncm-ip'],
+    ip: headers['x-forwarded-for'],
     headers,
     get,
     header: get,
