@@ -15,6 +15,8 @@
     */
    expires?: number | Date | undefined;
  
+   maxAge?: number;
+ 
    /**
     * Define the path where the cookie is available. Defaults to '/'
     */
@@ -76,8 +78,7 @@
    set: (...args: [key: string, v: any] | [o: any]) => void;
    get: (key: string) => any;
    redirect: (r: string) => void;
-   return: (r: any) => void;
-   render: (r: React.ReactNode) => void;
+   return: (id: string | symbol, r: any) => void;
    json: (j: any) => void;
    status: (s: number) => void;
  };
@@ -98,11 +99,10 @@
   */
  export type NextContextResponseInternal = {
    _private: {
-     return?: any;
+     return: { [id: string | symbol]: any };
      cookies?: ClientCookies;
      headers: any;
      redirect?: string;
-     render?: React.ReactNode;
      json?: any;
      status?: number;
    };

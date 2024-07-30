@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server';
-import type { MiddlewareFunction, NextContext, NextContextResponseInternal, NextFunction } from './types';
+import type {
+  MiddlewareFunction,
+  NextContext,
+  NextContextResponseInternal,
+  NextFunction,
+} from './types';
 import { redirect } from 'next/navigation';
 import ClientCookies from './ClientCookies';
 import React, { Fragment } from 'react';
@@ -10,12 +15,13 @@ export function createFinishMiddleware(): MiddlewareFunction {
   return async function finishMiddleware(
     { res, type }: NextContext,
     next: NextFunction,
+    ...args: any
   ) {
     await next();
+    const id: string | symbol = args[args.length - 1];
     const {
       return: returnValue,
       cookies,
-      render,
       json,
       status,
       headers,
@@ -24,11 +30,12 @@ export function createFinishMiddleware(): MiddlewareFunction {
     if (redirectUrl) {
       return redirect(redirectUrl);
     }
+    const value = returnValue[id];
     if (type === 'page' || type === 'layout') {
       return (
         <>
           {cookies && <ClientCookies key="cookies" cookies={cookies} />}
-          <Fragment key="main">{render || returnValue}</Fragment>
+          <Fragment key="main">{value}</Fragment>
         </>
       );
     }
@@ -38,6 +45,6 @@ export function createFinishMiddleware(): MiddlewareFunction {
         headers,
       });
     }
-    return returnValue;
+    return value;
   };
 }

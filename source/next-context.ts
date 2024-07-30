@@ -1,91 +1,47 @@
-import type { NextContext,CookieAttributes, NextContextResponseInternal } from './types';
+import type {
+  NextContext,
+  CookieAttributes,
+  NextContextResponseInternal,
+} from './types';
 import type { NextRequest } from 'next/server';
 import { cookies as getCookies, headers as getHeaders } from 'next/headers';
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 function transformCookiesToObject(): any {
-  let cookies: ReadonlyRequestCookies;
-  function getCookie() {
-    if (cookies) {
-      return cookies;
-    }
-    cookies = getCookies();
-    return cookies;
+  const originals = getCookies().getAll();
+  const cookies: any = {};
+  for (const h of originals) {
+    cookies[h.name] = h.value;
   }
-  return new Proxy(
-    {},
-    {
-      get: function (target, prop: string, receiver) {
-        return getCookie().get(prop)?.value;
-      },
-      has(target, key: string) {
-        return getCookie().has(key);
-      },
-      getOwnPropertyDescriptor(target, key: string) {
-        if (getCookie().has(key)) {
-          return {
-            configurable: true,
-            enumerable: true,
-            value: getCookie().get(key)!.value,
-          };
-        }
-      },
-      ownKeys(target) {
-        return getCookie()
-          .getAll()
-          .map((c) => c.name);
-      },
-    },
-  );
+  return cookies;
 }
 
 function transformHeadersToObject(): any {
-  let headers = getHeaders();
-  return new Proxy(
-    {},
-    {
-      get: function (target, prop: string, receiver) {
-        return headers.get(prop);
-      },
-      has(target, key: string) {
-        return headers.has(key);
-      },
-      set() {
-        throw new Error('Next cannot set headers');
-      },
-      getOwnPropertyDescriptor(target, key: string) {
-        if (headers.has(key)) {
-          return {
-            configurable: true,
-            enumerable: true,
-            value: headers.get(key),
-          };
-        }
-      },
-      ownKeys(target) {
-        return Array.from(headers.keys());
-      },
-    },
-  );
+  const originals = getHeaders();
+  const headers: any = {};
+  for (const h of Array.from(originals.keys())) {
+    headers[h] = originals.get(h);
+  }
+  return headers;
 }
 
 function buildResponse(): NextContextResponseInternal {
   const p: NextContextResponseInternal['_private'] = {
     status: 200,
+    return: {},
     headers: {},
   };
   const res = {
     _private: p,
-    clearCookie(
-      name: string,
-      options?: CookieAttributes,
-    ) {
+    clearCookie(name: string, options?: CookieAttributes) {
       getCookies().set(name, '', {
         ...options,
         expires: new Date(0),
       });
     },
     cookie(name: string, value: string, options?: CookieAttributes) {
+      if (options?.maxAge) {
+        options.expires = Date.now() + options.maxAge;
+      }
       getCookies().set(name, value, options);
     },
     append(k: string, v: string) {
@@ -106,10 +62,7 @@ function buildResponse(): NextContextResponseInternal {
     status(s: number) {
       p.status = s;
     },
-    return: (r: any) => (p.return = r),
-    render(n: React.ReactNode) {
-      p.render = n;
-    },
+    return: (id: string | symbol, r: any) => (p.return[id] = r),
     json(j: any) {
       p.json = j;
     },
@@ -163,6 +116,9 @@ function buildRequest() {
 export function buildPageResponse() {
   const res = buildResponse();
   function cookie(name: string, value: string, options?: CookieAttributes) {
+    if (options?.maxAge) {
+      options.expires = Date.now() + options.maxAge;
+    }
     res._private.cookies = res._private.cookies || {};
     res._private.cookies[name] = { ...options, value };
     if (options?.expires) {
@@ -172,10 +128,7 @@ export function buildPageResponse() {
   return {
     ...res,
     cookie,
-    clearCookie(
-      name: string,
-      options?: CookieAttributes,
-    ) {
+    clearCookie(name: string, options?: CookieAttributes) {
       cookie(name, '', { ...options, expires: new Date(0) });
     },
   };

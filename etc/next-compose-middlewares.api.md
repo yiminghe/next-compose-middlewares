@@ -10,8 +10,10 @@ import type { NextRequest } from 'next/server';
 export interface CookieAttributes {
     domain?: string | undefined;
     expires?: number | Date | undefined;
+    // (undocumented)
+    maxAge?: number;
     path?: string | undefined;
-    sameSite?: "strict" | "lax" | "none" | undefined;
+    sameSite?: 'strict' | 'lax' | 'none' | undefined;
     secure?: boolean | undefined;
 }
 
@@ -67,8 +69,7 @@ export type NextContextResponse = {
     set: (...args: [key: string, v: any] | [o: any]) => void;
     get: (key: string) => any;
     redirect: (r: string) => void;
-    return: (r: any) => void;
-    render: (r: React.ReactNode) => void;
+    return: (id: string | symbol, r: any) => void;
     json: (j: any) => void;
     status: (s: number) => void;
 };

@@ -63,17 +63,19 @@ export function isPageContextInitialized() {
   return getPageContext() !== defaultContext;
 }
 type NestedOmit<
-Schema,
-Path extends string,
+  Schema,
+  Path extends string,
 > = Path extends `${infer Head}.${infer Tail}`
-? Head extends keyof Schema
-  ? {
-      [K in keyof Schema]: K extends Head
-        ? NestedOmit<Schema[K], Tail>
-        : Schema[K];
-    }
-  : Schema
-: Omit<Schema, Path>;
+  ? Head extends keyof Schema
+    ? {
+        [K in keyof Schema]: K extends Head
+          ? NestedOmit<Schema[K], Tail>
+          : Schema[K];
+      }
+    : Schema
+  : Omit<Schema, Path>;
+
+export const PAGE_TOKEN = Symbol('page');
 /**
  *@public
  */

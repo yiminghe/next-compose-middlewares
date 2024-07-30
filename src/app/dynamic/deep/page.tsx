@@ -5,7 +5,7 @@ import { createPage } from '@/middlewares';
 import Link from 'next/link';
 import path from 'path';
 
-export default createPage(function Deep() {
+export default createPage(async function Deep() {
   const { req } = getNextContext();
   return (
     <div>

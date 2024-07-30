@@ -7,15 +7,15 @@ import Link from 'next/link';
 import ExtraContextInfo from '../components/ExtraContextInfo';
 
 let count = 0;
-export default createPage(function Dynamic() {
+export default createPage(async function Dynamic() {
   const context = getNextContext();
   const { user, req, res } = context;
   res.cookie('x-user2', 'yiminghe2', { path: '/' });
   const cs = ++count % 2 ? ['c1'] : ['c2'];
-  context.extraContent={
+  context.extraContent = {
     from: 'dynamic',
   };
-  res.render(
+  return (
     <ClientProvider name={user!}>
       <ExtraContextInfo />
       <script>{`console.log(${JSON.stringify(req)});`}</script>
@@ -30,6 +30,6 @@ export default createPage(function Dynamic() {
           return <C key={id} />;
         })}
       </div>
-    </ClientProvider>,
+    </ClientProvider>
   );
 });

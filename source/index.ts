@@ -11,9 +11,10 @@ import {
 import {
   setPageContext,
   setRouteContext,
+  requestStorage,
+  PAGE_TOKEN,
   isPageContextInitialized,
   getPageContext,
-  requestStorage,
 } from './set-context';
 
 export type {
@@ -23,21 +24,21 @@ export type {
   NextContext,
   MiddlewareFunction,
   NextFunction,
-  CookieAttributes
+  CookieAttributes,
 } from './types';
 
 export {
   getNextContext,
   // attach data to context directly
-  //  createNextContext, 
-  //  type GetSetNextContext 
+  //  createNextContext,
+  //  type GetSetNextContext
 } from './set-context';
 /**
  *@public
  */
 const finishMiddleware = createFinishMiddleware();
 
-function noop() { }
+function noop() {}
 
 /**
  *@public
@@ -67,27 +68,25 @@ export type PageFunction = (
  */
 export function withPageMiddlewares(fns: MiddlewareFunction[]) {
   return function (Page: PageFunction): PageFunction {
+    // page or multiple layout
+    const id = Symbol(Date.now());
     const handle = compose([
       finishMiddleware,
       ...fns,
-      ({ res }: NextContext, _2: any, r: any) => res.return(Page(r)),
+      ({ res }: NextContext, _2: any, r: any) => res.return(id, Page(r)),
     ]);
     const P = (r: PageRequest | LayoutRequest) => {
       const currentType = 'children' in r ? 'layout' : 'page';
-      // if page context is initialized by layout,
-      // use it, otherwise create a new one
       const context = isPageContextInitialized()
         ? getPageContext()
         : createNextContextFromPage(currentType);
-      // do not share response
-      context.res = buildPageResponse();
       const prevType = context.type;
       context.type = currentType;
       if (r?.params) {
         context.req.params = r.params;
       }
       setPageContext(context);
-      const ret = handle(context, noop, r);
+      const ret = handle(context, noop, r, id);
       context.type = prevType;
       return ret;
     };
@@ -129,6 +128,7 @@ export type RouteFunction = (
   context: { params: Params },
 ) => any;
 
+let routeId = 'route';
 /**
  *@public
  */
@@ -138,7 +138,7 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
       finishMiddleware,
       ...fns,
       ({ res }: NextContext, _2: any, ...args: any) =>
-        res.return(Route.apply(null, args)),
+        res.return(routeId, Route.apply(null, args)),
     ]);
     const R = (...args: any) => {
       const r = args[0];
@@ -149,7 +149,7 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
       }
       return requestStorage.run(new Map(), () => {
         setRouteContext(context);
-        return handle(context, noop, ...args);
+        return handle(context, noop, ...args, routeId);
       });
     };
     if (Route.name) {
@@ -171,13 +171,13 @@ export function withActionMiddlewares(fns: MiddlewareFunction[]) {
       finishMiddleware,
       ...fns,
       ({ res }: NextContext, _: any, ...args: any) =>
-        res.return(action(...args)),
+        res.return(routeId, action(...args)),
     ]);
     const a = (...args: any) => {
       const context = createNextContextFromAction();
       return requestStorage.run(new Map(), () => {
         setRouteContext(context);
-        return handle(context, noop, ...args);
+        return handle(context, noop, ...args, routeId);
       });
     };
     if (action.name) {

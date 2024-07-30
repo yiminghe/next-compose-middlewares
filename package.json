@@ -1,6 +1,6 @@
 {
   "name": "next-compose-middlewares",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "main": "./dist/cjs/index.js",
   "module": "./dist/mjs/index.js",
   "types": "./dist/cjs/index.d.ts",
@@ -41,7 +41,7 @@
     "test:only": "npm run pre:test && ts-node scripts/run-test.ts",
     "test": "start-test test:dev http://localhost:3000 test:only",
     "lint": "tsc --noEmit && next lint",
-    "test:dev": "NEXT_PUBLIC_CYPRESS=1 next dev",
+    "test:dev": "rm -rf dist && NEXT_PUBLIC_CYPRESS=1 next dev",
     "dev": "next dev",
     "doc": "api-extractor run --local --diagnostics",
     "build": "rm -rf dist && tsc -p tsconfig-cjs.json && tsc -p tsconfig-esm.json && pnpm doc && node scripts/build",
