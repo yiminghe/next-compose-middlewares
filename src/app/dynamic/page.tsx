@@ -7,10 +7,16 @@ import Link from 'next/link';
 import ExtraContextInfo from '../components/ExtraContextInfo';
 
 let count = 0;
+
+function sleep(){
+  return new Promise((r)=>{
+    setTimeout(r,1000);
+  });
+}
 export default createPage(async function Dynamic() {
   const context = getNextContext();
   const { user, req, res } = context;
-  res.cookie('x-user2', 'yiminghe2', { path: '/' });
+  res.cookie('x-user-from-page', 'yiminghe-from-page', { path: '/' });
   const cs = ++count % 2 ? ['c1'] : ['c2'];
   context.extraContent = {
     from: 'dynamic',

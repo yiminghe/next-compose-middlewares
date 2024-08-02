@@ -1,6 +1,6 @@
 {
   "name": "next-compose-middlewares",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "main": "./dist/cjs/index.js",
   "module": "./dist/mjs/index.js",
   "types": "./dist/cjs/index.d.ts",
@@ -47,10 +47,6 @@
     "build": "rm -rf dist && tsc -p tsconfig-cjs.json && tsc -p tsconfig-esm.json && pnpm doc && node scripts/build",
     "start": "next start",
     "prepare": "husky"
-  },
-  "dependencies": {
-    "@types/js-cookie": "3.x",
-    "js-cookie": "3.x"
   },
   "devDependencies": {
     "prettier-2": "npm:prettier@^2",
@@ -107,5 +103,5 @@
       "lcov"
     ]
   },
-  "packageManager": "pnpm@9.4.0"
+  "packageManager": "pnpm@9.6.0"
 }

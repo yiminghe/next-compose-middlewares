@@ -13,7 +13,7 @@ export const GET = createRoute(async function Get(...args) {
     from: 'route',
   };
   await sleep(1000);
-  res.cookie('x-user3', 'yiminghe', { path: '/' });
+  res.cookie('x-user-from-route', 'yiminghe-from-route', { path: '/' });
   res.set('x-from', 'next-compose');
   res.json({
     user,

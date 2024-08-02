@@ -107,6 +107,7 @@ location /rewrite {
 ```ts
 
 import type { NextRequest } from 'next/server';
+import { default as React_2 } from 'react';
 
 // @public (undocumented)
 export interface CookieAttributes {
@@ -128,7 +129,7 @@ export type LayoutFunction = (r: LayoutRequest) => ReturnedRender | Promise<Retu
 // @public (undocumented)
 export type LayoutRequest = {
     params: Params;
-    children: React.ReactNode;
+    children: React_2.ReactNode;
 };
 
 // @public (undocumented)
@@ -171,13 +172,12 @@ export type NextContextResponse = {
     set: (...args: [key: string, v: any] | [o: any]) => void;
     get: (key: string) => any;
     redirect: (r: string) => void;
-    return: (id: string | symbol, r: any) => void;
     json: (j: any) => void;
     status: (s: number) => void;
 };
 
 // @public (undocumented)
-export type NextContextType = 'page' | 'route' | 'action' | 'layout';
+export type NextContextType = 'page' | 'route' | 'action';
 
 // @public (undocumented)
 export type NextFunction = () => Promise<any> | void;
@@ -195,7 +195,7 @@ export type PageRequest = {
 export type Params = Record<string, string | string[]>;
 
 // @public (undocumented)
-export type ReturnedRender = void | React.ReactNode;
+export type ReturnedRender = React_2.ReactNode;
 
 // @public (undocumented)
 export type RouteFunction = (request: NextRequest, context: {

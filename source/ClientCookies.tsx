@@ -2,7 +2,7 @@
 
 import { useLayoutEffect } from 'react';
 import type { ClientCookies, CookieAttributes } from './types';
-import Cookies from 'js-cookie';
+import * as Cookies from './cookies';
 
 export default function ClientCookies({
   cookies,

@@ -3,7 +3,7 @@ declare module '@/next-compose-middlewares' {
   interface NextContext {
     user?: string;
     extraContent?: {
-      from: string
-    }
+      from: string;
+    };
   }
 }

@@ -78,14 +78,13 @@
    set: (...args: [key: string, v: any] | [o: any]) => void;
    get: (key: string) => any;
    redirect: (r: string) => void;
-   return: (id: string | symbol, r: any) => void;
    json: (j: any) => void;
    status: (s: number) => void;
  };
  /**
   * @public
   */
- export type NextContextType = 'page' | 'route' | 'action' | 'layout';
+ export type NextContextType = 'page' | 'route' | 'action';
  /**
   * @public
   */
@@ -99,10 +98,9 @@
   */
  export type NextContextResponseInternal = {
    _private: {
-     return: { [id: string | symbol]: any };
      cookies?: ClientCookies;
      headers: any;
-     redirect?: string;
+     redirectUrl?: string;
      json?: any;
      status?: number;
    };

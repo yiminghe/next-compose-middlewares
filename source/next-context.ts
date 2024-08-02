@@ -27,7 +27,6 @@ function transformHeadersToObject(): any {
 function buildResponse(): NextContextResponseInternal {
   const p: NextContextResponseInternal['_private'] = {
     status: 200,
-    return: {},
     headers: {},
   };
   const res = {
@@ -62,12 +61,11 @@ function buildResponse(): NextContextResponseInternal {
     status(s: number) {
       p.status = s;
     },
-    return: (id: string | symbol, r: any) => (p.return[id] = r),
     json(j: any) {
       p.json = j;
     },
     redirect(r: string) {
-      p.redirect = r;
+      p.redirectUrl = r;
     },
   };
   return res;
@@ -137,9 +135,9 @@ export function buildPageResponse() {
 /**
  *@public
  */
-export function createNextContextFromPage(type: 'page' | 'layout' = 'page') {
+export function createNextContextFromPage() {
   const context: NextContext = {
-    type,
+    type: 'page',
     req: buildRequest(),
     res: buildPageResponse(),
   };

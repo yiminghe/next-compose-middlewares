@@ -8,7 +8,7 @@ export default createLayout(function RootLayout({
   children: React.ReactNode;
 }) {
   const { user, req, res, type } = getNextContext();
-  res.cookie('x-user', 'yiminghe', { path: '/' });
+  res.cookie('x-user-from-layout', 'yiminghe-from-layout', { path: '/' });
   return (
     <html lang="en" data-user={user}>
       <body>

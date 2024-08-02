@@ -1,9 +1,11 @@
-import type { NextContext, MiddlewareFunction, NextFunction } from './types';
+import type {
+  NextContext,
+  MiddlewareFunction,
+  NextContextResponseInternal,
+} from './types';
 import type { NextRequest } from 'next/server';
 import { compose } from './compose';
-import { createFinishMiddleware } from './finish';
 import {
-  buildPageResponse,
   createNextContextFromAction,
   createNextContextFromPage,
   createNextContextFromRoute,
@@ -12,10 +14,13 @@ import {
   setPageContext,
   setRouteContext,
   requestStorage,
-  PAGE_TOKEN,
   isPageContextInitialized,
   getPageContext,
 } from './set-context';
+import { redirect } from 'next/navigation';
+import { NextResponse } from 'next/server';
+import ClientCookies from './ClientCookies';
+import React, { Fragment } from 'react';
 
 export type {
   NextContextResponse,
@@ -33,10 +38,6 @@ export {
   //  createNextContext,
   //  type GetSetNextContext
 } from './set-context';
-/**
- *@public
- */
-const finishMiddleware = createFinishMiddleware();
 
 function noop() {}
 
@@ -55,7 +56,7 @@ export type PageRequest = {
 /**
  *@public
  */
-export type ReturnedRender = void | React.ReactNode;
+export type ReturnedRender = React.ReactNode;
 /**
  *@public
  */
@@ -63,32 +64,46 @@ export type PageFunction = (
   r: PageRequest,
 ) => ReturnedRender | Promise<ReturnedRender>;
 
+function doRedirect(context: NextContext) {
+  const { redirectUrl } = getPrivate(context);
+  if (redirectUrl) {
+    redirect(redirectUrl);
+    return 1;
+  }
+  return 0;
+}
+
+function getPrivate(context: NextContext) {
+  return (context.res as NextContextResponseInternal)._private;
+}
 /**
  *@public
  */
 export function withPageMiddlewares(fns: MiddlewareFunction[]) {
   return function (Page: PageFunction): PageFunction {
-    // page or multiple layout
-    const id = Symbol(Date.now());
-    const handle = compose([
-      finishMiddleware,
-      ...fns,
-      ({ res }: NextContext, _2: any, r: any) => res.return(id, Page(r)),
-    ]);
-    const P = (r: PageRequest | LayoutRequest) => {
-      const currentType = 'children' in r ? 'layout' : 'page';
+    const P = async (...args: any) => {
+      const r = args[0];
       const context = isPageContextInitialized()
         ? getPageContext()
-        : createNextContextFromPage(currentType);
-      const prevType = context.type;
-      context.type = currentType;
+        : createNextContextFromPage();
       if (r?.params) {
         context.req.params = r.params;
       }
       setPageContext(context);
-      const ret = handle(context, noop, r, id);
-      context.type = prevType;
-      return ret;
+      await compose(fns, context, noop, ...args);
+      const ret = Page.apply(null, args);
+      await ret;
+      const { cookies } = getPrivate(context);
+      if (doRedirect(context)) {
+        return;
+      }
+     
+      return (
+        <>
+          {cookies && <ClientCookies key="cookies" cookies={cookies} />}
+          <Fragment key="main">{ret as any}</Fragment>
+        </>
+      );
     };
     if (Page.name) {
       Object.defineProperty(P, 'name', {
@@ -128,18 +143,11 @@ export type RouteFunction = (
   context: { params: Params },
 ) => any;
 
-let routeId = 'route';
 /**
  *@public
  */
 export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
   return function (Route: RouteFunction): RouteFunction {
-    const handle = compose([
-      finishMiddleware,
-      ...fns,
-      ({ res }: NextContext, _2: any, ...args: any) =>
-        res.return(routeId, Route.apply(null, args)),
-    ]);
     const R = (...args: any) => {
       const r = args[0];
       const c = args[1];
@@ -147,9 +155,22 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
       if (c?.params) {
         context.req.params = c.params;
       }
-      return requestStorage.run(new Map(), () => {
+      return requestStorage.run(new Map(), async () => {
         setRouteContext(context);
-        return handle(context, noop, ...args, routeId);
+        await compose(fns, context, noop, ...args);
+        const ret = Route.apply(null, args);
+        await ret;
+        const { status, headers, json } = getPrivate(context);
+        if (doRedirect(context)) {
+          return;
+        }
+        if (json) {
+          return NextResponse.json(json, {
+            status,
+            headers,
+          });
+        }
+        return ret;
       });
     };
     if (Route.name) {
@@ -167,17 +188,17 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
  */
 export function withActionMiddlewares(fns: MiddlewareFunction[]) {
   return function <T extends Function>(action: T): T {
-    const handle = compose([
-      finishMiddleware,
-      ...fns,
-      ({ res }: NextContext, _: any, ...args: any) =>
-        res.return(routeId, action(...args)),
-    ]);
     const a = (...args: any) => {
       const context = createNextContextFromAction();
-      return requestStorage.run(new Map(), () => {
+      return requestStorage.run(new Map(), async () => {
         setRouteContext(context);
-        return handle(context, noop, ...args, routeId);
+        await compose(fns, context, noop, ...args);
+        const ret = action.apply(null, args);
+        await ret;
+        if (doRedirect(context)) {
+          return;
+        }
+        return ret;
       });
     };
     if (action.name) {

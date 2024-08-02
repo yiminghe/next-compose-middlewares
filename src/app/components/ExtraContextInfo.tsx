@@ -1,6 +1,5 @@
 import { getNextContext } from '@/next-compose-middlewares';
 
-
 export default function ExtraContextInfo() {
   const { type, extraContent } = getNextContext();
   return (

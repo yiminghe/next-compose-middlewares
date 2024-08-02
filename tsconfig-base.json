@@ -1,6 +1,6 @@
 {
   "exclude": ["./test", "./tap-snapshots"],
-  "include": ["source/**/*.ts"],
+  "include": ["source/**/*.ts","source/**/*.tsx"],
   "compilerOptions": {
     "jsx": "react",
     "allowSyntheticDefaultImports": true,

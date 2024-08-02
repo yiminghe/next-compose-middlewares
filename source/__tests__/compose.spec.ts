@@ -20,9 +20,8 @@ describe('compose', () => {
         context.arr.push(4);
       },
     ];
-    const fn = compose(middleware);
     const context = { arr: [] };
-    fn(context, () => Promise.resolve()).then(() => {
+    compose(middleware, context, () => Promise.resolve()).then(() => {
       expect(context.arr).toEqual([1, 2, 3, 4, 5, 6]);
     });
   });
