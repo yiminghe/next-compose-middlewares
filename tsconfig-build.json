@@ -1,19 +1,18 @@
 {
-  "exclude": ["./test", "./tap-snapshots"],
-  "include": ["source/**/*.ts","source/**/*.tsx"],
+  "exclude": ["./test", "./tap-snapshots", "source/**/__tests__/*"],
+  "include": ["source/**/*.ts", "source/**/*.tsx"],
   "compilerOptions": {
+    "module": "esnext",
+    "outDir": "dist",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "declarationMap": true,
-    "inlineSources": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": true,
     "strict": true,
     "target": "es2022"
   }
