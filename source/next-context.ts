@@ -5,6 +5,7 @@ import type {
 } from './types';
 import type { NextRequest } from 'next/server';
 import { cookies as getCookies, headers as getHeaders } from 'next/headers';
+import { NEXT_URL_HEADER, FORWARDED_URI_HEADER, FORWARDED_PROTO_HEADER, FORWARDED_HOST_HEADER, FORWARDED_FOR_HEADER } from './constants';
 
 function transformCookiesToObject(): any {
   const originals = getCookies().getAll();
@@ -76,10 +77,10 @@ function buildRequest() {
   function get(k: string) {
     return headers[k];
   }
-  if (!headers['x-forwarded-uri']) {
+  if (!headers[FORWARDED_URI_HEADER]) {
     throw new Error('must setup middleware!');
   }
-  const stringUrl = `${headers['x-forwarded-proto']}://${headers['x-forwarded-host']}${headers['x-forwarded-uri']}`;
+  const stringUrl = `${headers[FORWARDED_PROTO_HEADER]}://${headers[FORWARDED_HOST_HEADER]}${headers[FORWARDED_URI_HEADER]}`;
   const url = new URL(stringUrl);
   const searchParams: Record<string, any> = {};
   for (const [k, v] of Array.from(url.searchParams.entries())) {
@@ -101,10 +102,11 @@ function buildRequest() {
     host: url.host,
     secure: protocol === 'https',
     url: url.toString(),
+    nextUrl: new URL(headers[NEXT_URL_HEADER]),
     path: url.pathname,
     query: searchParams,
     protocol,
-    ip: headers['x-forwarded-for'],
+    ip: headers[FORWARDED_FOR_HEADER],
     headers,
     get,
     header: get,

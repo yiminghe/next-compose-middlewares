@@ -152,6 +152,7 @@ export type NextContextRequest = {
     protocol: string;
     secure: boolean;
     url: string;
+    nextUrl: URL;
     ip: string | undefined;
     get: (k: string) => any;
     header: (k: string) => any;
