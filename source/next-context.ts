@@ -5,7 +5,15 @@ import type {
 } from './types';
 import type { NextRequest } from 'next/server';
 import { cookies as getCookies, headers as getHeaders } from 'next/headers';
-import { NEXT_URL_HEADER, FORWARDED_URI_HEADER, FORWARDED_PROTO_HEADER, FORWARDED_HOST_HEADER, FORWARDED_FOR_HEADER } from './constants';
+import {
+  NEXT_URL_HEADER,
+  FORWARDED_URI_HEADER,
+  FORWARDED_PROTO_HEADER,
+  FORWARDED_HOST_HEADER,
+  FORWARDED_FOR_HEADER,
+  NEXT_BASE_PATH_HEADER,
+} from './constants';
+import { NextURL } from 'next/dist/server/web/next-url';
 
 function transformCookiesToObject(): any {
   const originals = getCookies().getAll();
@@ -87,6 +95,9 @@ function buildRequest() {
     searchParams[k] = v;
   }
   const protocol = url.protocol.slice(0, -1);
+  const nextUrl = new NextURL(headers[NEXT_URL_HEADER]);
+  nextUrl.basePath = headers[NEXT_BASE_PATH_HEADER];
+  nextUrl.pathname = nextUrl.pathname.slice(nextUrl.basePath.length);
   return {
     params: {},
     method: 'GET',
@@ -102,7 +113,7 @@ function buildRequest() {
     host: url.host,
     secure: protocol === 'https',
     url: url.toString(),
-    nextUrl: new URL(headers[NEXT_URL_HEADER]),
+    nextUrl,
     path: url.pathname,
     query: searchParams,
     protocol,
