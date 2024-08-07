@@ -91,13 +91,15 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
       }
       setPageContext(context);
       await compose(fns, context, noop, ...args);
-      const ret = Page.apply(null, args);
-      await ret;
-      const { cookies } = getPrivate(context);
       if (doRedirect(context)) {
         return;
       }
-     
+      const ret = Page.apply(null, args);
+      await ret;
+      if (doRedirect(context)) {
+        return;
+      }
+      const { cookies } = getPrivate(context);
       return (
         <>
           {cookies && <ClientCookies key="cookies" cookies={cookies} />}
@@ -158,6 +160,9 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
       return requestStorage.run(new Map(), async () => {
         setRouteContext(context);
         await compose(fns, context, noop, ...args);
+        if (doRedirect(context)) {
+          return;
+        }
         const ret = Route.apply(null, args);
         await ret;
         const { status, headers, json } = getPrivate(context);
@@ -193,6 +198,9 @@ export function withActionMiddlewares(fns: MiddlewareFunction[]) {
       return requestStorage.run(new Map(), async () => {
         setRouteContext(context);
         await compose(fns, context, noop, ...args);
+        if (doRedirect(context)) {
+          return;
+        }
         const ret = action.apply(null, args);
         await ret;
         if (doRedirect(context)) {
