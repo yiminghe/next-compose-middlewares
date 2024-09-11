@@ -70,6 +70,24 @@ export default withPageMiddlewares([
 );
 ```
 
+### action
+`src/action/getUser.ts`
+
+```js
+import { withActionMiddlewares, getNextContext } from 'next-compose-middlewares';
+
+export default withActionMiddlewares([
+  async (context, next) => {
+    context.user = 'test';
+    return await next();
+  }])(
+  async () => {
+    const { user } = getNextContext();
+    return user;
+  },
+);
+```
+
 ### route
 `src/app/get/route.ts`
 
