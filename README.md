@@ -57,7 +57,7 @@ import { withPageMiddlewares, getNextContext } from 'next-compose-middlewares';
 export default withPageMiddlewares([
   async (context, next) => {
     context.user = 'test';
-    return await next();
+    await next();
   }])(
   () => {
     const { user } = getNextContext();
@@ -79,7 +79,7 @@ import { withActionMiddlewares, getNextContext } from 'next-compose-middlewares'
 export default withActionMiddlewares([
   async (context, next) => {
     context.user = 'test';
-    return await next();
+    await next();
   }])(
   async () => {
     const { user } = getNextContext();
@@ -97,7 +97,7 @@ import { withRouteMiddlewares,getNextContext } from 'next-compose-middlewares';
 export const GET = withRouteMiddlewares([
   async (context, next) => {
     context.user = 'test';
-    return await next();
+    await next();
   }])(
   () => {
     const { user, res } = getNextContext();
