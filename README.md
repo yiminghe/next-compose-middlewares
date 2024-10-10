@@ -59,7 +59,7 @@ export default withPageMiddlewares([
     context.user = 'test';
     await next();
   }])(
-  () => {
+  async () => {
     const { user } = getNextContext();
     return (
       <>
@@ -99,7 +99,7 @@ export const GET = withRouteMiddlewares([
     context.user = 'test';
     await next();
   }])(
-  () => {
+  async () => {
     const { user, res } = getNextContext();
     res.json({ user });
   },
