@@ -115,6 +115,10 @@ location /rewrite {
     proxy_set_header X-Forwarded-Host $host:$server_port;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_pass http://127.0.0.1:3000/dynamic;
+    proxy_http_version 1.1;
+    # Disable buffering for streaming support
+    proxy_buffering off;
+    proxy_set_header X-Accel-Buffering no;
 }
 ```
 
