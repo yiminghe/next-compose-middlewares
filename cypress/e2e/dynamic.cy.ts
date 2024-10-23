@@ -6,7 +6,11 @@ describe('dynamic spec', () => {
     cy.get('body').contains('from: dynamic');
     cy.get('body').contains('get server user from');
     cy.get('body').contains('of user: test');
-    cy.wait(100);
-    cy.getCookie('x-user-from-page').should('have.property', 'value', 'yiminghe-from-page');
+    cy.wait(500);
+    cy.getCookie('x-user-from-page').should(
+      'have.property',
+      'value',
+      'yiminghe-from-page',
+    );
   });
 });

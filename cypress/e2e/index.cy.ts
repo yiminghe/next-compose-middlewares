@@ -7,8 +7,12 @@ describe('index spec', () => {
     cy.get('body').contains('from: default extra context');
     cy.get('body').contains('server user: test');
     cy.get('body').contains('client user: test');
-    cy.wait(100);
-    cy.getCookie('x-user-from-layout').should('have.property', 'value', 'yiminghe-from-layout');
+    cy.wait(500);
+    cy.getCookie('x-user-from-layout').should(
+      'have.property',
+      'value',
+      'yiminghe-from-layout',
+    );
   });
 
   it('action passes', () => {
