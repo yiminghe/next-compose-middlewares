@@ -215,7 +215,7 @@ export type PageRequest = {
 };
 
 // @public (undocumented)
-export type Params = Record<string, string | string[]>;
+export type Params = Promise<Record<string, string | string[]>>;
 
 // @public (undocumented)
 export type ReturnedRender = React_2.ReactNode;

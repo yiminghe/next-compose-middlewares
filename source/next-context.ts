@@ -13,10 +13,10 @@ import {
   FORWARDED_FOR_HEADER,
   NEXT_BASE_PATH_HEADER,
 } from './constants';
-import { NextURL } from 'next/dist/server/web/next-url';
+import  { NextURL } from 'next/dist/server/web/next-url';
 
-function transformCookiesToObject(): any {
-  const originals = getCookies().getAll();
+async function transformCookiesToObject(): Promise<any> {
+  const originals = (await getCookies()).getAll();
   const cookies: any = {};
   for (const h of originals) {
     cookies[h.name] = h.value;
@@ -24,8 +24,8 @@ function transformCookiesToObject(): any {
   return cookies;
 }
 
-function transformHeadersToObject(): any {
-  const originals = getHeaders();
+async function transformHeadersToObject(): Promise<any> {
+  const originals = await getHeaders();
   const headers: any = {};
   for (const h of Array.from(originals.keys())) {
     headers[h] = originals.get(h);
@@ -40,17 +40,17 @@ function buildResponse(): NextContextResponseInternal {
   };
   const res = {
     _private: p,
-    clearCookie(name: string, options?: CookieAttributes) {
-      getCookies().set(name, '', {
+    async clearCookie(name: string, options?: CookieAttributes) {
+      (await getCookies()).set(name, '', {
         ...options,
         expires: new Date(0),
       });
     },
-    cookie(name: string, value: string, options?: CookieAttributes) {
+    async cookie(name: string, value: string, options?: CookieAttributes) {
       if (options?.maxAge) {
         options.expires = Date.now() + options.maxAge;
       }
-      getCookies().set(name, value, options);
+      (await getCookies()).set(name, value, options);
     },
     append(k: string, v: string) {
       p.headers[k] = p.headers[k] ?? '';
@@ -80,8 +80,8 @@ function buildResponse(): NextContextResponseInternal {
   return res;
 }
 
-function buildRequest() {
-  const headers = transformHeadersToObject();
+async function buildRequest() {
+  const headers = await transformHeadersToObject();
   function get(k: string) {
     return headers[k];
   }
@@ -148,10 +148,10 @@ export function buildPageResponse() {
 /**
  *@public
  */
-export function createNextContextFromPage() {
+export async function createNextContextFromPage() {
   const context: NextContext = {
     type: 'page',
-    req: buildRequest(),
+    req: await buildRequest(),
     res: buildPageResponse(),
   };
   return context;
@@ -159,12 +159,12 @@ export function createNextContextFromPage() {
 /**
  *@public
  */
-export function createNextContextFromAction() {
+export async function createNextContextFromAction() {
   const res = buildResponse();
   const context: NextContext = {
     type: 'action',
     req: {
-      ...buildRequest(),
+      ...(await buildRequest()),
       method: 'POST',
     },
     res,
@@ -175,12 +175,12 @@ export function createNextContextFromAction() {
 /**
  *@public
  */
-export function createNextContextFromRoute(req: NextRequest) {
+export async function createNextContextFromRoute(req: NextRequest) {
   const context: NextContext = {
     type: 'route',
     res: buildResponse(),
     req: {
-      ...buildRequest(),
+      ...(await buildRequest()),
       text: () => req.text(),
       json: () => req.json(),
       method: req.method,

@@ -1,6 +1,6 @@
 {
   "name": "next-compose-middlewares",
-  "version": "0.0.33",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/yiminghe/next-compose-middlewares"
@@ -55,21 +55,21 @@
     "prettier": "2.x",
     "pretty-quick": "3.x",
     "@microsoft/api-extractor": "7.x",
-    "@next/bundle-analyzer": "rc",
+    "@next/bundle-analyzer": "15.x",
     "@types/node": "18.x",
     "@types/react": "18.x",
     "mobx": "6.x",
     "mobx-react-lite": "4.x",
-    "next": "rc",
-    "react": "rc",
-    "react-dom": "rc",
+    "next": "15.x",
+    "react": "18.x",
+    "react-dom": "18.x",
     "typescript": "5.x",
     "cypress": "13.x",
     "start-server-and-test": "2.x",
-    "swc-plugin-coverage-instrument": "0.0.21",
+    "swc-plugin-coverage-instrument": "0.0.25",
     "@cypress/code-coverage": "3.x",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-next": "15.x"
   },
   "nyc": {
     "include": [
@@ -89,5 +89,5 @@
       "lcov"
     ]
   },
-  "packageManager": "pnpm@9.6.0"
+  "packageManager": "pnpm@9.12.2"
 }

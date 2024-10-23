@@ -44,7 +44,7 @@ function noop() {}
 /**
  *@public
  */
-export type Params = Record<string, string | string[]>;
+export type Params = Promise<Record<string, string | string[]>>;
 
 /**
  *@public
@@ -85,9 +85,9 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
       const r = args[0];
       const context = isPageContextInitialized()
         ? getPageContext()
-        : createNextContextFromPage();
+        : await createNextContextFromPage();
       if (r?.params) {
-        context.req.params = r.params;
+        context.req.params = await r.params;
       }
       setPageContext(context);
       await compose(fns, context, noop, ...args);
@@ -150,12 +150,12 @@ export type RouteFunction = (
  */
 export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
   return function (Route: RouteFunction): RouteFunction {
-    const R = (...args: any) => {
+    const R = async (...args: any) => {
       const r = args[0];
       const c = args[1];
-      const context = createNextContextFromRoute(r);
+      const context = await createNextContextFromRoute(r);
       if (c?.params) {
-        context.req.params = c.params;
+        context.req.params = await c.params;
       }
       return requestStorage.run(new Map(), async () => {
         setRouteContext(context);
@@ -193,8 +193,8 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
  */
 export function withActionMiddlewares(fns: MiddlewareFunction[]) {
   return function <T extends Function>(action: T): T {
-    const a = (...args: any) => {
-      const context = createNextContextFromAction();
+    const a = async (...args: any) => {
+      const context = await createNextContextFromAction();
       return requestStorage.run(new Map(), async () => {
         setRouteContext(context);
         await compose(fns, context, noop, ...args);
