@@ -101,7 +101,7 @@ async function buildRequest() {
   return {
     params: {},
     method: 'GET',
-    cookies: transformCookiesToObject(),
+    cookies: await transformCookiesToObject(),
     text: () =>
       new Promise<string>((r) => {
         r('');
