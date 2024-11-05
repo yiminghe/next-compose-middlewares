@@ -12,8 +12,9 @@ import {
   FORWARDED_HOST_HEADER,
   FORWARDED_FOR_HEADER,
   NEXT_BASE_PATH_HEADER,
+  INIT_TOKEN,
 } from './constants';
-import  { NextURL } from 'next/dist/server/web/next-url';
+import { NextURL } from 'next/dist/server/web/next-url';
 
 async function transformCookiesToObject(): Promise<any> {
   const originals = (await getCookies()).getAll();
@@ -148,12 +149,16 @@ export function buildPageResponse() {
 /**
  *@public
  */
-export async function createNextContextFromPage() {
+export function createNextContextFromPage() {
   const context: NextContext = {
     type: 'page',
-    req: await buildRequest(),
+    req: null as any,
     res: buildPageResponse(),
   };
+  (context as any)[INIT_TOKEN] = (async () => {
+    context.req = await buildRequest();
+    delete (context as any)[INIT_TOKEN];
+  })();
   return context;
 }
 /**

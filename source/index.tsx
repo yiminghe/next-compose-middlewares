@@ -21,6 +21,7 @@ import { redirect } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import ClientCookies from './ClientCookies';
 import React, { Fragment } from 'react';
+import { INIT_TOKEN } from './constants';
 
 export type {
   NextContextResponse,
@@ -39,7 +40,7 @@ export {
   //  type GetSetNextContext
 } from './set-context';
 
-function noop() {}
+function noop() { }
 
 /**
  *@public
@@ -83,13 +84,17 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
   return function (Page: PageFunction): PageFunction {
     const P = async (...args: any) => {
       const r = args[0];
-      const context = isPageContextInitialized()
-        ? getPageContext()
-        : await createNextContextFromPage();
+      let context: NextContext;
+      if (isPageContextInitialized()) {
+        context = getPageContext();
+      } else {
+        context = createNextContextFromPage();
+        setPageContext(context);
+      }
+      await (context as any)[INIT_TOKEN];
       if (r?.params) {
         context.req.params = await r.params;
       }
-      setPageContext(context);
       await compose(fns, context, noop, ...args);
       if (doRedirect(context)) {
         return;
