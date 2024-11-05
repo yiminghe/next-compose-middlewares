@@ -40,8 +40,6 @@ export {
   //  type GetSetNextContext
 } from './set-context';
 
-function noop() { }
-
 /**
  *@public
  */
@@ -95,7 +93,7 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
       if (r?.params) {
         context.req.params = await r.params;
       }
-      await compose(fns, context, noop, ...args);
+      await compose(fns, context, ...args);
       if (doRedirect(context)) {
         return;
       }
@@ -164,7 +162,7 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
       }
       return requestStorage.run(new Map(), async () => {
         setRouteContext(context);
-        await compose(fns, context, noop, ...args);
+        await compose(fns, context, ...args);
         if (doRedirect(context)) {
           return;
         }
@@ -202,7 +200,7 @@ export function withActionMiddlewares(fns: MiddlewareFunction[]) {
       const context = await createNextContextFromAction();
       return requestStorage.run(new Map(), async () => {
         setRouteContext(context);
-        await compose(fns, context, noop, ...args);
+        await compose(fns, context, ...args);
         if (doRedirect(context)) {
           return;
         }

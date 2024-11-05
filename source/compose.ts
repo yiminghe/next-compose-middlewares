@@ -1,24 +1,32 @@
 /**
  *@public
  */
- export function compose(
-  middleware: Function[],
-  context: any,
-  next: Function,
-  ...args: any[]
-) {
+ export function compose(middleware: Function[], context: any, ...args: any[]) {
+  // layout page share middleware
+  const store =
+    context.__next__compose__middleware__store__ ||
+    (context.__next__compose__middleware__store__ = new Map());
   // last called middleware #
   let index = -1;
   return dispatch(0);
-  function dispatch(i: number): Promise<any> {
+  async function dispatch(i: number): Promise<any> {
     if (i <= index)
-      return Promise.reject(new Error('next() called multiple times'));
+      return Promise.reject(new Error('middleware called multiple times'));
     index = i;
     let fn = middleware[i];
-    if (i === middleware.length) fn = next!;
     if (!fn) return Promise.resolve();
     try {
-      return Promise.resolve(fn(context, dispatch.bind(null, i + 1), ...args));
+      let existingPromise = store.get(fn);
+      if (existingPromise) {
+        await existingPromise;
+        dispatch(i + 1);
+      } else {
+        existingPromise = Promise.resolve(
+          fn(context, dispatch.bind(null, i + 1), ...args),
+        );
+        store.set(fn, existingPromise);
+        return existingPromise;
+      }
     } catch (err) {
       return Promise.reject(err);
     }

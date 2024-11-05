@@ -21,7 +21,7 @@ describe('compose', () => {
       },
     ];
     const context = { arr: [] };
-    compose(middleware, context, () => Promise.resolve()).then(() => {
+    compose(middleware, context).then(() => {
       expect(context.arr).toEqual([1, 2, 3, 4, 5, 6]);
     });
   });

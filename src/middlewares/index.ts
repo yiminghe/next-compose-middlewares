@@ -7,8 +7,15 @@ import {
   withRouteMiddlewares,
 } from '@/next-compose-middlewares';
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function user(context: NextContext, next: NextFunction) {
-  context.user ??= 'test';
+  console.log('begin run user middleware ' + Date.now());
+  await sleep(500);
+  context.user = 'test';
+  console.log('end run user middleware ' + Date.now());
   await next();
 }
 

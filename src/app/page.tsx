@@ -9,6 +9,7 @@ import ServerInfo from './components/ServerInfo';
 import ExtraContextInfo from './components/ExtraContextInfo';
 
 export default createPage(async function Index() {
+  console.log('run page', Date.now());
   const { user } = getNextContext();
   return (
     <ClientProvider name={user!}>
