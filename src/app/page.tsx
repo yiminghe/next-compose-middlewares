@@ -7,12 +7,14 @@ import { UserInput } from './components/UserInput';
 import { UserName } from './components/UserName';
 import ServerInfo from './components/ServerInfo';
 import ExtraContextInfo from './components/ExtraContextInfo';
+import { testTime } from './services/getTime';
 
 export default createPage(async function Index() {
-  console.log('run page', Date.now());
   const { user } = getNextContext();
+  const times = await testTime();
   return (
     <ClientProvider name={user!}>
+      <input id='times' defaultValue={JSON.stringify(times)}/>
       <ExtraContextInfo />
       <ServerInfo />
       <UserInput />

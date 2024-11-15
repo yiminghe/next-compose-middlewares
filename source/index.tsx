@@ -40,6 +40,9 @@ export {
   //  type GetSetNextContext
 } from './set-context';
 
+export { cache } from './cache';
+
+
 /**
  *@public
  */

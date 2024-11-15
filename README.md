@@ -132,6 +132,9 @@ import type { NextRequest } from 'next/server';
 import { default as React_2 } from 'react';
 
 // @public (undocumented)
+export function cache<T extends Function>(fn: T): T;
+
+// @public (undocumented)
 export interface CookieAttributes {
     domain?: string | undefined;
     expires?: number | Date | undefined;

@@ -8,11 +8,6 @@ import ExtraContextInfo from '../components/ExtraContextInfo';
 
 let count = 0;
 
-function sleep(){
-  return new Promise((r)=>{
-    setTimeout(r,1000);
-  });
-}
 export default createPage(async function Dynamic() {
   const context = getNextContext();
   const { user, req, res } = context;
@@ -24,7 +19,6 @@ export default createPage(async function Dynamic() {
   return (
     <ClientProvider name={user!}>
       <ExtraContextInfo />
-      <script>{`console.log(${JSON.stringify(req)});`}</script>
       <div>
         <Link href={`${req.path}/deep`}>deep</Link>
         &nbsp;

@@ -7,7 +7,6 @@ export default createLayout(function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log('run layout', Date.now());
   const { user, req, res, type } = getNextContext();
   res.cookie('x-user-from-layout', 'yiminghe-from-layout', { path: '/' });
   return (

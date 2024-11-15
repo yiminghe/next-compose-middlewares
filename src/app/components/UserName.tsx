@@ -7,7 +7,7 @@ import getUser from '../actions/getUser';
 
 export const UserName = observer(() => {
   const user = useContext(ClientContext);
-  const [ret, setRet] = useState<string>('');
+  const [ret, setRet] = useState<any>('');
   return (
     <div>
       <div>client user: {user.name}</div>
@@ -18,12 +18,12 @@ export const UserName = observer(() => {
           e.preventDefault();
           const res = await getUser(Date.now());
           console.log(res);
-          setRet(res.user!);
+          setRet(res);
         }}>
         get user by action
       </a>{' '}
       &nbsp;
-      <b>from action: {ret}</b>
+      <div>from action: {ret?<input id='action' readOnly value={JSON.stringify(ret)} />:null}</div>
     </div>
   );
 });
