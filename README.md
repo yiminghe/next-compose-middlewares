@@ -30,7 +30,7 @@ npm run dev
 
 ## docs
 
-[Docs](./docs/index.md)
+[Docs](https://github.com/yiminghe/next-compose-middlewares/blob/main/docs/index.md)
 
 ## Usage
 
