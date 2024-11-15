@@ -77,6 +77,7 @@ type NestedOmit<
 
 export const PAGE_TOKEN = Symbol('page');
 /**
+ * get request context
  *@public
  */
 export function getNextContext() {

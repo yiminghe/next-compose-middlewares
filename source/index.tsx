@@ -82,6 +82,7 @@ function getPrivate(context: NextContext) {
   return (context.res as NextContextResponseInternal)._private;
 }
 /**
+ * create higher order page component with middlewares
  *@public
  */
 export function withPageMiddlewares(fns: MiddlewareFunction[]) {
@@ -155,6 +156,7 @@ export type RouteFunction = (
 ) => any;
 
 /**
+ * create higher order route with middlewares
  *@public
  */
 export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
@@ -198,6 +200,7 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
 }
 
 /**
+ * create higher order action with middlewares
  *@public
  */
 export function withActionMiddlewares(fns: MiddlewareFunction[]) {

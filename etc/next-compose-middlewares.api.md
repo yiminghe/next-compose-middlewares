@@ -21,7 +21,7 @@ export interface CookieAttributes {
     secure?: boolean | undefined;
 }
 
-// @public (undocumented)
+// @public
 export function getNextContext(): NextContext;
 
 // @public (undocumented)
@@ -104,16 +104,16 @@ export type RouteFunction = (request: NextRequest, context: {
     params: Params;
 }) => any;
 
-// @public (undocumented)
+// @public
 export function withActionMiddlewares(fns: MiddlewareFunction[]): <T extends Function>(action: T) => T;
 
 // @public (undocumented)
 export const withLayoutMiddlewares: (fns: MiddlewareFunction[]) => (Layout: LayoutFunction) => LayoutFunction;
 
-// @public (undocumented)
+// @public
 export function withPageMiddlewares(fns: MiddlewareFunction[]): (Page: PageFunction) => PageFunction;
 
-// @public (undocumented)
+// @public
 export function withRouteMiddlewares(fns: MiddlewareFunction[]): (Route: RouteFunction) => RouteFunction;
 
 ```
