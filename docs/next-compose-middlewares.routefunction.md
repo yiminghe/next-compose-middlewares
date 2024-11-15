@@ -10,8 +10,8 @@ route function
 
 ```typescript
 export type RouteFunction = (request: NextRequest, context: {
-    params: Params;
+    params: AsyncParams;
 }) => any;
 ```
-**References:** [Params](./next-compose-middlewares.params.md)
+**References:** [AsyncParams](./next-compose-middlewares.asyncparams.md)
 

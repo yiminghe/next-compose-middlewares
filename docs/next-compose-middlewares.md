@@ -139,6 +139,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[AsyncParams](./next-compose-middlewares.asyncparams.md)
+
+
+</td><td>
+
+nextjs params
+
+
+</td></tr>
+<tr><td>
+
 [LayoutFunction](./next-compose-middlewares.layoutfunction.md)
 
 
@@ -233,28 +244,6 @@ page component
 </td><td>
 
 page component params
-
-
-</td></tr>
-<tr><td>
-
-[Params](./next-compose-middlewares.params.md)
-
-
-</td><td>
-
-params
-
-
-</td></tr>
-<tr><td>
-
-[ReturnedRender](./next-compose-middlewares.returnedrender.md)
-
-
-</td><td>
-
-react node
 
 
 </td></tr>

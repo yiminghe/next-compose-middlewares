@@ -10,9 +10,9 @@ page component params
 
 ```typescript
 export type PageRequest = {
-    params: Params;
-    searchParams: Params;
+    params: AsyncParams;
+    searchParams: AsyncParams;
 };
 ```
-**References:** [Params](./next-compose-middlewares.params.md)
+**References:** [AsyncParams](./next-compose-middlewares.asyncparams.md)
 

@@ -9,7 +9,7 @@ layout component
 **Signature:**
 
 ```typescript
-export type LayoutFunction = (r: LayoutRequest) => ReturnedRender | Promise<ReturnedRender>;
+export type LayoutFunction = (r: LayoutRequest) => React.ReactNode | Promise<React.ReactNode>;
 ```
-**References:** [LayoutRequest](./next-compose-middlewares.layoutrequest.md)<!-- -->, [ReturnedRender](./next-compose-middlewares.returnedrender.md)
+**References:** [LayoutRequest](./next-compose-middlewares.layoutrequest.md)
 

@@ -9,7 +9,7 @@ page component
 **Signature:**
 
 ```typescript
-export type PageFunction = (r: PageRequest) => ReturnedRender | Promise<ReturnedRender>;
+export type PageFunction = (r: PageRequest) => React.ReactNode | Promise<React.ReactNode>;
 ```
-**References:** [PageRequest](./next-compose-middlewares.pagerequest.md)<!-- -->, [ReturnedRender](./next-compose-middlewares.returnedrender.md)
+**References:** [PageRequest](./next-compose-middlewares.pagerequest.md)
 

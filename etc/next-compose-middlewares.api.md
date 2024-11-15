@@ -8,6 +8,9 @@ import type { NextRequest } from 'next/server';
 import { default as React_2 } from 'react';
 
 // @public
+export type AsyncParams = Promise<Record<string, string | string[]>>;
+
+// @public
 export function cache<T extends Function>(fn: T): T;
 
 // @public
@@ -25,11 +28,11 @@ export interface CookieAttributes {
 export function getNextContext(): NextContext;
 
 // @public
-export type LayoutFunction = (r: LayoutRequest) => ReturnedRender | Promise<ReturnedRender>;
+export type LayoutFunction = (r: LayoutRequest) => React_2.ReactNode | Promise<React_2.ReactNode>;
 
 // @public
 export type LayoutRequest = {
-    params: Params;
+    params: AsyncParams;
     children: React_2.ReactNode;
 };
 
@@ -85,23 +88,17 @@ export type NextContextType = 'page' | 'route' | 'action';
 export type NextFunction = () => Promise<any> | void;
 
 // @public
-export type PageFunction = (r: PageRequest) => ReturnedRender | Promise<ReturnedRender>;
+export type PageFunction = (r: PageRequest) => React_2.ReactNode | Promise<React_2.ReactNode>;
 
 // @public
 export type PageRequest = {
-    params: Params;
-    searchParams: Params;
+    params: AsyncParams;
+    searchParams: AsyncParams;
 };
 
 // @public
-export type Params = Promise<Record<string, string | string[]>>;
-
-// @public
-export type ReturnedRender = React_2.ReactNode;
-
-// @public
 export type RouteFunction = (request: NextRequest, context: {
-    params: Params;
+    params: AsyncParams;
 }) => any;
 
 // @public

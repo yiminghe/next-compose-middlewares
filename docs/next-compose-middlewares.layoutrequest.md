@@ -10,9 +10,9 @@ layout component params
 
 ```typescript
 export type LayoutRequest = {
-    params: Params;
+    params: AsyncParams;
     children: React.ReactNode;
 };
 ```
-**References:** [Params](./next-compose-middlewares.params.md)
+**References:** [AsyncParams](./next-compose-middlewares.asyncparams.md)
 

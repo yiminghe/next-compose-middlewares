@@ -47,31 +47,27 @@ export {
 export { cache } from './cache';
 
 /**
- * params
+ * nextjs params
  *@public
  */
-export type Params = Promise<Record<string, string | string[]>>;
+export type AsyncParams = Promise<Record<string, string | string[]>>;
 
 /**
  * page component params
  *@public
  */
 export type PageRequest = {
-  params: Params;
-  searchParams: Params;
+  params: AsyncParams;
+  searchParams: AsyncParams;
 };
-/**
- * react node
- *@public
- */
-export type ReturnedRender = React.ReactNode;
+
 /**
  * page component
  *@public
  */
 export type PageFunction = (
   r: PageRequest,
-) => ReturnedRender | Promise<ReturnedRender>;
+) => React.ReactNode | Promise<React.ReactNode>;
 
 function doRedirect(context: NextContext) {
   const { redirectUrl } = getPrivate(context);
@@ -135,7 +131,7 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
  *@public
  */
 export type LayoutRequest = {
-  params: Params;
+  params: AsyncParams;
   children: React.ReactNode;
 };
 /**
@@ -144,7 +140,7 @@ export type LayoutRequest = {
  */
 export type LayoutFunction = (
   r: LayoutRequest,
-) => ReturnedRender | Promise<ReturnedRender>;
+) => React.ReactNode | Promise<React.ReactNode>;
 
 /**
  * create higher order layout component with middlewares
@@ -160,7 +156,7 @@ export const withLayoutMiddlewares: (
  */
 export type RouteFunction = (
   request: NextRequest,
-  context: { params: Params },
+  context: { params: AsyncParams },
 ) => any;
 
 /**
