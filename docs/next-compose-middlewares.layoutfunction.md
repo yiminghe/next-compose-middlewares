@@ -4,6 +4,7 @@
 
 ## LayoutFunction type
 
+layout component
 
 **Signature:**
 

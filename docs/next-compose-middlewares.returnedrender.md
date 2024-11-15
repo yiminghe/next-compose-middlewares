@@ -4,6 +4,7 @@
 
 ## ReturnedRender type
 
+react node
 
 **Signature:**
 

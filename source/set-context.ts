@@ -1,9 +1,7 @@
 // @ts-ignore
 import { cache } from 'react';
 import type { NextContext } from './types';
-/**
- *@public
- */
+
 export function createPageContext<T>(defaultValue: T): GetSetNextContext<T> {
   const ref = cache(() => ({ current: defaultValue }));
 
@@ -18,25 +16,11 @@ export function createPageContext<T>(defaultValue: T): GetSetNextContext<T> {
 
 const defaultContext = Object.freeze({}) as NextContext;
 
-/**
- *@public
- */
-export const [
-  /**
-   *@public
-   */
-  getPageContext,
-  /**
-   *@public
-   */
-  setPageContext,
-] = createPageContext(defaultContext);
+export const [getPageContext, setPageContext] =
+  createPageContext(defaultContext);
 
 export const requestStorage = new AsyncLocalStorage<Map<Function, any>>();
 
-/**
- *@public
- */
 export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
   const get = (): T => requestStorage.getStore()!.get(get) || defaultValue;
 
@@ -45,19 +29,8 @@ export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
   return [get, set];
 }
 
-/**
- *@public
- */
-export const [
-  /**
-   *@public
-   */
-  getRouteContext,
-  /**
-   *@public
-   */
-  setRouteContext,
-] = createRouteContext(defaultContext);
+export const [getRouteContext, setRouteContext] =
+  createRouteContext(defaultContext);
 
 export function isPageContextInitialized() {
   return getPageContext() !== defaultContext;
@@ -85,14 +58,8 @@ export function getNextContext() {
   return context == defaultContext ? getRouteContext() : context;
 }
 
-/**
- *@public
- */
 export type GetSetNextContext<T> = [() => T, (v: T) => any];
 
-/**
- *@public
- */
 export function createNextContext<T>(c: T): GetSetNextContext<T> {
   let getSetPage: GetSetNextContext<T> = [] as any;
   let getSetRoute: GetSetNextContext<T> = [] as any;

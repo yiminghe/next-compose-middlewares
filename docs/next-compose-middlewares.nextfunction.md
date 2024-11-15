@@ -4,6 +4,7 @@
 
 ## NextFunction type
 
+middle next function
 
 **Signature:**
 

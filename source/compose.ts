@@ -1,7 +1,4 @@
-/**
- *@public
- */
- export function compose(middleware: Function[], context: any, ...args: any[]) {
+export function compose(middleware: Function[], context: any, ...args: any[]) {
   // layout page share middleware
   const store =
     context.__next__compose__middleware__store__ ||

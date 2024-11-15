@@ -4,6 +4,7 @@
 
 ## MiddlewareFunction type
 
+middleware function
 
 **Signature:**
 

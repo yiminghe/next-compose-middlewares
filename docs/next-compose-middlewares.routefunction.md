@@ -4,6 +4,7 @@
 
 ## RouteFunction type
 
+route function
 
 **Signature:**
 

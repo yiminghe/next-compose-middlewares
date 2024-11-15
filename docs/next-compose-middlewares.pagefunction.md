@@ -4,6 +4,7 @@
 
 ## PageFunction type
 
+page component
 
 **Signature:**
 

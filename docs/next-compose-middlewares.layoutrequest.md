@@ -4,6 +4,7 @@
 
 ## LayoutRequest type
 
+layout component params
 
 **Signature:**
 

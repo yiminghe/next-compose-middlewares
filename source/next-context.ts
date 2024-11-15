@@ -146,9 +146,6 @@ export function buildPageResponse() {
   };
 }
 
-/**
- *@public
- */
 export function createNextContextFromPage() {
   const context: NextContext = {
     type: 'page',
@@ -161,9 +158,7 @@ export function createNextContextFromPage() {
   })();
   return context;
 }
-/**
- *@public
- */
+
 export async function createNextContextFromAction() {
   const res = buildResponse();
   const context: NextContext = {
@@ -177,9 +172,6 @@ export async function createNextContextFromAction() {
   return context;
 }
 
-/**
- *@public
- */
 export async function createNextContextFromRoute(req: NextRequest) {
   const context: NextContext = {
     type: 'route',

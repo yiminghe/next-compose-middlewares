@@ -4,6 +4,7 @@
 
 ## CookieAttributes interface
 
+cookie attributes
 
 **Signature:**
 

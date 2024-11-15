@@ -10,7 +10,7 @@ import { default as React_2 } from 'react';
 // @public
 export function cache<T extends Function>(fn: T): T;
 
-// @public (undocumented)
+// @public
 export interface CookieAttributes {
     domain?: string | undefined;
     expires?: number | Date | undefined;
@@ -24,19 +24,19 @@ export interface CookieAttributes {
 // @public
 export function getNextContext(): NextContext;
 
-// @public (undocumented)
+// @public
 export type LayoutFunction = (r: LayoutRequest) => ReturnedRender | Promise<ReturnedRender>;
 
-// @public (undocumented)
+// @public
 export type LayoutRequest = {
     params: Params;
     children: React_2.ReactNode;
 };
 
-// @public (undocumented)
+// @public
 export type MiddlewareFunction = (context: NextContext, next: NextFunction) => Promise<any> | void;
 
-// @public (undocumented)
+// @public
 export interface NextContext {
     // (undocumented)
     req: NextContextRequest;
@@ -46,7 +46,7 @@ export interface NextContext {
     type: NextContextType;
 }
 
-// @public (undocumented)
+// @public
 export type NextContextRequest = {
     params: any;
     host: string;
@@ -66,7 +66,7 @@ export type NextContextRequest = {
     headers: any;
 };
 
-// @public (undocumented)
+// @public
 export type NextContextResponse = {
     clearCookie: (name: string, options?: CookieAttributes) => void;
     cookie: (name: string, value: string, options?: CookieAttributes) => void;
@@ -78,28 +78,28 @@ export type NextContextResponse = {
     status: (s: number) => void;
 };
 
-// @public (undocumented)
+// @public
 export type NextContextType = 'page' | 'route' | 'action';
 
-// @public (undocumented)
+// @public
 export type NextFunction = () => Promise<any> | void;
 
-// @public (undocumented)
+// @public
 export type PageFunction = (r: PageRequest) => ReturnedRender | Promise<ReturnedRender>;
 
-// @public (undocumented)
+// @public
 export type PageRequest = {
     params: Params;
     searchParams: Params;
 };
 
-// @public (undocumented)
+// @public
 export type Params = Promise<Record<string, string | string[]>>;
 
-// @public (undocumented)
+// @public
 export type ReturnedRender = React_2.ReactNode;
 
-// @public (undocumented)
+// @public
 export type RouteFunction = (request: NextRequest, context: {
     params: Params;
 }) => any;
@@ -107,7 +107,7 @@ export type RouteFunction = (request: NextRequest, context: {
 // @public
 export function withActionMiddlewares(fns: MiddlewareFunction[]): <T extends Function>(action: T) => T;
 
-// @public (undocumented)
+// @public
 export const withLayoutMiddlewares: (fns: MiddlewareFunction[]) => (Layout: LayoutFunction) => LayoutFunction;
 
 // @public

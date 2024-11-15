@@ -4,6 +4,7 @@
 
 ## NextContext interface
 
+request context
 
 **Signature:**
 

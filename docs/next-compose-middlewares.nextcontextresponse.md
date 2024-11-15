@@ -4,6 +4,7 @@
 
 ## NextContextResponse type
 
+response
 
 **Signature:**
 

@@ -59,6 +59,7 @@ create higher order action with middlewares
 
 </td><td>
 
+create higher order layout component with middlewares
 
 
 </td></tr>
@@ -106,6 +107,7 @@ Description
 
 </td><td>
 
+cookie attributes
 
 
 </td></tr>
@@ -116,6 +118,7 @@ Description
 
 </td><td>
 
+request context
 
 
 </td></tr>
@@ -141,6 +144,7 @@ Description
 
 </td><td>
 
+layout component
 
 
 </td></tr>
@@ -151,6 +155,7 @@ Description
 
 </td><td>
 
+layout component params
 
 
 </td></tr>
@@ -161,6 +166,7 @@ Description
 
 </td><td>
 
+middleware function
 
 
 </td></tr>
@@ -171,6 +177,7 @@ Description
 
 </td><td>
 
+request
 
 
 </td></tr>
@@ -181,6 +188,7 @@ Description
 
 </td><td>
 
+response
 
 
 </td></tr>
@@ -191,6 +199,7 @@ Description
 
 </td><td>
 
+context type
 
 
 </td></tr>
@@ -201,6 +210,7 @@ Description
 
 </td><td>
 
+middle next function
 
 
 </td></tr>
@@ -211,6 +221,7 @@ Description
 
 </td><td>
 
+page component
 
 
 </td></tr>
@@ -221,6 +232,7 @@ Description
 
 </td><td>
 
+page component params
 
 
 </td></tr>
@@ -231,6 +243,7 @@ Description
 
 </td><td>
 
+params
 
 
 </td></tr>
@@ -241,6 +254,7 @@ Description
 
 </td><td>
 
+react node
 
 
 </td></tr>
@@ -251,6 +265,7 @@ Description
 
 </td><td>
 
+route function
 
 
 </td></tr>

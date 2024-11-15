@@ -4,6 +4,7 @@
 
 ## withLayoutMiddlewares() function
 
+create higher order layout component with middlewares
 
 **Signature:**
 

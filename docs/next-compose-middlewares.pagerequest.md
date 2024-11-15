@@ -4,6 +4,7 @@
 
 ## PageRequest type
 
+page component params
 
 **Signature:**
 

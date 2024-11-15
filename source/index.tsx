@@ -47,11 +47,13 @@ export {
 export { cache } from './cache';
 
 /**
+ * params
  *@public
  */
 export type Params = Promise<Record<string, string | string[]>>;
 
 /**
+ * page component params
  *@public
  */
 export type PageRequest = {
@@ -59,10 +61,12 @@ export type PageRequest = {
   searchParams: Params;
 };
 /**
+ * react node
  *@public
  */
 export type ReturnedRender = React.ReactNode;
 /**
+ * page component
  *@public
  */
 export type PageFunction = (
@@ -127,6 +131,7 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
   };
 }
 /**
+ * layout component params
  *@public
  */
 export type LayoutRequest = {
@@ -134,6 +139,7 @@ export type LayoutRequest = {
   children: React.ReactNode;
 };
 /**
+ * layout component
  *@public
  */
 export type LayoutFunction = (
@@ -141,6 +147,7 @@ export type LayoutFunction = (
 ) => ReturnedRender | Promise<ReturnedRender>;
 
 /**
+ * create higher order layout component with middlewares
  *@public
  */
 export const withLayoutMiddlewares: (
@@ -148,6 +155,7 @@ export const withLayoutMiddlewares: (
 ) => (Layout: LayoutFunction) => LayoutFunction = withPageMiddlewares as any;
 
 /**
+ * route function
  *@public
  */
 export type RouteFunction = (

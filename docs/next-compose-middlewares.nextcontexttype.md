@@ -4,6 +4,7 @@
 
 ## NextContextType type
 
+context type
 
 **Signature:**
 
