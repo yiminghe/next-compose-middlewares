@@ -131,7 +131,7 @@ location /rewrite {
 import type { NextRequest } from 'next/server';
 import { default as React_2 } from 'react';
 
-// @public (undocumented)
+// @public
 export function cache<T extends Function>(fn: T): T;
 
 // @public (undocumented)
@@ -239,8 +239,6 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]): (Page: PageFunct
 
 // @public (undocumented)
 export function withRouteMiddlewares(fns: MiddlewareFunction[]): (Route: RouteFunction) => RouteFunction;
-
-// (No @packageDocumentation comment for this package)
 
 ```
 ---------

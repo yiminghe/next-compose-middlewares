@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation unified middleware and request context for nextjs
+ */
+
 import type {
   NextContext,
   MiddlewareFunction,
@@ -41,7 +45,6 @@ export {
 } from './set-context';
 
 export { cache } from './cache';
-
 
 /**
  *@public

@@ -1,28 +1,28 @@
-import { getNextContext } from "./set-context";
+import { getNextContext } from './set-context';
 
 const UNTERMINATED = 0;
 const TERMINATED = 1;
 const ERRORED = 2;
 
 type UnterminatedCacheNode<T> = {
-  s: 0,
-  v: void,
-  o: null | WeakMap<Function | Object, CacheNode<T>>,
-  p: null | Map<string | number | null | void | symbol | boolean, CacheNode<T>>,
+  s: 0;
+  v: void;
+  o: null | WeakMap<Function | Object, CacheNode<T>>;
+  p: null | Map<string | number | null | void | symbol | boolean, CacheNode<T>>;
 };
 
 type TerminatedCacheNode<T> = {
-  s: 1,
-  v: T,
-  o: null | WeakMap<Function | Object, CacheNode<T>>,
-  p: null | Map<string | number | null | void | symbol | boolean, CacheNode<T>>,
+  s: 1;
+  v: T;
+  o: null | WeakMap<Function | Object, CacheNode<T>>;
+  p: null | Map<string | number | null | void | symbol | boolean, CacheNode<T>>;
 };
 
 type ErroredCacheNode<T> = {
-  s: 2,
-  v: any,
-  o: null | WeakMap<Function | Object, CacheNode<T>>,
-  p: null | Map<string | number | null | void | symbol | boolean, CacheNode<T>>,
+  s: 2;
+  v: any;
+  o: null | WeakMap<Function | Object, CacheNode<T>>;
+  p: null | Map<string | number | null | void | symbol | boolean, CacheNode<T>>;
 };
 
 type CacheNode<T> =
@@ -47,9 +47,13 @@ const key = '__next_compose_middlewares_cache_root';
 function getFnMap() {
   const context: any = getNextContext();
   context[key] = context[key] || createCacheRoot();
-  return context[key]
+  return context[key];
 }
 
+/**
+ * cache function call on request level
+ * @public
+ */
 export function cache<T extends Function>(fn: T): T {
   return function () {
     const fnMap: WeakMap<any, CacheNode<T>> = getFnMap();
@@ -103,13 +107,13 @@ export function cache<T extends Function>(fn: T): T {
     try {
       // $FlowFixMe[incompatible-call]: We don't want to use rest arguments since we transpile the code.
       const result = fn.apply(null, arguments);
-      const terminatedNode: TerminatedCacheNode<any> = (cacheNode as any);
+      const terminatedNode: TerminatedCacheNode<any> = cacheNode as any;
       terminatedNode.s = TERMINATED;
       terminatedNode.v = result;
       return result;
     } catch (error) {
       // We store the first error that's thrown and rethrow it.
-      const erroredNode: ErroredCacheNode<any> = (cacheNode as any);
+      const erroredNode: ErroredCacheNode<any> = cacheNode as any;
       erroredNode.s = ERRORED;
       erroredNode.v = error;
       throw error;
