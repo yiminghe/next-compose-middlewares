@@ -2,6 +2,17 @@
 import { cache } from 'react';
 import type { NextContext } from './types';
 
+const g: any = globalThis;
+
+const cacheStore = g.__next_compose_middlewares_context_cache = g.__next_compose_middlewares_context_cache || new Map();
+
+function cacheGlobal<T>(name: string, fn: () => T): T {
+  if (!cacheStore.has(name)) {
+    cacheStore.set(name, fn());
+  }
+  return cacheStore.get(name);
+}
+
 export function createPageContext<T>(defaultValue: T): GetSetNextContext<T> {
   const ref = cache(() => ({ current: defaultValue }));
 
@@ -14,12 +25,12 @@ export function createPageContext<T>(defaultValue: T): GetSetNextContext<T> {
   return [get, set];
 }
 
-const defaultContext = Object.freeze({}) as NextContext;
+const defaultContext = cacheGlobal('defaultContext', () => Object.freeze({})) as NextContext;
 
 export const [getPageContext, setPageContext] =
-  createPageContext(defaultContext);
+  cacheGlobal('getPageContext', () => createPageContext(defaultContext));
 
-export const requestStorage = new AsyncLocalStorage<Map<Function, any>>();
+export const requestStorage = cacheGlobal('requestStorage', () => new AsyncLocalStorage<Map<Function, any>>());
 
 export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
   const get = (): T => requestStorage.getStore()!.get(get) || defaultValue;
@@ -30,25 +41,12 @@ export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
 }
 
 export const [getRouteContext, setRouteContext] =
-  createRouteContext(defaultContext);
+  cacheGlobal('getRouteContext', () => createRouteContext(defaultContext));
 
 export function isPageContextInitialized() {
   return getPageContext() !== defaultContext;
 }
-type NestedOmit<
-  Schema,
-  Path extends string,
-> = Path extends `${infer Head}.${infer Tail}`
-  ? Head extends keyof Schema
-    ? {
-        [K in keyof Schema]: K extends Head
-          ? NestedOmit<Schema[K], Tail>
-          : Schema[K];
-      }
-    : Schema
-  : Omit<Schema, Path>;
 
-export const PAGE_TOKEN = Symbol('page');
 /**
  * get request context
  *@public
