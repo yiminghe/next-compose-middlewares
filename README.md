@@ -4,7 +4,6 @@
 - SetCookie/clearCookie both inside Page and Route/Action
 - Easily access request/response context between components inside Page and functions inside Route/Action 
 
-
 [![NPM version][npm-image]][npm-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![npm download][download-image]][download-url]
