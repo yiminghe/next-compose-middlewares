@@ -44,13 +44,10 @@ function buildResponse(): NextContextResponseInternal {
     async clearCookie(name: string, options?: CookieAttributes) {
       (await getCookies()).set(name, '', {
         ...options,
-        expires: new Date(0),
+        maxAge: 0,
       });
     },
     async cookie(name: string, value: string, options?: CookieAttributes) {
-      if (options?.maxAge) {
-        options.expires = Date.now() + options.maxAge;
-      }
       (await getCookies()).set(name, value, options);
     },
     append(k: string, v: string) {
@@ -127,21 +124,23 @@ async function buildRequest() {
 
 export function buildPageResponse() {
   const res = buildResponse();
-  function cookie(name: string, value: string, options?: CookieAttributes) {
-    if (options?.maxAge) {
-      options.expires = Date.now() + options.maxAge;
+  function cookie(name: string, value: string, options_?: CookieAttributes) {
+    const options = { ...options_ };
+    if (options.maxAge !== undefined) {
+      options.expires = Date.now() + options.maxAge * 1000;
+      delete options.maxAge;
     }
     res._private.cookies = res._private.cookies || {};
-    res._private.cookies[name] = { ...options, value };
-    if (options?.expires) {
-      res._private.cookies[name].expires = +options.expires;
+    res._private.cookies[name] = { options, value };
+    if (options.expires) {
+      options.expires = +options.expires;
     }
   }
   return {
     ...res,
     cookie,
-    clearCookie(name: string, options?: CookieAttributes) {
-      cookie(name, '', { ...options, expires: new Date(0) });
+    clearCookie(name: string, options_?: CookieAttributes) {
+      cookie(name, '', { ...options_, expires: new Date(0) });
     },
   };
 }

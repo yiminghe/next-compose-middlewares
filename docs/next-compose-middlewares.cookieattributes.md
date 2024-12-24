@@ -88,7 +88,7 @@ number
 
 </td><td>
 
-_(Optional)_
+_(Optional)_ Sets the cookie’s lifespan in seconds.
 
 
 </td></tr>

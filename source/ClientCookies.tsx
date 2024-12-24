@@ -1,7 +1,7 @@
 'use client';
 
 import { useLayoutEffect } from 'react';
-import type { ClientCookies, CookieAttributes } from './types';
+import type { ClientCookies } from './types';
 import * as Cookies from './cookies';
 
 export default function ClientCookies({
@@ -12,15 +12,14 @@ export default function ClientCookies({
   useLayoutEffect(() => {
     if (cookies) {
       for (const key of Object.keys(cookies)) {
-        const value = cookies[key]!;
-        let options = value;
+        let { value, options } = cookies[key]!;
         if (typeof options.expires === 'number') {
           options = {
             ...options,
             expires: new Date(options.expires),
           };
         }
-        Cookies.set(key, value.value, options);
+        Cookies.set(key, value, options);
       }
     }
   }, [cookies]);

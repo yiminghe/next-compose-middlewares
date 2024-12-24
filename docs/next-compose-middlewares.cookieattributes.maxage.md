@@ -4,6 +4,8 @@
 
 ## CookieAttributes.maxAge property
 
+Sets the cookie’s lifespan in seconds.
+
 **Signature:**
 
 ```typescript

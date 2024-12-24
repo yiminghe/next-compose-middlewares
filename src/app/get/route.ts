@@ -13,7 +13,10 @@ export const GET = createRoute(async function Get(...args) {
     from: 'route',
   };
   await sleep(1000);
-  res.cookie('x-user-from-route', 'yiminghe-from-route', { path: '/' });
+  res.cookie('x-user-from-route', 'yiminghe-from-route', {
+    path: '/',
+    maxAge: 60 * 60,
+  });
   res.set('x-from', 'next-compose');
   const times = await testTime();
   res.json({

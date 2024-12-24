@@ -17,7 +17,6 @@ export function cache<T extends Function>(fn: T): T;
 export interface CookieAttributes {
     domain?: string | undefined;
     expires?: number | Date | undefined;
-    // (undocumented)
     maxAge?: number;
     path?: string | undefined;
     sameSite?: 'strict' | 'lax' | 'none' | undefined;
@@ -51,22 +50,22 @@ export interface NextContext {
 
 // @public
 export type NextContextRequest = {
-    params: any;
+    params: Record<string, string | string[]>;
     host: string;
     protocol: string;
     secure: boolean;
     url: string;
     nextUrl: URL;
     ip: string | undefined;
-    get: (k: string) => any;
-    header: (k: string) => any;
+    get: (k: string) => string | undefined;
+    header: (k: string) => string | undefined;
     text: () => Promise<string>;
     json: () => Promise<any>;
     method: string;
     path: string;
-    query: any;
-    cookies: any;
-    headers: any;
+    query: Record<string, string | undefined>;
+    cookies: Record<string, string | undefined>;
+    headers: Record<string, string | undefined>;
 };
 
 // @public
