@@ -119,6 +119,7 @@ export interface NextContext {
  */
 export type NextContextResponseInternal = {
   _private: {
+    cookieSent?: boolean;
     cookies?: ClientCookies;
     headers: any;
     redirectUrl?: string;

@@ -109,7 +109,9 @@ export function withPageMiddlewares(fns: MiddlewareFunction[]) {
       if (doRedirect(context)) {
         return;
       }
-      const { cookies } = getPrivate(context);
+      const private_ = getPrivate(context);
+      const { cookies } = private_;
+      private_.cookieSent = true;
       return (
         <>
           {cookies && <ClientCookies key="cookies" cookies={cookies} />}

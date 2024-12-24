@@ -126,6 +126,10 @@ async function buildRequest() {
 export function buildPageResponse() {
   const res = buildResponse();
   function cookie(name: string, value: string, options_?: CookieAttributes) {
+    const private_ = res._private;
+    if (private_.cookieSent) {
+      throw new Error('only can set cookie inside middleware and entry page!');
+    }
     const { maxAge, expires, ...clientOptions_ } = options_ || {};
     let clientOptions: ClientCookieAttributes = clientOptions_;
     if (expires) {
@@ -133,8 +137,8 @@ export function buildPageResponse() {
     } else if (typeof maxAge === 'number') {
       clientOptions.expires = Date.now() + maxAge * 1000;
     }
-    res._private.cookies = res._private.cookies || {};
-    res._private.cookies[name] = { options: clientOptions, value };
+    private_.cookies = private_.cookies || {};
+    private_.cookies[name] = { options: clientOptions, value };
   }
   return {
     ...res,
