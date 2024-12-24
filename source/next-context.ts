@@ -2,6 +2,7 @@ import type {
   NextContext,
   CookieAttributes,
   NextContextResponseInternal,
+  ClientCookieAttributes,
 } from './types';
 import type { NextRequest } from 'next/server';
 import { cookies as getCookies, headers as getHeaders } from 'next/headers';
@@ -125,16 +126,15 @@ async function buildRequest() {
 export function buildPageResponse() {
   const res = buildResponse();
   function cookie(name: string, value: string, options_?: CookieAttributes) {
-    const options = { ...options_ };
-    if (options.maxAge !== undefined) {
-      options.expires = Date.now() + options.maxAge * 1000;
-      delete options.maxAge;
+    const { maxAge, expires, ...clientOptions_ } = options_ || {};
+    let clientOptions: ClientCookieAttributes = clientOptions_;
+    if (expires) {
+      clientOptions.expires = +expires;
+    } else if (typeof maxAge === 'number') {
+      clientOptions.expires = Date.now() + maxAge * 1000;
     }
     res._private.cookies = res._private.cookies || {};
-    res._private.cookies[name] = { options, value };
-    if (options.expires) {
-      options.expires = +options.expires;
-    }
+    res._private.cookies[name] = { options: clientOptions, value };
   }
   return {
     ...res,

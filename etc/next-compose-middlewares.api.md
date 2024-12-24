@@ -16,7 +16,7 @@ export function cache<T extends Function>(fn: T): T;
 // @public
 export interface CookieAttributes {
     domain?: string | undefined;
-    expires?: number | Date | undefined;
+    expires?: Date | undefined;
     maxAge?: number;
     path?: string | undefined;
     sameSite?: 'strict' | 'lax' | 'none' | undefined;

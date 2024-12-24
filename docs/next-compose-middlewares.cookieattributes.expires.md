@@ -4,10 +4,10 @@
 
 ## CookieAttributes.expires property
 
-Define when the cookie will be removed. Value can be a Number which will be interpreted as days from time of creation or a Date instance. If omitted, the cookie becomes a session cookie.
+Defines the exact date when the cookie will expire.
 
 **Signature:**
 
 ```typescript
-expires?: number | Date | undefined;
+expires?: Date | undefined;
 ```

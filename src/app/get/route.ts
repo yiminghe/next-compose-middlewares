@@ -17,6 +17,10 @@ export const GET = createRoute(async function Get(...args) {
     path: '/',
     maxAge: 60 * 60,
   });
+  res.cookie('x-user-from-route2', 'yiminghe-from-route2', {
+    path: '/',
+    expires: new Date(Date.now() + 1000 * 60 * 60),
+  });
   res.set('x-from', 'next-compose');
   const times = await testTime();
   res.json({

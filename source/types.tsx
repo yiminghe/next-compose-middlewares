@@ -12,11 +12,9 @@ export type NextFunction = () => Promise<any> | void;
  */
 export interface CookieAttributes {
   /**
-   * Define when the cookie will be removed. Value can be a Number
-   * which will be interpreted as days from time of creation or a
-   * Date instance. If omitted, the cookie becomes a session cookie.
+   * Defines the exact date when the cookie will expire.
    */
-  expires?: number | Date | undefined;
+  expires?: Date | undefined;
 
   /**
    * Sets the cookie’s lifespan in seconds.
@@ -51,10 +49,18 @@ export interface CookieAttributes {
 /**
  *@internal
  */
+export type ClientCookieAttributes = Omit<
+  CookieAttributes,
+  'maxAge' | 'expires'
+> & { expires?: number | undefined };
+
+/**
+ *@internal
+ */
 export type ClientCookies = {
   [key: string]: {
     value: string;
-    options: Exclude<CookieAttributes, 'maxAge'>;
+    options: ClientCookieAttributes;
   };
 };
 /**

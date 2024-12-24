@@ -64,12 +64,12 @@ _(Optional)_ Define the domain where the cookie is available. Defaults to the do
 
 </td><td>
 
-number \| Date \| undefined
+Date \| undefined
 
 
 </td><td>
 
-_(Optional)_ Define when the cookie will be removed. Value can be a Number which will be interpreted as days from time of creation or a Date instance. If omitted, the cookie becomes a session cookie.
+_(Optional)_ Defines the exact date when the cookie will expire.
 
 
 </td></tr>
