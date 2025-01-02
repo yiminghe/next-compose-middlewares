@@ -7,10 +7,9 @@ const nextConfig = {
   reactStrictMode: false,
   pageExtensions: ['ts', 'tsx', 'js'],
   experimental: {
-    swcPlugins:
-      process.env.NODE_ENV !== 'production'
-        ? [[require.resolve('swc-plugin-coverage-instrument'), {}]]
-        : [],
+    swcPlugins: process.env.NEXT_PUBLIC_CYPRESS
+      ? [[require.resolve('swc-plugin-coverage-instrument'), {}]]
+      : [],
   },
 };
 
