@@ -37,7 +37,11 @@ npm run dev
 `src/middleware.ts`
 
 ```js
-export { middleware } from 'next-compose-middlewares/middleware';
+import { createMiddleware } from 'next-compose-middlewares/middleware';
+export const middleware = createMiddleware();
+export const config = {
+  matcher: '/((?!_next|favicon.ico|sitemap.xml|robots.txt).*)',
+};
 ```
 
 ### extends type

@@ -95,7 +95,7 @@ async function buildRequest() {
   }
   const protocol = url.protocol.slice(0, -1);
   const nextUrl = new NextURL(headers[NEXT_URL_HEADER]);
-  nextUrl.basePath = headers[NEXT_BASE_PATH_HEADER];
+  nextUrl.basePath = headers[NEXT_BASE_PATH_HEADER] || '';
   nextUrl.pathname = nextUrl.pathname.slice(nextUrl.basePath.length);
   return {
     params: {},
