@@ -4,7 +4,8 @@ import type { NextContext } from './types';
 
 const g: any = globalThis;
 
-const cacheStore = g.__next_compose_middlewares_context_cache = g.__next_compose_middlewares_context_cache || new Map();
+const cacheStore = (g.__next_compose_middlewares_context_cache =
+  g.__next_compose_middlewares_context_cache || new Map());
 
 function cacheGlobal<T>(name: string, fn: () => T): T {
   if (!cacheStore.has(name)) {
@@ -25,12 +26,19 @@ export function createPageContext<T>(defaultValue: T): GetSetNextContext<T> {
   return [get, set];
 }
 
-const defaultContext = cacheGlobal('defaultContext', () => Object.freeze({})) as NextContext;
+const defaultContext = cacheGlobal('defaultContext', () =>
+  Object.freeze({}),
+) as NextContext;
 
-export const [getPageContext, setPageContext] =
-  cacheGlobal('getPageContext', () => createPageContext(defaultContext));
+export const [getPageContext, setPageContext] = cacheGlobal(
+  'getPageContext',
+  () => createPageContext(defaultContext),
+);
 
-export const requestStorage = cacheGlobal('requestStorage', () => new AsyncLocalStorage<Map<Function, any>>());
+export const requestStorage = cacheGlobal(
+  'requestStorage',
+  () => new AsyncLocalStorage<Map<Function, any>>(),
+);
 
 export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
   const get = (): T => requestStorage.getStore()!.get(get) || defaultValue;
@@ -40,8 +48,10 @@ export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
   return [get, set];
 }
 
-export const [getRouteContext, setRouteContext] =
-  cacheGlobal('getRouteContext', () => createRouteContext(defaultContext));
+export const [getRouteContext, setRouteContext] = cacheGlobal(
+  'getRouteContext',
+  () => createRouteContext(defaultContext),
+);
 
 export function isPageContextInitialized() {
   return getPageContext() !== defaultContext;

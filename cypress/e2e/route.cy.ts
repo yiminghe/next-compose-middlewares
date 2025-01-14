@@ -14,6 +14,10 @@ describe('route spec', () => {
       expect(data.type).to.equal('route');
       expect(data.from).to.equal('route');
     });
-    cy.getCookie('x-user-from-route').should('have.property', 'value', 'yiminghe-from-route');
+    cy.getCookie('x-user-from-route').should(
+      'have.property',
+      'value',
+      'yiminghe-from-route',
+    );
   });
 });

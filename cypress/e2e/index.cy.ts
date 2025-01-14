@@ -8,12 +8,12 @@ describe('index spec', () => {
     cy.get('body').contains('server user: test');
     cy.get('body').contains('client user: test');
     cy.wait(500);
-    cy.get('#times').then(($)=>{
+    cy.get('#times').then(($) => {
       const data = JSON.parse($.val() as string);
       expect(data.t1).to.equal(data.t2);
       expect(data.t2).to.equal(data.t3);
       expect(data.t3).to.equal(data.t4);
-     });
+    });
     cy.getCookie('x-user-from-layout').should(
       'have.property',
       'value',

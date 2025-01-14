@@ -44,7 +44,9 @@ export function createMiddleware(ms: MiddlewareMiddleware[] = []) {
       await compose(headerMiddlewares, context);
     }
     const res = NextResponse.next({
-      headers: context.headers,
+      request: {
+        headers: context.headers,
+      },
     });
     const responseContext: ResponseContext = {
       ...context,

@@ -26,5 +26,5 @@ export const middleware = createMiddleware([
 ]);
 
 export const config = {
-  matcher: '/((?!_next|favicon.ico|sitemap.xml|robots.txt).*)',
+  matcher: '/((?!_next|__|favicon.ico|sitemap.xml|robots.txt).*)',
 };

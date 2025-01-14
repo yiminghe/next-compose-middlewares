@@ -14,7 +14,7 @@ export default createPage(async function Index() {
   const times = await testTime();
   return (
     <ClientProvider name={user!}>
-      <input id='times' defaultValue={JSON.stringify(times)}/>
+      <input id="times" defaultValue={JSON.stringify(times)} />
       <ExtraContextInfo />
       <ServerInfo />
       <UserInput />

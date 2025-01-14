@@ -9,6 +9,6 @@ export default createAction(async (time: number) => {
     ...(await testTime()),
     time,
     user: getNextContext().user,
-    type: getNextContext().type
+    type: getNextContext().type,
   };
 });
