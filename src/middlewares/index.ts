@@ -1,3 +1,5 @@
+import { getI18n } from '@/i18n/server';
+import { getI18nComponent, I18nTranslate } from '@/i18n/types';
 import {
   NextContext,
   NextFunction,
@@ -19,7 +21,17 @@ async function user(context: NextContext, next: NextFunction) {
   await next();
 }
 
-export const createPage = withPageMiddlewares([user]);
+export const createPage = withPageMiddlewares([
+  user,
+  async (context, next) => {
+    const locale = (context.req.query.locale as any) || 'zh-CN';
+    const { i18n, T, translation } = getI18n(locale);
+    context.t = i18n.t as I18nTranslate;
+    context.T = T;
+    context.translation = translation;
+    context.locale = locale;
+  },
+]);
 export const createLayout = withLayoutMiddlewares([user]);
 export const createAction = withActionMiddlewares([user]);
 export const createRoute = withRouteMiddlewares([user]);
