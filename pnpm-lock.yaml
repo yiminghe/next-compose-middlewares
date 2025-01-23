@@ -126,8 +126,8 @@ importers:
         specifier: 10.x
         version: 10.9.2(@types/node@18.19.39)(typescript@5.5.2)
       typed-icu-message:
-        specifier: 0.0.9
-        version: 0.0.9
+        specifier: 0.0.10
+        version: 0.0.10
       typescript:
         specifier: 5.x
         version: 5.5.2
@@ -4428,8 +4428,8 @@ packages:
     resolution: {integrity: sha512-/OxDN6OtAk5KBpGb28T+HZc2M+ADtvRxXrKKbUwtsLgdoxgX13hyy7ek6bFRl5+aBs2yZzB0c4CnQfAtVypW/g==}
     engines: {node: '>= 0.4'}
 
-  typed-icu-message@0.0.9:
-    resolution: {integrity: sha512-QHTnE3UFHP1waeEOJ0Ccc2mazlwwnNRqfYgr/ku93/zrX5BfnSz4imQ0czEGzs3zJ7Ja03Onvi3Iv1SJjEqQFg==}
+  typed-icu-message@0.0.10:
+    resolution: {integrity: sha512-2L/xm2zhetEv2QeCS2KG8MUIA6bl3SmITJmsM3MibFLP33XCibHi2cUUVHKvCu+Tqztv5darIoJMDfelEIzfVg==}
 
   typedarray-to-buffer@3.1.5:
     resolution: {integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==}
@@ -9926,7 +9926,7 @@ snapshots:
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
 
-  typed-icu-message@0.0.9:
+  typed-icu-message@0.0.10:
     dependencies:
       '@formatjs/icu-messageformat-parser': 2.11.0
 
