@@ -32,32 +32,28 @@ export type I18nNsType = string;
 export type I18nTranslate = <T extends I18nResKeys>(
   ...args:
     | [
-        p: T,
+        key: T,
         options: I18nRes[T]['valuesType'] & {
           ns?: I18nNsType | I18nNsType[];
           defaultValue?: string;
         },
       ]
     | [
-        p: T,
+        key: T,
         defaultValue: string,
         options: I18nRes[T]['valuesType'] & { ns?: I18nNsType | I18nNsType[] },
       ]
 ) => I18nRes[T]['returnType'];
 
 export function getI18nComponent(i18n: any) {
-  return <T extends I18nResKeys>({
-    i18nKey,
-    values,
-    components,
-  }: {
-    i18nKey: T;
-    defaultValue?: string;
-    values: I18nRes[T]['valuesType'];
-    components: I18nRes[T]['componentsType'];
-  }): I18nRes[T]['returnType'] => {
+  return <T extends I18nResKeys>(
+    key: T,
+    values: I18nRes[T]['valuesType'],
+    components: I18nRes[T]['componentsType'],
+    defaultValue?: string,
+  ): I18nRes[T]['returnType'] => {
     return React.createElement(Trans, {
-      i18nKey,
+      i18nKey: key,
       values,
       components,
       t: i18n.t,

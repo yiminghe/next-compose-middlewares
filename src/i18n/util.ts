@@ -5,7 +5,7 @@ import { getI18nComponent } from './types';
 type R = {
   i18n: i18n;
   translation: any;
-  T: ReturnType<typeof getI18nComponent>;
+  c: ReturnType<typeof getI18nComponent>;
 };
 const cache = new Map<string, R>();
 
@@ -25,7 +25,7 @@ export function getI18nInstance(
         [locale]: { translation },
       },
     });
-    instance = { i18n, translation, T: getI18nComponent(i18n) };
+    instance = { i18n, translation, c: getI18nComponent(i18n) };
     cache.set(locale, instance);
   }
   return instance;

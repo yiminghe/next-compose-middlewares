@@ -5,7 +5,7 @@ import { getI18nInstance } from './util';
 
 const I18nContext = createContext<{
   t: I18nTranslate;
-  T: ReturnType<typeof getI18nComponent>;
+  c: ReturnType<typeof getI18nComponent>;
 }>(null as any);
 
 export function getI18nContext() {
@@ -22,7 +22,7 @@ export function I18nProvider({
   locale: 'zh-CN' | 'en-US';
   translation: any;
 }) {
-  const { i18n, T } = getI18nInstance(locale, translation);
+  const { i18n, c } = getI18nInstance(locale, translation);
   const t = i18n.t as I18nTranslate;
-  return <I18nContext value={{ t, T }}>{children}</I18nContext>;
+  return <I18nContext value={{ t, c }}>{children}</I18nContext>;
 }

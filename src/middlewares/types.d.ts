@@ -6,7 +6,7 @@ declare module '@/next-compose-middlewares' {
     translation?: any;
     locale?: 'zh-CN' | 'en-US';
     t?: I18nTranslate;
-    T?: ReturnType<typeof getI18nComponent>;
+    c?: ReturnType<typeof getI18nComponent>;
     extraContent?: {
       from: string;
     };

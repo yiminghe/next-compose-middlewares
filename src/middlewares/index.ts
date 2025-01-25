@@ -25,9 +25,9 @@ export const createPage = withPageMiddlewares([
   user,
   async (context, next) => {
     const locale = (context.req.query.locale as any) || 'zh-CN';
-    const { i18n, T, translation } = getI18n(locale);
+    const { i18n, c, translation } = getI18n(locale);
     context.t = i18n.t as I18nTranslate;
-    context.T = T;
+    context.c = c;
     context.translation = translation;
     context.locale = locale;
   },
