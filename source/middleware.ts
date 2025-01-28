@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation enhanced next native middleware
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import {
   FORWARDED_URI_HEADER,
@@ -6,14 +10,25 @@ import {
 } from './constants';
 import { compose } from './compose';
 
+/**
+ * header middleware context
+ * @public
+ */
 export interface HeaderContext {
   req: NextRequest;
   headers: Headers;
 }
 
+/**
+ * response middleware context
+ * @public
+ */
 export interface ResponseContext extends HeaderContext {
   res: NextResponse;
 }
+/**
+ * middleware interface for next native middleware
+ */
 export interface MiddlewareMiddleware {
   header?: (arg: HeaderContext, next: () => Promise<void>) => Promise<void>;
   response?: (arg: ResponseContext, next: () => Promise<void>) => Promise<void>;

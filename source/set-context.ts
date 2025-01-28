@@ -35,15 +35,16 @@ export const [getPageContext, setPageContext] = cacheGlobal(
   () => createPageContext(defaultContext),
 );
 
-export const requestStorage = cacheGlobal(
-  'requestStorage',
-  () => new AsyncLocalStorage<Map<Function, any>>(),
-);
+export const requestStorage = () =>
+  cacheGlobal(
+    'requestStorage',
+    () => new AsyncLocalStorage<Map<Function, any>>(),
+  );
 
 export function createRouteContext<T>(defaultValue: T): GetSetNextContext<T> {
-  const get = (): T => requestStorage.getStore()!.get(get) || defaultValue;
+  const get = (): T => requestStorage().getStore()!.get(get) || defaultValue;
 
-  const set = (v: T) => requestStorage.getStore()!.set(get, v);
+  const set = (v: T) => requestStorage().getStore()!.set(get, v);
 
   return [get, set];
 }

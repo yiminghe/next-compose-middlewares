@@ -1,6 +1,6 @@
 {
   "name": "next-compose-middlewares",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/yiminghe/next-compose-middlewares"
@@ -32,7 +32,7 @@
     "lint": "tsc --noEmit && next lint",
     "test:dev": "rm -rf dist && NEXT_PUBLIC_CYPRESS=1 next dev",
     "dev": "HOSTNAME=0.0.0.0 next dev",
-    "doc": "api-extractor run --local --diagnostics",
+    "doc": "rm -rf temp docs && node scripts/doc",
     "build": "rm -rf dist && tsc -p tsconfig-build.json && pnpm doc && node scripts/build",
     "start": "next start",
     "prepare": "husky"
@@ -61,6 +61,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-html-reporter": "^3.10.2",
+    "json5": "^2.2.3",
     "mobx": "6.x",
     "mobx-react-lite": "4.x",
     "mochawesome": "^7.1.3",

@@ -28,4 +28,15 @@ unified middleware and request context for nextjs
 
 
 </td></tr>
+<tr><td>
+
+[next-compose-middlewares/middleware](./next-compose-middlewares_middleware.md)
+
+
+</td><td>
+
+enhanced next native middleware
+
+
+</td></tr>
 </tbody></table>

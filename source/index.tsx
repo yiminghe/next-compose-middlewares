@@ -174,7 +174,7 @@ export function withRouteMiddlewares(fns: MiddlewareFunction[]) {
       if (c?.params) {
         context.req.params = await c.params;
       }
-      return requestStorage.run(new Map(), async () => {
+      return requestStorage().run(new Map(), async () => {
         setRouteContext(context);
         await compose(fns, context, ...args);
         if (doRedirect(context)) {
@@ -213,7 +213,7 @@ export function withActionMiddlewares(fns: MiddlewareFunction[]) {
   return function <T extends Function>(action: T): T {
     const a = async (...args: any) => {
       const context = await createNextContextFromAction();
-      return requestStorage.run(new Map(), async () => {
+      return requestStorage().run(new Map(), async () => {
         setRouteContext(context);
         await compose(fns, context, ...args);
         if (doRedirect(context)) {
