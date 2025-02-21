@@ -63,19 +63,16 @@ pnpm api-documenter markdown --input-folder=temp --output-folder=${docsPath}`,
   for (const f of files) {
     if (f.endsWith('.md')) {
       let content = fs.readFileSync(path.join(docsPath, f), 'utf-8');
-      content = content.replace(/next-compose-middlewares[\\\w]+/g, (c) => {
+      content = content.replace(/next-context[\\\w]+/g, (c) => {
         return c.replaceAll('\\_', '/');
       });
-      content = content.replace(
-        /##\s+next-compose-middlewares[\\\w]* package/g,
-        (c) => {
-          return (
-            c
-              //.replace(' next-compose-middlewares', 'next-compose-middlewares')
-              .replaceAll('\\_', '/')
-          );
-        },
-      );
+      content = content.replace(/##\s+next-context[\\\w]* package/g, (c) => {
+        return (
+          c
+            //.replace(' next-context', 'next-context')
+            .replaceAll('\\_', '/')
+        );
+      });
       fs.writeFileSync(path.join(docsPath, f), content);
     }
   }

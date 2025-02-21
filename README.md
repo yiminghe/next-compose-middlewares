@@ -1,23 +1,23 @@
-# next-compose-middlewares
+# next-context
 - Using koa style middlewares inside nextjs
 - Unified request/response context(express api) across Page and Route/Action
 - SetCookie/clearCookie both inside Page and Route/Action
-- Easily access request/response context between components inside Page and functions inside Route/Action 
+- Easily access request/response context between next middleware, components inside Page and functions inside Route/Action 
 
 [![NPM version][npm-image]][npm-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![npm download][download-image]][download-url]
-![Build Status](https://github.com/yiminghe/next-compose-middlewares/actions/workflows/ci.yaml/badge.svg)
-[![next-compose-middlewares](https://img.shields.io/endpoint?url=https://cloud.cypress.io/badge/simple/5v7p13/main&style=flat&logo=cypress)](https://cloud.cypress.io/projects/5v7p13/runs)
+![Build Status](https://github.com/yiminghe/next-context/actions/workflows/ci.yaml/badge.svg)
+[![next-context](https://img.shields.io/endpoint?url=https://cloud.cypress.io/badge/simple/5v7p13/main&style=flat&logo=cypress)](https://cloud.cypress.io/projects/5v7p13/runs)
 
-[npm-image]: http://img.shields.io/npm/v/next-compose-middlewares.svg?style=flat-square
-[npm-url]: http://npmjs.org/package/next-compose-middlewares
-[coveralls-image]: https://img.shields.io/coveralls/yiminghe/next-compose-middlewares.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/yiminghe/next-compose-middlewares?branch=main
+[npm-image]: http://img.shields.io/npm/v/next-context.svg?style=flat-square
+[npm-url]: http://npmjs.org/package/next-context
+[coveralls-image]: https://img.shields.io/coveralls/yiminghe/next-context.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/yiminghe/next-context?branch=main
 [node-image]: https://img.shields.io/badge/node.js-%3E=_18.0-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
-[download-image]: https://img.shields.io/npm/dm/next-compose-middlewares.svg?style=flat-square
-[download-url]: https://npmjs.org/package/next-compose-middlewares
+[download-image]: https://img.shields.io/npm/dm/next-context.svg?style=flat-square
+[download-url]: https://npmjs.org/package/next-context
 
 
 ## demo
@@ -29,7 +29,7 @@ npm run dev
 
 ## docs
 
-[Docs](https://github.com/yiminghe/next-compose-middlewares/blob/main/docs/index.md)
+[Docs](https://github.com/yiminghe/next-context/blob/main/docs/index.md)
 
 ## Usage
 
@@ -37,7 +37,7 @@ npm run dev
 `src/middleware.ts`
 
 ```js
-import { createMiddleware } from 'next-compose-middlewares/middleware';
+import { createMiddleware } from 'next-context/middleware';
 export const middleware = createMiddleware();
 export const config = {
   matcher: '/((?!_next|favicon.ico|sitemap.xml|robots.txt).*)',
@@ -47,7 +47,7 @@ export const config = {
 ### extends type
 
 ```ts
-declare module 'next-compose-middlewares' {
+declare module 'next-context' {
   interface NextContext {
     user: string;
   }
@@ -59,7 +59,7 @@ declare module 'next-compose-middlewares' {
 
 ```js
 import React from 'react';
-import { withPageMiddlewares, getNextContext } from 'next-compose-middlewares';
+import { withPageMiddlewares, getNextContext } from 'next-context';
 
 export default withPageMiddlewares([
   async (context, next) => {
@@ -81,7 +81,7 @@ export default withPageMiddlewares([
 `src/action/getUser.ts`
 
 ```js
-import { withActionMiddlewares, getNextContext } from 'next-compose-middlewares';
+import { withActionMiddlewares, getNextContext } from 'next-context';
 
 export default withActionMiddlewares([
   async (context, next) => {
@@ -99,7 +99,7 @@ export default withActionMiddlewares([
 `src/app/get/route.ts`
 
 ```js
-import { withRouteMiddlewares,getNextContext } from 'next-compose-middlewares';
+import { withRouteMiddlewares,getNextContext } from 'next-context';
 
 export const GET = withRouteMiddlewares([
   async (context, next) => {

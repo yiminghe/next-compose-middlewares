@@ -1,4 +1,4 @@
-import { cache } from '@/next-compose-middlewares';
+import { cache } from '@/next-context';
 
 function sleep(ms: number) {
   return new Promise((resolve) => {

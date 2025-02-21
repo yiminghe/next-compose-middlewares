@@ -1,5 +1,5 @@
 import React from 'react';
-import { getNextContext } from '@/next-compose-middlewares';
+import { getNextContext } from '@/next-context';
 import { createPage } from '@/middlewares';
 import { ClientProvider } from '@/client-context/ClientContext';
 import components from '@/components';

@@ -1,6 +1,6 @@
-import { createMiddleware } from '@/next-compose-middlewares/middleware';
+import { createMiddleware } from '@/next-context/middleware';
 
-declare module '@/next-compose-middlewares/middleware' {
+declare module '@/next-context/middleware' {
   export interface HeaderContext {
     foo?: string;
   }

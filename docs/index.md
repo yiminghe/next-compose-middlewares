@@ -19,7 +19,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[next-compose-middlewares](./next-compose-middlewares.md)
+[next-context](./next-context.md)
 
 
 </td><td>
@@ -30,7 +30,7 @@ unified middleware and request context for nextjs
 </td></tr>
 <tr><td>
 
-[next-compose-middlewares/middleware](./next-compose-middlewares_middleware.md)
+[next-context/middleware](./next-context_middleware.md)
 
 
 </td><td>

@@ -1,5 +1,5 @@
 import { createLayout } from '@/middlewares';
-import { getNextContext } from '@/next-compose-middlewares';
+import { getNextContext } from '@/next-context';
 import React from 'react';
 
 export default createLayout(function RootLayout({

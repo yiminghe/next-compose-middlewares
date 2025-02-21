@@ -1,9 +1,9 @@
 {
-  "name": "next-compose-middlewares",
+  "name": "next-context",
   "version": "0.2.2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yiminghe/next-compose-middlewares"
+    "url": "https://github.com/yiminghe/next-context"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
