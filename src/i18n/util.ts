@@ -38,15 +38,16 @@ export function getI18nInstance(
     instance = {
       messages,
       t(key: any, values: any) {
-        let formatter = formatterCache.get(key);
+        const message = messages[key];
+        let formatter = formatterCache.get(message);
         if (!formatter) {
           formatter = new IntlMessageFormat(
-            messages[key],
+            message,
             locale,
             undefined,
             formatters,
           );
-          formatterCache.set(key, formatter);
+          formatterCache.set(message, formatter);
         }
         return formatter.format(values);
       },
