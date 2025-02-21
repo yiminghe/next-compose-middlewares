@@ -4,7 +4,7 @@ import { createPage } from '@/middlewares';
 import { getNextContext } from '@/utils/getNextContext';
 
 export default createPage(async function TPage() {
-  const { t, c, locale, translation } = getNextContext();
+  const { t, locale, messages } = getNextContext();
 
   return (
     <div>
@@ -14,9 +14,12 @@ export default createPage(async function TPage() {
           n: 'hello',
         })}
       </div>
-      <div>T: {c('c', { c: '2' }, { s: <strong /> })}</div>
+      <div>
+        T:{' '}
+        {t('c', { c: '2', s: (chunks) => <strong key="1">{chunks}</strong> })}
+      </div>
       <hr />
-      <I18nProvider locale={locale!} translation={translation!}>
+      <I18nProvider locale={locale!} messages={messages!}>
         <ClientT />
       </I18nProvider>
     </div>

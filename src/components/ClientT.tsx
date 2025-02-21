@@ -3,7 +3,7 @@
 import { getI18nContext } from '@/i18n/context';
 
 export function ClientT() {
-  const { t, c } = getI18nContext();
+  const { t } = getI18nContext();
   return (
     <div>
       <div>
@@ -12,7 +12,10 @@ export function ClientT() {
           n: 'hello',
         })}
       </div>
-      <div>T: {c('c', { c: '2' }, { s: <strong /> })}</div>
+      <div>
+        T:{' '}
+        {t('c', { c: '2', s: (chunks) => <strong key="1">{chunks}</strong> })}
+      </div>
     </div>
   );
 }

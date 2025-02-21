@@ -10,9 +10,7 @@ import fs from 'fs';
     const locale = path.basename(json).replace('.json', '');
     all[locale] = require(path.resolve(json));
   }
-  const typedCode = getTsTypesFromRes(all, {
-    reactI18next: '@yiminghe/react-i18next',
-  });
+  const typedCode = getTsTypesFromRes(all);
   fs.writeFileSync(
     path.resolve('src/i18n/types.ts'),
     `

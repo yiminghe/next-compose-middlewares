@@ -24,10 +24,10 @@ export const UserName = observer(() => {
           setRet(res);
         }}>
         get user by action
-      </a>{' '}
+      </a>
       &nbsp;
       <div>
-        from action:{' '}
+        from action:
         {ret ? (
           <input id="action" readOnly value={JSON.stringify(ret)} />
         ) : null}

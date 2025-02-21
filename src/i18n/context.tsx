@@ -1,11 +1,10 @@
 'use client';
 import { createContext, use } from 'react';
-import { getI18nComponent, I18nTranslate } from './types';
+import { I18nTranslate } from './types';
 import { getI18nInstance } from './util';
 
 const I18nContext = createContext<{
   t: I18nTranslate;
-  c: ReturnType<typeof getI18nComponent>;
 }>(null as any);
 
 export function getI18nContext() {
@@ -16,13 +15,12 @@ export function getI18nContext() {
 export function I18nProvider({
   children,
   locale,
-  translation,
+  messages,
 }: {
   children: any;
   locale: 'zh-CN' | 'en-US';
-  translation: any;
+  messages: any;
 }) {
-  const { i18n, c } = getI18nInstance(locale, translation);
-  const t = i18n.t as I18nTranslate;
-  return <I18nContext value={{ t, c }}>{children}</I18nContext>;
+  const { t } = getI18nInstance(locale, messages);
+  return <I18nContext value={{ t }}>{children}</I18nContext>;
 }

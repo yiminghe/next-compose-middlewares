@@ -1,5 +1,4 @@
 import { getI18n } from '@/i18n/server';
-import { getI18nComponent, I18nTranslate } from '@/i18n/types';
 import {
   NextContext,
   NextFunction,
@@ -25,10 +24,9 @@ export const createPage = withPageMiddlewares([
   user,
   async (context, next) => {
     const locale = (context.req.query.locale as any) || 'zh-CN';
-    const { i18n, c, translation } = getI18n(locale);
-    context.t = i18n.t as I18nTranslate;
-    context.c = c;
-    context.translation = translation;
+    const { t, messages } = getI18n(locale);
+    context.t = t;
+    context.messages = messages;
     context.locale = locale;
   },
 ]);

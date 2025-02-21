@@ -1,32 +1,58 @@
-import ICU from 'i18next-icu';
-import { i18n, createInstance } from 'i18next';
-import { getI18nComponent } from './types';
+import { I18nTranslate } from './types';
 
-type R = {
-  i18n: i18n;
-  translation: any;
-  c: ReturnType<typeof getI18nComponent>;
+import IntlMessageFormat from 'intl-messageformat';
+import { memoize } from '@formatjs/fast-memoize';
+const formatters = {
+  formatters: {
+    getNumberFormat: memoize(
+      (locale, opts) => new Intl.NumberFormat(locale, opts),
+    ),
+    getDateTimeFormat: memoize(
+      (locale, opts) => new Intl.DateTimeFormat(locale, opts),
+    ),
+    getPluralRules: memoize(
+      (locale, opts) => new Intl.PluralRules(locale, opts),
+    ),
+  },
 };
-const cache = new Map<string, R>();
+
+const cache = new Map<string, Map<string, IntlMessageFormat>>();
+
+type R = { t: I18nTranslate; messages: any };
+
+const instanceMap = new Map<any, R>();
 
 export function getI18nInstance(
   locale: 'zh-CN' | 'en-US',
-  translation: any,
+  messages: any,
+  cacheKey?: any,
 ): R {
-  let instance = cache.get(locale);
+  cacheKey = cacheKey || messages;
+  let instance: any = instanceMap.get(cacheKey);
   if (!instance) {
-    const i18n = createInstance();
-    i18n.use(ICU).init({
-      lng: locale,
-      interpolation: {
-        escapeValue: false,
+    let formatterCache = cache.get(locale);
+    if (!formatterCache) {
+      formatterCache = new Map<string, IntlMessageFormat>();
+      cache.set(locale, formatterCache);
+    }
+    instance = {
+      messages,
+      t(key: any, values: any) {
+        let formatter = formatterCache.get(key);
+        if (!formatter) {
+          formatter = new IntlMessageFormat(
+            messages[key],
+            locale,
+            undefined,
+            formatters,
+          );
+          formatterCache.set(key, formatter);
+        }
+        return formatter.format(values);
       },
-      resources: {
-        [locale]: { translation },
-      },
-    });
-    instance = { i18n, translation, c: getI18nComponent(i18n) };
-    cache.set(locale, instance);
+    } as any;
+    instanceMap.set(cacheKey, instance);
   }
+
   return instance;
 }
