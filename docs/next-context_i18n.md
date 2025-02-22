@@ -4,6 +4,8 @@
 
 ## next-context/i18n package
 
+i18n support for nextjs
+
 ## Functions
 
 <table><thead><tr><th>

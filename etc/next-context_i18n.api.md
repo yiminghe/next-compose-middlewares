@@ -30,8 +30,6 @@ export function middleware(init: (ctx: NextContext) => Promise<{
 
 // Warnings were encountered during analysis:
 //
-// dist/dist/i18n/index.d.ts:17:5 - (ae-forgotten-export) The symbol "Messages" needs to be exported by the entry point index.d.ts
-
-// (No @packageDocumentation comment for this package)
+// dist/dist/i18n/index.d.ts:20:5 - (ae-forgotten-export) The symbol "Messages" needs to be exported by the entry point index.d.ts
 
 ```

@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation i18n support for nextjs
+ */
+
 'use client';
 
 import { I18nContext, NextContext, NextFunction } from '../types';

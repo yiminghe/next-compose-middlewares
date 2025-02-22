@@ -35,6 +35,8 @@ unified middleware and request context for nextjs
 
 </td><td>
 
+i18n support for nextjs
+
 
 </td></tr>
 <tr><td>
