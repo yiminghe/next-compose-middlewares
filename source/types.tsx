@@ -105,11 +105,18 @@ export type NextContextResponse = {
  * @public
  */
 export type NextContextType = 'page' | 'route' | 'action';
+
+/**
+ * i18n context
+ * @public
+ */
+export interface I18nContext {}
+
 /**
  * request context
  * @public
  */
-export interface NextContext {
+export interface NextContext extends I18nContext {
   type: NextContextType;
   req: NextContextRequest;
   res: NextContextResponse;

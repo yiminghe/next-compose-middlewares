@@ -1,4 +1,5 @@
-import { getI18n } from '@/i18n/server';
+import en from '@/i18n/en-US.json';
+import zh from '@/i18n/zh-CN.json';
 import {
   NextContext,
   NextFunction,
@@ -6,7 +7,8 @@ import {
   withPageMiddlewares,
   withActionMiddlewares,
   withRouteMiddlewares,
-} from '@/next-context';
+} from 'next-context';
+import { middleware as i18n } from 'next-context/i18n';
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -22,13 +24,15 @@ async function user(context: NextContext, next: NextFunction) {
 
 export const createPage = withPageMiddlewares([
   user,
-  async (context, next) => {
+  i18n(async (context) => {
     const locale = (context.req.query.locale as any) || 'zh-CN';
-    const { t, messages } = getI18n(locale);
-    context.t = t;
+    const messages = locale === 'zh-CN' ? zh : en;
     context.messages = messages;
-    context.locale = locale;
-  },
+    return {
+      messages,
+      locale,
+    };
+  }),
 ]);
 export const createLayout = withLayoutMiddlewares([user]);
 export const createAction = withActionMiddlewares([user]);

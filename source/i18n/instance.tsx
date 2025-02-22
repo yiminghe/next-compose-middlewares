@@ -1,7 +1,8 @@
-import { I18nTranslate } from './types';
-
 import IntlMessageFormat from 'intl-messageformat';
 import { memoize } from '@formatjs/fast-memoize';
+import type { NextFunction, NextContext } from '../types';
+
+export type Messages = Record<string, string>;
 const formatters = {
   formatters: {
     getNumberFormat: memoize(
@@ -18,16 +19,14 @@ const formatters = {
 
 const cache = new Map<string, Map<string, IntlMessageFormat>>();
 
-type R = { t: I18nTranslate; messages: any };
-
-const instanceMap = new Map<any, R>();
+const instanceMap = new Map<any, any>();
 
 export function getI18nInstance(
-  locale: 'zh-CN' | 'en-US',
-  messages: any,
+  locale: string,
+  messages: Messages,
   cacheKey?: any,
-): R {
-  cacheKey = cacheKey || messages;
+): { t: any; locale: string } {
+  cacheKey = cacheKey || locale;
   let instance: any = instanceMap.get(cacheKey);
   if (!instance) {
     let formatterCache = cache.get(locale);
@@ -36,7 +35,7 @@ export function getI18nInstance(
       cache.set(locale, formatterCache);
     }
     instance = {
-      messages,
+      locale,
       t(key: any, values: any) {
         const message = messages[key];
         let formatter = formatterCache.get(message);
@@ -56,4 +55,22 @@ export function getI18nInstance(
   }
 
   return instance;
+}
+
+/**
+ * i18n next-context middleware
+ * @public
+ */
+export function middleware(
+  init: (ctx: NextContext) => Promise<{
+    messages: Record<string, string>;
+    locale: string;
+    cacheKey?: string;
+  }>,
+) {
+  return async (ctx: NextContext, next: NextFunction) => {
+    const { messages, locale, cacheKey } = await init(ctx);
+    Object.assign(ctx, getI18nInstance(locale, messages, cacheKey));
+    await next();
+  };
 }

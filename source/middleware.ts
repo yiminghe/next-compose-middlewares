@@ -28,6 +28,7 @@ export interface ResponseContext extends HeaderContext {
 }
 /**
  * middleware interface for next native middleware
+ * @public
  */
 export interface MiddlewareMiddleware {
   header?: (arg: HeaderContext, next: () => Promise<void>) => Promise<void>;

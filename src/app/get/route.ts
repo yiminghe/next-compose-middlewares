@@ -1,4 +1,4 @@
-import { getNextContext } from '@/next-context';
+import { getNextContext } from 'next-context';
 import { createRoute } from '../../middlewares';
 import { testTime } from '../services/getTime';
 

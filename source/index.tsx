@@ -35,6 +35,7 @@ export type {
   MiddlewareFunction,
   NextFunction,
   CookieAttributes,
+  I18nContext,
 } from './types';
 
 export {

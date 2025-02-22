@@ -1,5 +1,5 @@
 import ExtraContextInfo from '@/app/components/ExtraContextInfo';
-import { getNextContext } from '@/next-context';
+import { getNextContext } from 'next-context';
 import { createPage } from '@/middlewares';
 
 import Link from 'next/link';

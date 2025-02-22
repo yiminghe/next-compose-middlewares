@@ -27,6 +27,10 @@ export interface CookieAttributes {
 export function getNextContext(): NextContext;
 
 // @public
+export interface I18nContext {
+}
+
+// @public
 export type LayoutFunction = (r: LayoutRequest) => React_2.ReactNode | Promise<React_2.ReactNode>;
 
 // @public
@@ -39,7 +43,7 @@ export type LayoutRequest = {
 export type MiddlewareFunction = (context: NextContext, next: NextFunction) => Promise<any> | void;
 
 // @public
-export interface NextContext {
+export interface NextContext extends I18nContext {
     // (undocumented)
     req: NextContextRequest;
     // (undocumented)

@@ -2,7 +2,8 @@
 - Using koa style middlewares inside nextjs
 - Unified request/response context(express api) across Page and Route/Action
 - SetCookie/clearCookie both inside Page and Route/Action
-- Easily access request/response context between next middleware, components inside Page and functions inside Route/Action 
+- Easily access request/response context between next middleware, components inside Page and functions inside Route/Action
+- I18n support both for server and client component
 
 [![NPM version][npm-image]][npm-url]
 [![Test coverage][coveralls-image]][coveralls-url]

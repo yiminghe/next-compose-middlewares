@@ -30,7 +30,16 @@ unified middleware and request context for nextjs
 </td></tr>
 <tr><td>
 
-[next-context\_middleware](./next-context_middleware.md)
+[next-context/i18n](./next-context_i18n.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[next-context/middleware](./next-context_middleware.md)
 
 
 </td><td>

@@ -1,13 +1,27 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-
 function r(...p) {
   return path.join(__dirname, ...p);
 }
-execSync('rm -rf ' + r('../docs'), { stdio: 'inherit' });
-execSync(
-  'pnpm api-documenter markdown --input-folder=temp --output-folder=docs',
-);
-execSync('rm -rf ' + r('../dist/dist-types'), { stdio: 'inherit' });
-execSync('rm -rf ' + r('../dist/tsdoc-metadata.json'), { stdio: 'inherit' });
+const pkg = require('../package.json');
+
+pkg.exports = {
+  '.': {
+    types: './dist/index.d.ts',
+    default: './dist/index.js',
+  },
+  './middleware': {
+    types: './dist/middleware.d.ts',
+    default: './dist/middleware.js',
+  },
+  './i18n': {
+    types: './dist/i18n/index.d.ts',
+    'react-server': './dist/i18n/react-server.js',
+    default: './dist/i18n/index.js',
+  },
+};
+
+fs.writeFileSync(r('../dist/package.json'), JSON.stringify(pkg, null, 2));
+
+fs.copyFileSync(r('../README.md'), r('../dist/README.md'));

@@ -1,4 +1,4 @@
-import { getNextContext } from '@/next-context';
+import { getNextContext } from 'next-context';
 import Client1 from './Client';
 
 export default function Server1() {

@@ -113,6 +113,17 @@ cookie attributes
 </td></tr>
 <tr><td>
 
+[I18nContext](./next-context.i18ncontext.md)
+
+
+</td><td>
+
+i18n context
+
+
+</td></tr>
+<tr><td>
+
 [NextContext](./next-context.nextcontext.md)
 
 

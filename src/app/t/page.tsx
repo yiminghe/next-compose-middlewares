@@ -1,23 +1,15 @@
 import { ClientT } from '@/components/ClientT';
-import { I18nProvider } from '@/i18n/context';
+import { I18nProvider } from 'next-context/i18n';
 import { createPage } from '@/middlewares';
-import { getNextContext } from '@/utils/getNextContext';
+import { getNextContext } from 'next-context';
+import { SharedT } from '@/components/SharedT';
 
 export default createPage(async function TPage() {
-  const { t, locale, messages } = getNextContext();
+  const { locale, messages } = getNextContext();
 
   return (
     <div>
-      <div>
-        t:{' '}
-        {t('n', {
-          n: 'hello',
-        })}
-      </div>
-      <div>
-        T:{' '}
-        {t('c', { c: '2', s: (chunks) => <strong key="1">{chunks}</strong> })}
-      </div>
+      <SharedT />
       <hr />
       <I18nProvider locale={locale!} messages={messages!}>
         <ClientT />

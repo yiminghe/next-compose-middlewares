@@ -73,7 +73,7 @@ export function createNextContext<T>(c: T): GetSetNextContext<T> {
   let getSetPage: GetSetNextContext<T> = [] as any;
   let getSetRoute: GetSetNextContext<T> = [] as any;
   function init() {
-    const context = getNextContext() || {};
+    const context = getNextContext() || ({} as NextContext);
     if (context.type === 'page') {
       if (getSetPage.length) {
         return getSetPage;

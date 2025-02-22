@@ -1,6 +1,6 @@
 {
   "name": "next-context",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/yiminghe/next-context"
@@ -13,15 +13,18 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./source/index.tsx"
     },
     "./middleware": {
-      "types": "./dist/middleware.d.ts",
-      "default": "./dist/middleware.js"
+      "default": "./source/middleware.ts"
+    },
+    "./i18n": {
+      "react-server": "./source/i18n/react-server.ts",
+      "default": "./source/i18n/index.tsx"
     }
   },
   "scripts": {
+    "pub": "cd dist && rm -rf dist-types tsdoc-metadata.json && npm publish",
     "i18n": "ts-node scripts/i18n.ts",
     "jest": "jest",
     "format": "prettier --config ./prettier.config.js --ignore-path ./.prettierignore ./ --write",
@@ -29,17 +32,19 @@
     "pre:test": "rm -rf .nyc_output && rm -rf coverage",
     "test:only": "npm run pre:test && ts-node scripts/run-test.ts",
     "test": "start-test test:dev http://localhost:3000 test:only",
-    "lint": "tsc --noEmit && next lint",
+    "lint": "rm -rf dist .next && tsc --noEmit && next lint",
     "test:dev": "rm -rf dist && NEXT_PUBLIC_CYPRESS=1 next dev",
     "dev": "HOSTNAME=0.0.0.0 next dev",
     "doc": "rm -rf temp docs && node scripts/doc",
-    "build": "rm -rf dist && tsc -p tsconfig-build.json && pnpm doc && node scripts/build",
+    "build": "rm -rf dist && tsc -p tsconfig-build.json && node scripts/build",
     "start": "next start",
     "prepare": "husky"
   },
-  "devDependencies": {
+  "dependencies": {
     "@formatjs/fast-memoize": "^2.2.6",
-    "intl-messageformat": "^10.7.15",
+    "intl-messageformat": "^10.7.15"
+  },
+  "devDependencies": {
     "@cypress/code-coverage": "3.x",
     "@jest/globals": "^29.7.0",
     "@microsoft/api-documenter": "^7.25.21",
@@ -66,7 +71,7 @@
     "mochawesome": "^7.1.3",
     "mochawesome-merge": "^4.3.0",
     "mochawesome-report-generator": "^6.2.0",
-    "next": "15.x",
+    "next": "^15.1.7",
     "prettier": "2.x",
     "prettier-2": "npm:prettier@^2",
     "prettier-plugin-tailwindcss": "0.2.x",

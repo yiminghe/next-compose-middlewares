@@ -3,7 +3,7 @@
   "include": ["source/**/*.ts", "source/**/*.tsx"],
   "compilerOptions": {
     "module": "esnext",
-    "outDir": "dist",
+    "outDir": "dist/dist",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
